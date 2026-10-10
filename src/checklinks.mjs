@@ -26,8 +26,11 @@ for (const page of pages) {
     const clean = link.split("#")[0].split("?")[0];
     if (!clean) continue;
     checked++;
-    const target = clean.startsWith("/") ? join(ROOT, clean) : resolve(dirname(page), clean);
-    const hit = existsSync(target) || existsSync(join(target, "index.html"));
+    const raw = clean.startsWith("/") ? join(ROOT, clean.replace(/^\/+/, "")) : resolve(dirname(page), clean);
+    const hit =
+      (existsSync(raw) && statSync(raw).isFile()) ||
+      existsSync(`${raw}.html`) ||
+      existsSync(join(raw, "index.html"));
     if (!hit) broken.push({ page: relative(ROOT, page), link });
   }
 }
