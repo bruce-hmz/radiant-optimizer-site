@@ -21,11 +21,11 @@
   { "slug": "wasm-arcade", "url": "https://wasmarcade.com/Fan" },
   { "slug": "eaglercraft", "url": "https://eaglercraft.com/play" },
   { "slug": "super-mario-64-js", "url": "https://brohann3214.github.io/sm64js/" },
-  { "slug": "doom-1993", "url": "https://dos.zone/doom-dec-1993/" },
-  { "slug": "the-ultimate-doom", "url": "https://dos.zone/the-ultimate-doom-1995/" },
+  { "slug": "doom-1993", "url": "https://dos.zone/doom-dec-1993/", "click": true, "scrollY": 170 },
+  { "slug": "the-ultimate-doom", "url": "https://dos.zone/the-ultimate-doom-1995/", "click": true, "scrollY": 170 },
   { "slug": "doom-mod-collection", "url": "https://joeheyming.github.io/doom/" },
-  { "slug": "duke-nukem-3d", "url": "https://js-dos.com/Duke%20Nukem%203d/" },
-  { "slug": "wolfenstein-3d", "url": "https://js-dos.com/Wolf/" },
+  { "slug": "duke-nukem-3d", "url": "https://dos.zone/duke-nukem-3d-1996/", "click": true, "scrollY": 170, "waitLoad": 8000, "keys": ["Enter", "Enter", "Enter"], "wait": 20000 },
+  { "slug": "wolfenstein-3d", "url": "https://dos.zone/wolfenstein-3d-may-05-1992/", "click": true, "scrollY": 170, "waitLoad": 8000, "keys": ["Enter", "Enter"], "wait": 15000 },
   { "slug": "red-alert-multiplayer", "url": "https://dos.zone/multiplayer/red-alert/" },
   { "slug": "red-alert-2-chrono-divide", "url": "https://chronodivide.com/" },
   { "slug": "openttd-web", "url": "https://openttdonline.com/play/" },
@@ -53,6 +53,10 @@
   { "slug": "wave-race-64", "url": "https://decompgames.com/games/wave-race-64/" },
   { "slug": "open-skyways", "url": "https://decompgames.com/games/skyways/" },
   { "slug": "supertuxkart-wasm", "url": "https://supertuxkart.pages.dev/" },
-  { "slug": "stunts-dos", "url": "https://js-dos.com/Stunts/" },
-  { "slug": "wacky-wheels", "url": "https://dos.zone/wackywheels/" }
+  { "slug": "stunts-dos", "url": "https://dos.zone/stunts/", "click": true, "scrollY": 170, "waitLoad": 8000, "keys": ["Enter", "Enter"], "wait": 15000 },
+  { "slug": "wacky-wheels", "url": "https://dos.zone/wackywheels/", "click": true, "scrollY": 170 },
+  { "slug": "1080-snowboarding", "url": "https://decompgames.com/games/1080-snowboarding/" },
+  { "slug": "sensible-soccer", "url": "https://dos.zone/international-sensible-soccer-1994/", "click": true, "scrollY": 170, "keys": ["1"], "wait": 12000 },
+  { "slug": "open-digger", "url": "https://decompgames.com/games/digger/" },
+  { "slug": "mortal-kombat", "url": "https://dos.zone/mortal-kombat-1993/", "click": true, "scrollY": 170 }
 ]

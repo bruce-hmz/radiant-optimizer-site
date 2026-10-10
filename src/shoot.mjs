@@ -31,8 +31,18 @@ for (const t of targets) {
   const page = await ctx.newPage();
   try {
     await page.goto(t.url, { waitUntil: "load", timeout: 40000 });
+    if (t.waitLoad) await page.waitForTimeout(t.waitLoad);
+    if (t.scrollY) await page.evaluate((y) => window.scrollTo(0, y), t.scrollY).catch(() => {});
     if (t.click) {
-      await page.mouse.click(640, 400).catch(() => {});
+      await page.mouse.move(640, 360).catch(() => {});
+      await page.mouse.click(640, 360).catch(() => {});
+      await page.mouse.move(700, 320).catch(() => {});
+    }
+    if (t.keys) {
+      for (const k of t.keys) {
+        await page.keyboard.press(k).catch(() => {});
+        await page.waitForTimeout(t.keyDelay || 2500);
+      }
     }
     await page.waitForTimeout(t.wait || 6000);
     const buf = await page.screenshot({ type: "jpeg", quality: 72, animations: "disabled" });
