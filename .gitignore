@@ -15,3 +15,6 @@ src/domaincheck3.mjs
 
 # Local preview logs
 src/shots-log.json
+
+# Wrangler local state (dev caches, account info)
+.wrangler/
