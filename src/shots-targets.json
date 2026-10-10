@@ -49,5 +49,10 @@
   { "slug": "super-metroid", "url": "https://decompgames.com/games/super-metroid/" },
   { "slug": "beneath-a-steel-sky", "url": "https://decompgames.com/games/beneath-a-steel-sky/" },
   { "slug": "open-cadet", "url": "https://decompgames.com/games/open-cadet/" },
-  { "slug": "craft", "url": "https://decompgames.com/games/craft/" }
+  { "slug": "craft", "url": "https://decompgames.com/games/craft/" },
+  { "slug": "wave-race-64", "url": "https://decompgames.com/games/wave-race-64/" },
+  { "slug": "open-skyways", "url": "https://decompgames.com/games/skyways/" },
+  { "slug": "supertuxkart-wasm", "url": "https://supertuxkart.pages.dev/" },
+  { "slug": "stunts-dos", "url": "https://js-dos.com/Stunts/" },
+  { "slug": "wacky-wheels", "url": "https://dos.zone/wackywheels/" }
 ]

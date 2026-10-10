@@ -148,9 +148,9 @@ const GROUPS = [
     name: "Racing",
     cats: ["Racing"],
     title: "Browser racing games",
-    lede: "Kart racing and anti-gravity speed, rebuilt from the N64 originals.",
+    lede: "Kart racing, anti-gravity speed and DOS-era stunt driving, in a browser tab.",
     intro:
-      "Racing ports live or die on input latency, which is exactly the problem browser builds have historically struggled with. The N64 clean-room builds here hold up better than most, and a gamepad makes a noticeable difference. If you are testing whether your setup is the bottleneck rather than the browser, our troubleshooting guide covers what to check first.",
+      "This group spans four eras now. The N64 clean-room builds, Mario Kart 64, F-Zero X, Diddy Kong Racing and Wave Race 64, are the strongest of them, and a gamepad makes a noticeable difference because input latency is what browser racing has historically struggled with. Open Skyways reconstructs the engine behind the 1993 arcade racer SkyRoads with its own thirty courses. Stunts and Wacky Wheels are genuine DOS builds from 1990 and 1994, emulated in the tab, with Wacky Wheels including its own battle mode. SuperTuxKart is the outlier: an open-source kart racer compiled to WebAssembly that wants a 120 MB download and roughly 500 MB of memory, so check your connection before you start it.",
   },
   {
     slug: "sports",
