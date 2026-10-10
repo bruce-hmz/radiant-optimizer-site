@@ -1,0 +1,586 @@
+{
+  "source": {
+    "postUrl": "https://x.com/RadiantOpti/status/2108068628793082338",
+    "replyUrl": "https://x.com/RadiantOpti/status/2108068632991256995",
+    "postDate": "2026-10-08",
+    "checkedDate": "2026-10-10"
+  },
+  "games": [
+    {
+      "slug": "black-ops-zombies",
+      "name": "Black Ops Zombies",
+      "altName": "Call of Duty: Black Ops 1 Zombies (fan host)",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "setup",
+      "summary": "A fan-run browser host for the classic Black Ops 1 zombie survival maps.",
+      "whatItIs": "This entry points to a community host that runs the Black Ops 1 Zombies survival mode inside a browser tab. It is an unaffiliated fan project, not an official Call of Duty release, and nothing on this page is endorsed by Activision.",
+      "whatYouNeed": [
+        "A desktop browser such as Chrome, Edge or Firefox",
+        "A stable connection, because the host streams game data as you play",
+        "Patience on the first load, since a map can take a while to start"
+      ],
+      "howToOpen": [
+        "Open the source destination using the button on this page.",
+        "Wait for the loader to finish and avoid reloading while it is progressing.",
+        "Read the host's own controls and server list before you join a match.",
+        "If a map never loads, treat it as a host-side issue rather than a fault in your PC."
+      ],
+      "sourceUrl": "https://vel.gg/bo1z",
+      "statusNote": "Destination responded on 9 Oct 2026. A page response does not prove that a map finishes loading.",
+      "related": ["moon-zombies", "kino-der-toten", "cheese-cube"]
+    },
+    {
+      "slug": "moon-zombies",
+      "name": "Moon Zombies",
+      "altName": "Black Ops Rezurrection map (fan project)",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "setup",
+      "summary": "A zombie survival browser project set on the lunar map Moon.",
+      "whatItIs": "A community entry that adapts the Moon survival map for the browser. It is a single map experience rather than a full Call of Duty release, and its requirements were not fully confirmed when this page was checked.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A stable connection for streaming assets",
+        "Awareness that the project is a map entry, not a complete game"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Let the loading screen finish before you interact.",
+        "Check the host's notes for controls and any file requirements."
+      ],
+      "sourceUrl": "https://moon-zombies.pages.dev/",
+      "statusNote": "The connection ended during our check, so the Moon map's requirements are unconfirmed.",
+      "related": ["kino-der-toten", "black-ops-zombies", "cheese-cube"]
+    },
+    {
+      "slug": "kino-der-toten",
+      "name": "Kino der Toten",
+      "altName": "Black Ops theatre map (fan project)",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "setup",
+      "summary": "A community take on the iconic theatre zombie map.",
+      "whatItIs": "This entry covers a browser project built around the Kino der Toten map. Keep it distinct from the main Black Ops host, since it is a separate community build with its own loading behaviour.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A stable connection",
+        "Acceptance that this is one map, not the whole game"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Allow the loader to complete.",
+        "Read the project's own instructions for controls and saving."
+      ],
+      "sourceUrl": "https://kino-der-toten.pages.dev/",
+      "statusNote": "The connection ended during our check, so the Kino der Toten build is unverified.",
+      "related": ["moon-zombies", "black-ops-zombies", "cheese-cube"]
+    },
+    {
+      "slug": "cheese-cube",
+      "name": "BO3 Cheese Cube",
+      "altName": "Black Ops III custom map (fan project)",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "setup",
+      "summary": "A browser zombie challenge inspired by the Cheese Cube custom map.",
+      "whatItIs": "A community map entry in the original list, built around the Cheese Cube challenge format. Loading behaviour and the exact content included were not confirmed at the time of this check.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A stable connection",
+        "Expectations set for a short custom-map experience"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Wait for the project to finish loading.",
+        "Check the host's page for controls and any extra setup."
+      ],
+      "sourceUrl": "https://cheese-cube.pages.dev/",
+      "statusNote": "Loading and included content are unconfirmed; this is a map entry.",
+      "related": ["moon-zombies", "kino-der-toten", "black-ops-2-vibe-slops"]
+    },
+    {
+      "slug": "black-ops-2-vibe-slops",
+      "name": "Black Ops 2 / Vibe Slops",
+      "altName": "Claude of Duty: Vibe Slops II",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "setup",
+      "summary": "The project the original list labels as Black Ops 2, actually named Vibe Slops.",
+      "whatItIs": "The shared list names this entry Black Ops 2, but the community project behind it is called Claude of Duty: Vibe Slops II. It is an independent build, so do not expect the full original game.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A stable connection",
+        "The understanding that this is a fan build with its own content"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Wait for the project to initialise.",
+        "Read the project's own notes before judging what is included."
+      ],
+      "sourceUrl": "https://vibeslops.luckeysystems.com/",
+      "statusNote": "The destination was not readable during our check, so content is unconfirmed.",
+      "related": ["cheese-cube", "black-ops-zombies", "modern-warfare-2"]
+    },
+    {
+      "slug": "modern-warfare-2",
+      "name": "Modern Warfare 2",
+      "altName": "MW2 community browser project",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "setup",
+      "summary": "A community MW2 browser project that was rate limited when checked.",
+      "whatItIs": "This entry covers a community project named after Modern Warfare 2. The host returned a rate-limit response during the check, so its build and playable content could not be confirmed.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A stable connection",
+        "A willingness to retry later if the host is busy"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "If the host reports it is busy, try again later instead of reloading repeatedly.",
+        "Follow the project's own setup notes once it responds."
+      ],
+      "sourceUrl": "https://ovz-game-production.up.railway.app/",
+      "statusNote": "The host returned HTTP 429 during the check. Availability may be temporary.",
+      "related": ["black-ops-2-vibe-slops", "black-ops-zombies", "cs-surf"]
+    },
+    {
+      "slug": "skate-3",
+      "name": "Skate 3",
+      "altName": "Skate 3 fan browser project",
+      "category": "Sports",
+      "device": "Desktop",
+      "requirement": "files",
+      "summary": "A fan-made browser skating project that streams data from your own converted copy.",
+      "whatItIs": "The landing page describes a project that streams game data from a copy of Skate 3 that you convert yourself. The browser link does not include the original game files, and this page does not provide them.",
+      "whatYouNeed": [
+        "A legally owned copy of Skate 3 that you convert yourself",
+        "A desktop browser with enough local storage for the converted data",
+        "The project's own conversion instructions, read before you start"
+      ],
+      "howToOpen": [
+        "Read the project's setup page for the required conversion steps.",
+        "Prepare the game data from a copy you own.",
+        "Open the source destination and follow the loader's prompts.",
+        "Check how progress is saved before starting a long session."
+      ],
+      "sourceUrl": "https://skate.aaddpp.lol/",
+      "statusNote": "The landing page describes streaming data from your own converted copy. No game files are provided here.",
+      "related": ["skate-rust", "pes-6", "gta-vice-city"]
+    },
+    {
+      "slug": "skate-rust",
+      "name": "Skate Rust",
+      "altName": "Listed skating entry (destination mismatch)",
+      "category": "Sports",
+      "device": "Unknown",
+      "requirement": "unavailable",
+      "summary": "The supplied link no longer points to the named skating project.",
+      "whatItIs": "The original list named a skating project here, but the supplied address currently leads somewhere else entirely. Because the destination does not match the name, this page withholds the launch button.",
+      "whatYouNeed": [
+        "Nothing for now, since the destination is incorrect",
+        "A check of the original reply if you want to hunt for the real project"
+      ],
+      "howToOpen": [
+        "Do not treat the current destination as the named game.",
+        "Compare the original reply on X against any replacement link before using it.",
+        "Report a corrected address if you find one."
+      ],
+      "sourceUrl": "",
+      "statusNote": "Wrong destination. The supplied URL leads to an unrelated storefront, so the launch button is withheld.",
+      "related": ["skate-3", "pes-6", "wasm-arcade"]
+    },
+    {
+      "slug": "cs-surf",
+      "name": "CS Surf / Surfd",
+      "altName": "Source-style surfing project",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "ready",
+      "summary": "Trade gunfire for momentum, riding ramps and chasing faster times.",
+      "whatItIs": "A Source-style surfing project with its own maps, movement and timed routes. The destination lists a browser start, so it is one of the quicker entries to try.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A keyboard and mouse for precise movement",
+        "A little practice, since surf maps reward route knowledge"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Follow the on-screen start and read the movement controls.",
+        "Pick a beginner route before attempting timed runs."
+      ],
+      "sourceUrl": "https://surfd.net/",
+      "statusNote": "The destination lists a browser start and responded on 9 Oct 2026.",
+      "related": ["quake", "urban-terror", "half-life-cs16-webxash"]
+    },
+    {
+      "slug": "halo-ce",
+      "name": "Halo: Combat Evolved",
+      "altName": "Halo CE community browser project",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "setup",
+      "summary": "A community browser project for the first Halo, still in early form.",
+      "whatItIs": "The source destination showed an opening screen for a community Halo CE project. What the build eventually loads and what it requires were not established during the check.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A stable connection",
+        "An open mind, since the project may be partial"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Let the opening screen load and read any project notes.",
+        "Check the project's own page for file requirements."
+      ],
+      "sourceUrl": "https://mitchellhynes.com/halo",
+      "statusNote": "An entry page was found. The eventual game and its requirements were not established.",
+      "related": ["halo-ce-mobile", "quake-3", "return-to-castle-wolfenstein"]
+    },
+    {
+      "slug": "halo-ce-mobile",
+      "name": "Halo CE Mobile",
+      "altName": "Halo CE aimed at phones",
+      "category": "Shooter",
+      "device": "Mobile",
+      "requirement": "files",
+      "summary": "A Halo browser project aimed at mobile devices that needs your own disc data.",
+      "whatItIs": "This project targets mobile browsers and asks for an Xbox Halo CE disc image that you supply yourself. Browser access does not include that disc data.",
+      "whatYouNeed": [
+        "A legally owned Xbox Halo CE ISO or XISO that you prepare yourself",
+        "A modern mobile browser with enough memory",
+        "Touch controls, or a paired controller"
+      ],
+      "howToOpen": [
+        "Read the project's instructions for preparing the disc image.",
+        "Open the source destination on your device.",
+        "Load your own data when the project asks for it.",
+        "Check the project's supported-browser list if graphics fail to start."
+      ],
+      "sourceUrl": "https://hcemobile.com/",
+      "statusNote": "The project asks for your own disc data. No game files are provided here.",
+      "related": ["halo-ce", "skate-3", "gta-vice-city"]
+    },
+    {
+      "slug": "pes-6",
+      "name": "PES 6 Web Online",
+      "altName": "Pro Evolution Soccer 6 (PSP build)",
+      "category": "Sports",
+      "device": "Desktop",
+      "requirement": "ready",
+      "summary": "The PSP football classic rebuilt for the browser with pad and touch support.",
+      "whatItIs": "This project identifies itself as the PSP version of PES 6 and documents keyboard, gamepad and touch controls. It is a browser rebuild rather than a cloud stream.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A gamepad or keyboard for the best control",
+        "A stable connection for the initial asset load"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Choose your input method on the setup screen.",
+        "Kick off a friendly before starting a longer competition."
+      ],
+      "sourceUrl": "https://pes6.optijuegos.net/",
+      "statusNote": "The project documents keyboard, gamepad and touch controls and responded on 9 Oct 2026.",
+      "related": ["skate-3", "cs-surf", "quake"]
+    },
+    {
+      "slug": "gta-5",
+      "name": "GTA 5 (archived link)",
+      "altName": "Grand Theft Auto V fan page, archive only",
+      "category": "Sandbox",
+      "device": "Unknown",
+      "requirement": "archive",
+      "summary": "The list's GTA 5 entry resolves to a web archive, not a live game.",
+      "whatItIs": "The original graphic named GTA 5, but its reply link points to a Wayback Machine snapshot. An archived page is historical context and is not a confirmed, playable GTA V build.",
+      "whatYouNeed": [
+        "Nothing, unless you want to view the archive for context",
+        "Awareness that archived pages often lose their scripts and assets"
+      ],
+      "howToOpen": [
+        "Open the archive only if you want historical context.",
+        "Expect missing assets and non-working scripts.",
+        "For an actual Vice City browser project, use the separate Vice City entry."
+      ],
+      "sourceUrl": "https://web.archive.org/web/20261006055917/https://playgta5.com/",
+      "statusNote": "Archive only. This is a Wayback capture, not a live game.",
+      "related": ["gta-vice-city", "simpsons-hit-and-run", "wasm-arcade"]
+    },
+    {
+      "slug": "gta-vice-city",
+      "name": "GTA: Vice City (WASM)",
+      "altName": "Vice City WebAssembly project",
+      "category": "Sandbox",
+      "device": "Desktop",
+      "requirement": "files",
+      "summary": "A Vice City WebAssembly project that imports game data you provide.",
+      "whatItIs": "The setup screen expects a game.tar.gz archive built from a copy of Vice City that you own, and it describes storing that data locally in your browser. The project does not ship the original files.",
+      "whatYouNeed": [
+        "A legally owned copy of Vice City that you package yourself",
+        "A desktop browser with enough storage for the imported archive",
+        "The project's own instructions for building the archive"
+      ],
+      "howToOpen": [
+        "Read the project's page for the exact archive format.",
+        "Prepare game.tar.gz from your own copy.",
+        "Open the source destination and import the archive when prompted.",
+        "Note that clearing site data can remove your imported files."
+      ],
+      "sourceUrl": "https://joncodeofficial.github.io/gta-vice-city-wasm/",
+      "statusNote": "The setup screen expects your own game.tar.gz and stores it in browser-local storage.",
+      "related": ["gta-5", "simpsons-hit-and-run", "skate-3"]
+    },
+    {
+      "slug": "simpsons-hit-and-run",
+      "name": "The Simpsons: Hit & Run",
+      "altName": "Springfield driving adventure (web port)",
+      "category": "Sandbox",
+      "device": "Desktop",
+      "requirement": "setup",
+      "summary": "A community web port of Springfield's driving adventure.",
+      "whatItIs": "A fan project that ports The Simpsons: Hit & Run to the browser. A loading screen was found during the check, but a running scene and the controls were not tested.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A stable connection for the initial load",
+        "A keyboard or gamepad for driving"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Allow the loading screen to finish.",
+        "Read the project's page for controls and any data requirements."
+      ],
+      "sourceUrl": "https://shar-wasm.cjoseph.workers.dev/?skipmovie",
+      "statusNote": "A loader was found during the check. A running scene and controls were not verified.",
+      "related": ["gta-vice-city", "gta-5", "skate-3"]
+    },
+    {
+      "slug": "quake",
+      "name": "Quake / QuakeWorld",
+      "altName": "The arena classic, browser multiplayer",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "ready",
+      "summary": "The arena classic rebuilt for browser multiplayer with fast movement.",
+      "whatItIs": "The destination describes a QuakeWorld multiplayer project, so treat it as a fast, competitive multiplayer experience rather than a full single-player campaign.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A keyboard and mouse for the movement binds",
+        "A stable connection, since this is a live multiplayer project"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Read the mode notes so you know what to expect.",
+        "Join a server and check the movement binds before playing seriously."
+      ],
+      "sourceUrl": "https://q1.pieter.com/",
+      "statusNote": "The destination describes a QuakeWorld multiplayer project and lists a browser start.",
+      "related": ["quake-2", "quake-3", "urban-terror"]
+    },
+    {
+      "slug": "quake-2",
+      "name": "Quake II",
+      "altName": "Quake II browser multiplayer",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "ready",
+      "summary": "Another entry in the Quake browser collection, focused on multiplayer.",
+      "whatItIs": "Quake II is id Software's 1997 shooter, the follow-up to the original, with a sci-fi campaign and a strong multiplayer scene of its own. The host describes multiplayer for up to eight players; a joined match was not tested, so treat the player count as the project's own claim.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A keyboard and mouse",
+        "A stable connection, and enough players for a full lobby"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Read the setup notes for controls and servers.",
+        "Try a match with a few players before hosting a full lobby."
+      ],
+      "sourceUrl": "https://q2.pieter.com/",
+      "statusNote": "The host describes multiplayer for up to eight players and responded on 9 Oct 2026.",
+      "related": ["quake", "quake-3", "return-to-castle-wolfenstein"]
+    },
+    {
+      "slug": "quake-3",
+      "name": "Quake III Arena",
+      "altName": "Arena shooter browser project",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "setup",
+      "summary": "The arena shooter's community browser project, built for fast action.",
+      "whatItIs": "Quake III Arena is id Software's 1999 arena shooter, built entirely around multiplayer and known for its fast movement and rocket-jumping. A community browser project hosts it here. The connection check did not complete, which does not by itself prove a worldwide outage.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A keyboard and mouse, since arena shooters need fast turning",
+        "A stable connection, and a retry later if the host is busy"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "If it does not respond, try again later rather than reloading repeatedly.",
+        "Read the project's notes for modes and controls."
+      ],
+      "sourceUrl": "https://q3.pieter.com/",
+      "statusNote": "The connection check did not complete. This does not establish an outage.",
+      "related": ["quake", "quake-2", "cs-surf"]
+    },
+    {
+      "slug": "return-to-castle-wolfenstein",
+      "name": "Return to Castle Wolfenstein",
+      "altName": "RTCW browser multiplayer project",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "ready",
+      "summary": "A community RTCW project with multiplayer and a sizable first load.",
+      "whatItIs": "Return to Castle Wolfenstein is the 2001 shooter that rebuilt the Wolfenstein series in full 3D, and it leaned heavily on its class-based multiplayer. The host describes multiplayer and an initial data load of roughly 380 MB; campaign play was not established, so expect a multiplayer-focused build.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "Enough bandwidth and patience for a large first load",
+        "A keyboard and mouse"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Let the initial data load finish without reloading.",
+        "Check the host's notes for servers and controls."
+      ],
+      "sourceUrl": "https://rtcw.pieter.com/",
+      "statusNote": "The host describes multiplayer and roughly a 380 MB initial load.",
+      "related": ["quake-2", "urban-terror", "half-life-pixelsuft"]
+    },
+    {
+      "slug": "urban-terror",
+      "name": "Urban Terror",
+      "altName": "Listed as Unreal Tournament in the original reply",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "ready",
+      "summary": "Tactical multiplayer action from the real Urban Terror web project.",
+      "whatItIs": "The original reply labels this entry Unreal Tournament, but the destination identifies itself as Urban Terror. They are different games, so this page shows the corrected title.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A keyboard and mouse",
+        "A stable connection for tactical multiplayer"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Read the project's own notes for servers and controls.",
+        "Expect tactical multiplayer rather than an arena shooter."
+      ],
+      "sourceUrl": "https://ut.pieter.com/",
+      "statusNote": "Name corrected: the destination identifies as Urban Terror, not Unreal Tournament.",
+      "related": ["quake", "return-to-castle-wolfenstein", "cs-surf"]
+    },
+    {
+      "slug": "half-life-pixelsuft",
+      "name": "Half-Life (Pixelsuft)",
+      "altName": "Xash3D Emscripten port",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "files",
+      "summary": "A Half-Life browser port built on an Xash3D Emscripten engine.",
+      "whatItIs": "The page identifies an Xash3D Emscripten port of Half-Life. Included game content and a usable session were not confirmed, and original game data may be required.",
+      "whatYouNeed": [
+        "A legally owned copy of Half-Life for any required data",
+        "A desktop browser",
+        "The project's own notes on which content is bundled"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Read the setup page for data requirements.",
+        "Load your own files only if the project asks for them."
+      ],
+      "sourceUrl": "https://pixelsuft.github.io/hl/",
+      "statusNote": "A setup page was found. Included content and a usable session remain unconfirmed.",
+      "related": ["half-life-cs16-webxash", "return-to-castle-wolfenstein", "quake"]
+    },
+    {
+      "slug": "half-life-cs16-webxash",
+      "name": "Half-Life / CS 1.6 (WebXash)",
+      "altName": "webXash engine project",
+      "category": "Shooter",
+      "device": "Desktop",
+      "requirement": "files",
+      "summary": "The webXash engine project for compatible Half-Life and Counter-Strike data.",
+      "whatItIs": "The destination identifies the webXash engine, which runs compatible Half-Life and Counter-Strike data in the browser. Check the current setup screen for what data it expects.",
+      "whatYouNeed": [
+        "Legally owned Half-Life or Counter-Strike data if the project asks for it",
+        "A desktop browser",
+        "The project's own setup instructions"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Read the setup screen for data requirements and available demos.",
+        "Supply your own data only where the project documents it."
+      ],
+      "sourceUrl": "https://x8bitrain.github.io/webXash/",
+      "statusNote": "The destination identifies WebXash. Check the setup screen for data requirements.",
+      "related": ["half-life-pixelsuft", "cs-surf", "quake"]
+    },
+    {
+      "slug": "diablo-web",
+      "name": "Diablo Web",
+      "altName": "Classic dungeon crawler, browser port",
+      "category": "RPG",
+      "device": "Desktop",
+      "requirement": "files",
+      "summary": "Descend into a classic dungeon in a project that may need your own game data.",
+      "whatItIs": "The destination identifies Diablo Web, a browser port of the original dungeon crawler. Its file requirements were not verified, and it may need data from a copy you own.",
+      "whatYouNeed": [
+        "A legally owned copy of Diablo if data is required",
+        "A desktop browser",
+        "The project's own notes on which files to supply"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Read the project's setup notes for file requirements.",
+        "Supply your own data only where the project documents it."
+      ],
+      "sourceUrl": "https://johnimril.github.io/diablo_web/",
+      "statusNote": "An entry page was found. File requirements and gameplay were not verified.",
+      "related": ["gta-vice-city", "half-life-pixelsuft", "simpsons-hit-and-run"]
+    },
+    {
+      "slug": "hedgewars-webwars",
+      "name": "Hedgewars / WebWars",
+      "altName": "Turn-based artillery strategy",
+      "category": "Strategy",
+      "device": "Unknown",
+      "requirement": "unavailable",
+      "summary": "A strategy entry whose host failed a certificate check.",
+      "whatItIs": "Hedgewars is a turn-based artillery strategy game, and this entry covers a browser build. The linked host failed a TLS hostname check, so this page withholds the launch button.",
+      "whatYouNeed": [
+        "Nothing for now, since the host did not pass its certificate check",
+        "A corrected address from the project before you proceed"
+      ],
+      "howToOpen": [
+        "Do not bypass a browser certificate warning.",
+        "Wait for the project to publish a corrected address.",
+        "Check the original reply for an updated link."
+      ],
+      "sourceUrl": "",
+      "statusNote": "Certificate error. The host link is withheld until it resolves.",
+      "related": ["wasm-arcade", "quake-2", "pes-6"]
+    },
+    {
+      "slug": "wasm-arcade",
+      "name": "WASM Arcade (GTA / Minecraft)",
+      "altName": "PC-game collection directory",
+      "category": "Collection",
+      "device": "Unknown",
+      "requirement": "setup",
+      "summary": "A collection page that redirects to a wider PC-game browser library.",
+      "whatItIs": "The source link redirects to a PC-game collection rather than a single title. Treat it as a directory entry that leads to more projects, not as one more game.",
+      "whatYouNeed": [
+        "A desktop browser",
+        "A stable connection",
+        "The understanding that you are browsing a collection, not a single game"
+      ],
+      "howToOpen": [
+        "Open the source destination from this page.",
+        "Browse the collection and read each project's own notes.",
+        "Return to this directory to compare entries by requirement and device."
+      ],
+      "sourceUrl": "https://wasmarcade.com/Fan",
+      "statusNote": "A collection was found. This is a directory entry, not a single game.",
+      "related": ["gta-5", "gta-vice-city", "hedgewars-webwars"]
+    }
+  ]
+}

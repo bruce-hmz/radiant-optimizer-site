@@ -1,0 +1,1220 @@
+import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, readdirSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const SRC = __dirname;
+const OUT = join(__dirname, "..", "public");
+
+/* ------------------------------------------------------------------ */
+/*  Clean generated output                                             */
+/*  The build owns every HTML page, but NOT public/assets/shots: those  */
+/*  are real screenshots captured separately by src/shoot.mjs and must  */
+/*  survive a rebuild. Clearing the generated paths stops a renamed or  */
+/*  removed page (e.g. a retired genre folder) from lingering as a      */
+/*  stale duplicate that would still be deployed and indexed.           */
+/*  Best effort: some sandboxes block file deletion, so a failure here  */
+/*  is a warning, not a crash.                                          */
+/* ------------------------------------------------------------------ */
+const GENERATED_DIRS = ["browser-games", "games", "guides"];
+const GENERATED_FILES = ["index.html", "404.html", "sitemap.xml", "robots.txt"];
+let cleaned = true;
+try {
+  for (const d of GENERATED_DIRS) rmSync(join(OUT, d), { recursive: true, force: true });
+  for (const f of GENERATED_FILES) rmSync(join(OUT, f), { force: true });
+} catch {
+  cleaned = false;
+}
+
+/* ------------------------------------------------------------------ */
+/*  CONFIG — edit these before you deploy                              */
+/* ------------------------------------------------------------------ */
+const CONFIG = {
+  siteName: "PlayVault",
+  tagline: "Classic games you can play in a browser tab",
+  baseUrl: "https://radiantoptimizerlist.com",
+  sourcePostUrl: "https://x.com/RadiantOpti/status/2108068628793082338",
+  sourceReplyUrl: "https://x.com/RadiantOpti/status/2108068632991256995",
+  affiliateAntivirus: "#partner-antivirus",
+  affiliateRadiant: "#partner-radiant",
+};
+/* ------------------------------------------------------------------ */
+
+// Join the base URL and a path with exactly one slash, so that a baseUrl
+// without a trailing slash never produces "https://hostassets/...".
+const abs = (p) => `${String(CONFIG.baseUrl).replace(/\/+$/, "")}/${String(p).replace(/^\/+/, "")}`;
+
+// Normalise once so every `${CONFIG.baseUrl}/path` template below is safe
+// whether or not the operator typed a trailing slash.
+CONFIG.baseUrl = String(CONFIG.baseUrl).replace(/\/+$/, "");
+
+const sourceData = JSON.parse(readFileSync(join(SRC, "data", "games.json"), "utf8"));
+const libraryData = JSON.parse(readFileSync(join(SRC, "data", "library.json"), "utf8"));
+const SOURCE = sourceData.games.map((g) => ({ ...g, collection: "source" }));
+const LIBRARY = libraryData.games.map((g) => ({ ...g, collection: "library" }));
+const games = [...SOURCE, ...LIBRARY];
+const bySlug = Object.fromEntries(games.map((g) => [g.slug, g]));
+
+const hostOf = (g) => {
+  if (g.host) return g.host;
+  if (!g.sourceUrl) return "no destination";
+  try {
+    return new URL(g.sourceUrl).hostname.replace(/^www\./, "");
+  } catch {
+    return "unknown";
+  }
+};
+
+const REQ = {
+  ready: { cls: "req-ready", label: "Ready to start" },
+  files: { cls: "req-files", label: "Bring your own files" },
+  setup: { cls: "req-setup", label: "Check setup first" },
+  archive: { cls: "req-archive", label: "Archive snapshot" },
+  unavailable: { cls: "req-unavailable", label: "Link withheld" },
+};
+
+const COLLECTIONS = {
+  source: { label: "From the list", hint: "Shared by @RadiantOpti on 8 Oct 2026" },
+  library: { label: "Wider library", hint: "Independently collected browser ports" },
+};
+
+// Parent-keyword hubs. Each group maps to one or more categories.
+const GROUPS = [
+  {
+    slug: "shooter-classics",
+    name: "Classic & retro shooters",
+    cats: [],
+    title: "Classic and retro shooters in your browser",
+    lede: "Doom, Duke Nukem, Wolfenstein and the N64 split-screen era, all running in a tab.",
+    intro:
+      "This is the oldest end of the browser shooter scene, and the most reliable. Doom, The Ultimate Doom, Duke Nukem 3D and Wolfenstein 3D run from genuine DOS executables inside a browser DOS environment, so the original behaviour is preserved rather than approximated. Alongside them sit the N64 and SNES clean-room builds, GoldenEye 007, Perfect Dark, Doom 64, Star Fox 64 and Duke Nukem: Zero Hour, which reconstruct the original console code instead of emulating a cartridge. Freedoom and OpenTyrian are the two entries here with entirely free assets, so nothing has to be supplied by you. None of these need an account, and all of them work as single-player.",
+  },
+  {
+    slug: "shooter-online",
+    name: "Online multiplayer shooters",
+    cats: [],
+    title: "Online multiplayer shooters in your browser",
+    lede: "Quake, Half-Life and Counter-Strike projects that put you on a live server from a browser tab.",
+    intro:
+      "These entries are about playing against other people. The Quake family, Return to Castle Wolfenstein, Urban Terror and the two Half-Life and Counter-Strike builds all connect to live servers, and several of them are the same family of projects hosted under different addresses. Latency matters more here than anywhere else in the library, so expect the experience to depend on your connection and on how far the server is from you. CS Surf is the outlier: it drops the shooting in favour of movement, and it is one of the quickest entries to get into.",
+  },
+  {
+    slug: "shooter-hosts",
+    name: "Fan-hosted modern shooters",
+    cats: [],
+    title: "Fan-hosted modern shooters in your browser",
+    lede: "Community hosts for Call of Duty and Halo entries, with the caveats stated up front.",
+    intro:
+      "This group is different from the rest of the library: these are community hosts for modern titles rather than self-contained ports, and they stream data to you as you play. Several of them were unreachable or unverified when we last checked, so read each status note before you invest an evening. Halo CE Mobile asks for your own disc data, and the Call of Duty zombie entries are single-map projects rather than full games. Treat this group as the most experimental part of the directory, and expect some links to come and go.",
+  },
+  {
+    slug: "sandbox",
+    name: "Sandbox & building",
+    cats: ["Sandbox"],
+    title: "Browser sandbox games",
+    lede: "Voxel building, open-world driving and everything in between, running in a browser tab.",
+    intro:
+      "Sandbox games are the easiest genre to try in a browser because most of them start immediately. Minecraft Classic is Mojang's own free browser build, Eaglercraft is a community client, and Craft is a small open-source voxel game with free assets. The Grand Theft Auto entries are a different story: Vice City expects a game archive you build yourself, and the GTA 5 link in the original list only survives as a web archive.",
+  },
+  {
+    slug: "platformer",
+    name: "Platformer",
+    cats: ["Platformer"],
+    title: "Browser platformer games",
+    lede: "Precision jumping from 1989 to the N64 era, rebuilt to run in a tab.",
+    intro:
+      "Platformers translate unusually well to the browser because they need a keyboard and almost nothing else. PrinceJS reimplements the original Prince of Persia in HTML5, sm64js is a JavaScript port built from the Super Mario 64 decompilation, and Sonic the Hedgehog 2 and Banjo-Kazooie arrive as clean-room builds. Most of these run at full speed on a laptop that would struggle to emulate the same hardware.",
+  },
+  {
+    slug: "action-adventure",
+    name: "Action & adventure",
+    cats: ["Action", "Action-adventure", "Adventure", "RPG"],
+    title: "Browser action and adventure games",
+    lede: "Exploration-driven classics, dungeon crawlers and point-and-click adventures.",
+    intro:
+      "This group covers the slower, longer games: Ocarina of Time and Super Metroid for exploration, Castlevania: Symphony of the Night for action, Diablo for dungeon crawling, and Beneath a Steel Sky for point-and-click adventure. They are the entries most likely to ask for your own game files, so check the requirement badge before you start.",
+  },
+  {
+    slug: "strategy",
+    name: "Strategy & simulation",
+    cats: ["Strategy", "Simulation"],
+    title: "Browser strategy and simulation games",
+    lede: "Real-time strategy, transport tycoons and park builders, without a launcher.",
+    intro:
+      "Strategy and simulation games are the ones that quietly eat entire afternoons. Red Alert runs from a browser DOS build with a multiplayer lobby, Chrono Divide recreates Red Alert 2, OpenTTD ships with free graphics so nothing is missing, and OpenRCT2 supplies the engine while expecting the original RollerCoaster Tycoon 2 data from a copy you own.",
+  },
+  {
+    slug: "racing",
+    name: "Racing",
+    cats: ["Racing"],
+    title: "Browser racing games",
+    lede: "Kart racing and anti-gravity speed, rebuilt from the N64 originals.",
+    intro:
+      "Racing ports live or die on input latency, which is exactly the problem browser builds have historically struggled with. The N64 clean-room builds here hold up better than most, and a gamepad makes a noticeable difference. If you are testing whether your setup is the bottleneck rather than the browser, our troubleshooting guide covers what to check first.",
+  },
+  {
+    slug: "sports",
+    name: "Sports",
+    cats: ["Sports"],
+    title: "Browser sports games",
+    lede: "Skating and football classics, ported to run in a browser tab.",
+    intro:
+      "Sports ports are the most likely to ask for your own data, because the original games shipped with large licensed asset libraries that cannot be redistributed. Skate 3 streams from a converted copy you make yourself, and PES 6 documents keyboard, gamepad and touch controls. Read the setup notes before you start a conversion.",
+  },
+  {
+    slug: "arcade",
+    name: "Arcade & fighting",
+    cats: ["Arcade", "Fighting", "Collection"],
+    title: "Browser arcade and fighting games",
+    lede: "Short-session arcade action, party fighters and collection directories.",
+    intro:
+      "The arcade end of the library is where you find games you can finish in a coffee break. Super Smash Bros. and Open Cadet both start quickly, and the WASM Arcade entry is a directory rather than a single title, so treat it as a jumping-off point to more projects.",
+  },
+];
+const GROUP_OF = {};
+for (const grp of GROUPS) for (const c of grp.cats) GROUP_OF[c] = grp;
+
+// "Shooter" is 28 of 58 entries, far too broad for one page. Instead of one
+// oversized group, those entries are assigned to three intent-based sub-groups
+// by explicit slug override. Everything else still resolves by category.
+const SUBGROUP = {
+  // Classic DOS and retro PC shooters, plus the console clean-room builds.
+  "doom-1993": "shooter-classics",
+  "the-ultimate-doom": "shooter-classics",
+  "doom-mod-collection": "shooter-classics",
+  "duke-nukem-3d": "shooter-classics",
+  "wolfenstein-3d": "shooter-classics",
+  "freedoom": "shooter-classics",
+  "opentyrian": "shooter-classics",
+  "goldeneye-007": "shooter-classics",
+  "perfect-dark": "shooter-classics",
+  "doom-64": "shooter-classics",
+  "star-fox-64": "shooter-classics",
+  "duke-nukem-zero-hour": "shooter-classics",
+  // Live online multiplayer projects.
+  quake: "shooter-online",
+  "quake-2": "shooter-online",
+  "quake-3": "shooter-online",
+  "return-to-castle-wolfenstein": "shooter-online",
+  "urban-terror": "shooter-online",
+  "cs-surf": "shooter-online",
+  "half-life-pixelsuft": "shooter-online",
+  "half-life-cs16-webxash": "shooter-online",
+  // Community hosts for modern titles.
+  "black-ops-zombies": "shooter-hosts",
+  "moon-zombies": "shooter-hosts",
+  "kino-der-toten": "shooter-hosts",
+  "cheese-cube": "shooter-hosts",
+  "black-ops-2-vibe-slops": "shooter-hosts",
+  "modern-warfare-2": "shooter-hosts",
+  "halo-ce": "shooter-hosts",
+  "halo-ce-mobile": "shooter-hosts",
+};
+
+const groupOf = (g) =>
+  SUBGROUP[g.slug] ? GROUPS.find((x) => x.slug === SUBGROUP[g.slug]) : GROUP_OF[g.category];
+const gamesInGroup = (grp) => games.filter((g) => groupOf(g) === grp);
+
+const GUIDES = [
+  {
+    slug: "how-to-use-the-list",
+    title: "How to use the browser games list",
+    description:
+      "A plain-English walkthrough of the list shared by @RadiantOpti: what the four entry types mean and how to start a first session safely.",
+    kicker: "Getting started",
+    file: "how-to-use-the-list.html",
+    nav: "howto",
+  },
+  {
+    slug: "browser-ports-explained",
+    title: "Browser ports explained: decompilation, emulation and clean-room builds",
+    description:
+      "Why some browser games start instantly and others ask for your own game files. The four kinds of browser port, how they differ, and why links break so often.",
+    kicker: "Background",
+    file: "browser-ports-explained.html",
+    nav: "howto",
+  },
+  {
+    slug: "troubleshooting",
+    title: "Browser game won't load? Troubleshooting guide",
+    description:
+      "Fix the most common failures in browser game projects: missing game data, blank canvas, certificate warnings, unresponsive controls and lost progress.",
+    kicker: "Fix it",
+    file: "troubleshooting.html",
+    nav: "fix",
+  },
+  {
+    slug: "is-it-safe",
+    title: "Is the browser games list safe?",
+    description:
+      "Two separate questions answered: whether the browser game projects are safe to open, and whether the Radiant Optimizer utility is legitimate.",
+    kicker: "Safety",
+    file: "is-it-safe.html",
+    nav: "safe",
+  },
+  {
+    slug: "radiant-optimizer-review",
+    title: "Radiant Optimizer review: what it does and who should skip it",
+    description:
+      "An independent look at the $57.77 one-time Windows tuning tool: what it actually changes, what it cannot do, and whether it is worth it.",
+    kicker: "Review",
+    file: "radiant-optimizer-review.html",
+    nav: "review",
+  },
+];
+
+/* ---------------- helpers ---------------- */
+
+const esc = (s) =>
+  String(s == null ? "" : s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+const reqBadge = (r) => {
+  const m = REQ[r] || REQ.setup;
+  return `<span class="badge ${m.cls}">${esc(m.label)}</span>`;
+};
+
+const write = (relPath, content) => {
+  const full = join(OUT, relPath);
+  mkdirSync(dirname(full), { recursive: true });
+  writeFileSync(full, content, "utf8");
+  return relPath;
+};
+
+/* ---------------- cover art ---------------- */
+
+const PALETTE = {
+  Shooter: ["#3b1220", "#e24b4a", "#f7c1c1"],
+  Sports: ["#0d2b23", "#1d9e75", "#9fe1cb"],
+  Sandbox: ["#1b2a10", "#639922", "#c0dd97"],
+  RPG: ["#241c47", "#7f77dd", "#cecbf6"],
+  Strategy: ["#0c2440", "#378add", "#b5d4f4"],
+  Racing: ["#3a2606", "#ba7517", "#fac775"],
+  Platformer: ["#3a1027", "#d4537e", "#f4c0d1"],
+  Action: ["#3a1808", "#d85a30", "#f5c4b3"],
+  "Action-adventure": ["#241c47", "#7f77dd", "#cecbf6"],
+  Fighting: ["#3b1220", "#e24b4a", "#f7c1c1"],
+  Simulation: ["#0d2b23", "#1d9e75", "#9fe1cb"],
+  Arcade: ["#3a2606", "#ba7517", "#fac775"],
+  Adventure: ["#0c2440", "#378add", "#b5d4f4"],
+  Puzzle: ["#1e232b", "#888780", "#d3d1c7"],
+  Collection: ["#1e232b", "#888780", "#d3d1c7"],
+};
+
+const initialsOf = (name) => {
+  const stop = new Set(["the", "of", "a", "and", "in", "on", "for", "to", "your"]);
+  const words = String(name)
+    .replace(/[^\w\s'&:-]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .filter((w) => !stop.has(w.toLowerCase()));
+  const pick = words.length >= 2 ? [words[0], words[1]] : [words[0] || name];
+  return pick.map((w) => w[0]).join("").toUpperCase().slice(0, 2);
+};
+
+function coverSvg(g) {
+  const [bg, mid, light] = PALETTE[g.category] || PALETTE.Collection;
+  const ini = initialsOf(g.name);
+  const rings = [0, 1, 2, 3]
+    .map(
+      (i) =>
+        `<circle cx="960" cy="250" r="${90 + i * 78}" fill="none" stroke="${mid}" stroke-opacity="${(0.32 - i * 0.06).toFixed(2)}" stroke-width="1.5"/>`
+    )
+    .join("");
+  const bars = [0, 1, 2, 3, 4, 5, 6, 7]
+    .map((i) => {
+      const h = 70 + ((i * 47) % 130);
+      return `<rect x="${i * 160 - 40}" y="${720 - h}" width="52" height="${h}" fill="${mid}" fill-opacity="0.16"/>`;
+    })
+    .join("");
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="${mid}" stop-opacity="0.16"/>
+<stop offset="1" stop-color="${bg}" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<rect width="1280" height="720" fill="${bg}"/>
+${bars}
+${rings}
+<rect x="0" y="0" width="1280" height="720" fill="url(#g)"/>
+<text x="72" y="196" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="200" font-weight="800" fill="${mid}" fill-opacity="0.9" letter-spacing="-6">${esc(ini)}</text>
+<text x="72" y="300" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="34" font-weight="600" fill="${light}" fill-opacity="0.75">${esc(g.category)}</text>
+<rect x="72" y="336" width="96" height="4" fill="${mid}"/>
+<text x="72" y="640" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="52" font-weight="700" fill="#ffffff" fill-opacity="0.94">${esc(g.name.length > 30 ? g.name.slice(0, 29) + "…" : g.name)}</text>
+<text x="72" y="684" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="24" fill="${light}" fill-opacity="0.6">${esc(hostOf(g))}</text>
+</svg>`;
+}
+
+const shotPath = (slug) => join(OUT, "assets", "shots", `${slug}.jpg`);
+// Captures that only show a loading spinner or a bot-check wall. Fall back to cover art.
+const SHOT_SKIP = new Set(["prince-of-persia", "modern-warfare-2", "simpsons-hit-and-run"]);
+const hasShot = (slug) => !SHOT_SKIP.has(slug) && existsSync(shotPath(slug));
+
+/* ---------------- chrome ---------------- */
+
+const ICON_SEARCH = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`;
+const ICON_WARN = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4"/><path d="M12 17.5v.01"/></svg>`;
+
+function header(rel, active) {
+  const nav = [
+    ["", "Directory", "directory"],
+    ["browser-games/index.html", "Browser games", "browser"],
+    ["guides/how-to-use-the-list.html", "How to use", "howto"],
+    ["guides/is-it-safe.html", "Is it safe?", "safe"],
+    ["guides/radiant-optimizer-review.html", "Radiant review", "review"],
+  ];
+  return `<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="${rel}index.html"><span class="mark">PV</span><span class="name">${esc(CONFIG.siteName)}</span></a>
+    <nav class="nav">${nav
+      .map(([href, label, key]) => `<a href="${rel}${href}"${key === active ? ' style="color:var(--text)"' : ""}>${label}</a>`)
+      .join("")}</nav>
+  </div>
+</header>`;
+}
+
+function footer(rel) {
+  return `<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h5>${esc(CONFIG.siteName)}</h5>
+        <p class="disclaimer">${esc(CONFIG.tagline)}. An independent directory of community browser-game projects. We are not affiliated with Radiant Optimizer, the projects listed, or their publishers.</p>
+      </div>
+      <div>
+        <h5>Browse</h5>
+        <a href="${rel}browser-games/index.html">Browser games</a>
+        <a href="${rel}browser-games/no-download/index.html">No download needed</a>
+        <a href="${rel}index.html">Radiant Optimizer list</a>
+      </div>
+      <div>
+        <h5>Genres</h5>
+        ${GROUPS.slice(0, 6)
+          .map((g) => `<a href="${rel}browser-games/${g.slug}/index.html">${esc(g.name)}</a>`)
+          .join("")}
+      </div>
+      <div>
+        <h5>Guides</h5>
+        ${GUIDES.map((g) => `<a href="${rel}guides/${g.slug}.html">${esc(g.title.split(":")[0])}</a>`).join("")}
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="disclaimer">We link to original project destinations only. We do not host, mirror or provide game files, and we do not offer copies of commercial games. Projects marked "Bring your own files" expect data from a game you legally own. Screenshots are captured from the linked projects for identification purposes and remain the property of their creators. Never bypass a browser certificate warning, and never download an unfamiliar executable to play a browser game.</p>
+      <p class="disclaimer" style="margin-top:12px">Last checked ${esc(sourceData.source.checkedDate)}. Destinations and status can change without notice.</p>
+    </div>
+  </div>
+</footer>`;
+}
+
+function layout({ rel, title, description, canonical, active, body, jsonLd, image }) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(description)}">
+<link rel="canonical" href="${abs(canonical)}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(description)}">
+<meta property="og:site_name" content="${esc(CONFIG.siteName)}">
+${image ? `<meta property="og:image" content="${abs(image)}">` : ""}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b0d12">
+<link rel="stylesheet" href="${rel}assets/style.css">
+${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ""}
+</head>
+<body>
+<a class="sr-only" href="#main">Skip to content</a>
+${header(rel, active)}
+<main id="main">
+${body}
+</main>
+${footer(rel)}
+<script src="${rel}assets/app.js" defer></script>
+</body>
+</html>`;
+}
+
+/* ---------------- index ---------------- */
+
+const cats = ["All", ...Array.from(new Set(games.map((g) => g.category))).sort()];
+const imgSrc = (g, prefix) => (hasShot(g.slug) ? `${prefix}assets/shots/${g.slug}.jpg` : `${prefix}assets/covers/${g.slug}.svg`);
+
+function card(g, prefix = "") {
+  const search = [g.name, g.altName, g.category, g.device, g.summary, hostOf(g)].join(" ").toLowerCase();
+  return `<article class="card" data-cat="${esc(g.category)}" data-dev="${esc(g.device)}" data-col="${g.collection}" data-search="${esc(search)}">
+  <a class="thumb" href="${prefix}games/${g.slug}.html" aria-hidden="true" tabindex="-1">
+    <img src="${imgSrc(g, prefix)}" alt="" loading="lazy" width="1280" height="720">
+    ${g.collection === "source" ? '<span class="pin">From the list</span>' : ""}
+  </a>
+  <div class="card-body">
+    <div class="card-top">
+      <span class="badge cat">${esc(g.category)}</span>
+      ${reqBadge(g.requirement)}
+    </div>
+    <h3><a href="${prefix}games/${g.slug}.html">${esc(g.name)}</a></h3>
+    <p>${esc(g.summary)}</p>
+    <div class="card-foot">
+      <span class="badge dev">${esc(g.device)}</span>
+      <a class="go" href="${prefix}games/${g.slug}.html">Details &rarr;</a>
+    </div>
+  </div>
+</article>`;
+}
+
+const homeBody = `
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Updated ${esc(sourceData.source.checkedDate)}</span>
+    <h1>The <span class="grad">Radiant Optimizer</span> browser games list, sorted and explained</h1>
+    <p class="lede">In October 2026 the @RadiantOpti account shared a graphic of classic games that run in a browser tab, followed by a reply with the project links. This directory turns that thread into something you can actually use: every project, a real screenshot, its destination, what it needs before it will run, and what to watch out for.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="#directory">Browse all ${games.length} projects</a>
+      <a class="btn btn-ghost" href="guides/how-to-use-the-list.html">How to use the list</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b>${games.length}</b><span>projects listed</span></div>
+      <div class="stat"><b>${SOURCE.length}</b><span>from the original list</span></div>
+      <div class="stat"><b>${LIBRARY.length}</b><span>in the wider library</span></div>
+      <div class="stat"><b>${cats.length - 1}</b><span>categories</span></div>
+    </div>
+    <div class="notice">
+      ${ICON_WARN}
+      <div><strong>Not a download page.</strong> Every game here runs on someone else's website. We link to original destinations only, we do not host game files, and projects marked "Bring your own files" expect data from a game you legally own.</div>
+    </div>
+  </div>
+</section>
+
+<section id="directory">
+  <div class="wrap">
+    <h2 class="sec">The full directory</h2>
+    <p class="sec-lede">Filter by collection, category or device, or search by name. Each card shows a real screenshot where we could capture one, and what the project needs before you open it.</p>
+
+    <div class="toolbar">
+      <div class="search-box">
+        ${ICON_SEARCH}
+        <input id="game-search" type="search" placeholder="Search projects, e.g. Quake, Skate, zombies, Doom..." aria-label="Search projects">
+      </div>
+      <div class="filters">
+        <span class="label">Collection</span>
+        <button class="chip active" data-group="col" data-value="All">All</button>
+        <button class="chip" data-group="col" data-value="source">${esc(COLLECTIONS.source.label)} (${SOURCE.length})</button>
+        <button class="chip" data-group="col" data-value="library">${esc(COLLECTIONS.library.label)} (${LIBRARY.length})</button>
+      </div>
+      <div class="filters">
+        <span class="label">Category</span>
+        ${cats.map((c) => `<button class="chip${c === "All" ? " active" : ""}" data-group="cat" data-value="${esc(c)}">${esc(c)}</button>`).join("")}
+      </div>
+      <div class="filters">
+        <span class="label">Device</span>
+        ${["All", "Desktop", "Mobile"].map((d) => `<button class="chip${d === "All" ? " active" : ""}" data-group="dev" data-value="${esc(d)}">${esc(d)}</button>`).join("")}
+      </div>
+      <p class="result-count" id="result-count">${games.length} projects shown</p>
+    </div>
+
+    <div class="grid" id="game-grid">
+      ${games.map((g) => card(g, "")).join("\n      ")}
+    </div>
+  </div>
+</section>
+
+<section id="entry-types">
+  <div class="wrap">
+    <h2 class="sec">How to read the badges</h2>
+    <p class="sec-lede">The fastest way to avoid disappointment is to check what a project needs before you click. Every entry falls into one of these buckets.</p>
+    <div class="entry-types">
+      <div class="etype"><h4>${reqBadge("ready")}</h4><p>The host lists a browser start. Quickest to try, still a community project with no uptime guarantee.</p></div>
+      <div class="etype"><h4>${reqBadge("setup")}</h4><p>The project loads, but read its own notes for controls, servers or data before committing a session.</p></div>
+      <div class="etype"><h4>${reqBadge("files")}</h4><p>Expects data converted from a game you legally own. Browser access does not include those files.</p></div>
+      <div class="etype"><h4>${reqBadge("archive")} ${reqBadge("unavailable")}</h4><p>The link resolves to an archive or fails a check. Historical context rather than something playable today.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="source">
+  <div class="wrap">
+    <h2 class="sec">Start with the original source</h2>
+    <p class="sec-lede">We follow the thread rather than paraphrasing it. Compare the names in the graphic with the destinations they actually lead to.</p>
+    <div class="link-cards">
+      <a class="link-card" href="${CONFIG.sourcePostUrl}" target="_blank" rel="nofollow noopener">
+        <span class="k">Original post &middot; ${esc(sourceData.source.postDate)}</span>
+        <h4>The browser-games graphic</h4>
+        <p>The image that started the search spike, shared by @RadiantOpti.</p>
+      </a>
+      <a class="link-card" href="${CONFIG.sourceReplyUrl}" target="_blank" rel="nofollow noopener">
+        <span class="k">Links reply</span>
+        <h4>The project links</h4>
+        <p>The follow-up reply carrying the destinations the first collection is built from.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="guides">
+  <div class="wrap">
+    <h2 class="sec">Guides</h2>
+    <p class="sec-lede">Everything the list does not tell you.</p>
+    <div class="link-cards">
+      ${GUIDES.map(
+        (g) => `<a class="link-card" href="guides/${g.slug}.html">
+        <span class="k">${esc(g.kicker)}</span>
+        <h4>${esc(g.title)}</h4>
+        <p>${esc(g.description)}</p>
+      </a>`
+      ).join("\n      ")}
+    </div>
+  </div>
+</section>
+`;
+
+write(
+  "index.html",
+  layout({
+    rel: "",
+    title: `Radiant Optimizer Browser Games — Full List, Links & Setup (${sourceData.source.checkedDate})`,
+    description: `The complete Radiant Optimizer browser games list shared by @RadiantOpti, plus a wider library: ${games.length} classic game projects, their real destinations, screenshots and what each one needs.`,
+    canonical: "/",
+    active: "directory",
+    body: homeBody,
+    image: imgSrc(games[0], ""),
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Radiant Optimizer Browser Games — Full List",
+      description: `A directory of ${games.length} community browser-game projects.`,
+      url: CONFIG.baseUrl + "/",
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: games.length,
+        itemListElement: games.map((g, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: g.name,
+          url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+        })),
+      },
+    },
+  })
+);
+
+/* ---------------- game pages ---------------- */
+
+games.forEach((g) => {
+  const related = (g.related || []).map((s) => bySlug[s]).filter(Boolean);
+  const openBlock = g.sourceUrl
+    ? `<a class="btn btn-primary" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener">Open the original project &nearr;</a>`
+    : `<span class="btn btn-ghost" style="opacity:.6;cursor:default">Launch button withheld</span>`;
+  const img = imgSrc(g, "../");
+
+  const grp = groupOf(g);
+  const body = `
+<div class="wrap">
+  <nav class="crumbs">
+    <a href="../browser-games/index.html">Browser games</a><span>/</span>${
+      grp ? `<a href="../browser-games/${grp.slug}/index.html">${esc(grp.name)}</a><span>/</span>` : ""
+    }${esc(g.name)}
+  </nav>
+
+  <div class="article-head">
+    <div class="meta-row">
+      <span class="badge cat">${esc(g.category)}</span>
+      <span class="badge dev">${esc(g.device)}</span>
+      ${reqBadge(g.requirement)}
+      ${g.collection === "source" ? `<span class="badge dev">From the list</span>` : ""}
+    </div>
+    <h1>${esc(g.name)}</h1>
+    <p class="lede">${esc(g.summary)}</p>
+  </div>
+
+  <figure class="shot">
+    <img src="${img}" alt="${esc(g.name)} running in a browser" width="1280" height="720">
+    <figcaption>${hasShot(g.slug) ? `Screenshot captured from ${esc(hostOf(g))}. Belongs to the project's creators.` : `Cover art for ${esc(g.name)}. We could not capture a live screenshot of this project.`}</figcaption>
+  </figure>
+
+  <div class="article-body">
+    <div class="btn-row" style="margin:6px 0 8px">
+      ${openBlock}
+      <a class="btn btn-ghost" href="../index.html">Back to directory</a>
+    </div>
+    <p style="font-size:13px;color:var(--muted-2);margin-top:14px">${esc(g.statusNote)}</p>
+
+    <h2>What it is</h2>
+    <p>${esc(g.whatItIs)}</p>
+
+    <h2>What you need</h2>
+    <ul>${g.whatYouNeed.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+
+    <h2>How to open it</h2>
+    <ol>${g.howToOpen.map((x) => `<li>${esc(x)}</li>`).join("")}</ol>
+
+    <div class="callout warn">
+      <h4>Before you click</h4>
+      <p>We link to the original destination only and we do not host or provide game files. If the project asks for data, use files from a game you legally own. Never bypass a certificate warning and never install an unfamiliar executable to play a browser game.</p>
+    </div>
+
+    <h2>Source</h2>
+    <p>${
+      g.sourceUrl
+        ? `Original destination: <a class="inline" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(g.sourceUrl.replace(/^https?:\/\//, ""))}</a> (${esc(hostOf(g))}).`
+        : "No usable destination: the supplied link did not resolve to the named project, so we withhold it."
+    }${
+      g.collection === "source"
+        ? ` Listed in the <a class="inline" href="${CONFIG.sourceReplyUrl}" target="_blank" rel="nofollow noopener">original links reply</a>.`
+        : " Collected independently for the wider library."
+    }</p>
+    ${
+      related.length
+        ? `<h2>Related entries</h2>
+    <div class="link-cards">
+      ${related
+        .map(
+          (r) => `<a class="link-card" href="${r.slug}.html">
+        <span class="k">${esc(r.category)}</span>
+        <h4>${esc(r.name)}</h4>
+        <p>${esc(r.summary)}</p>
+      </a>`
+        )
+        .join("\n      ")}
+    </div>`
+        : ""
+    }
+  </div>
+</div>
+`;
+
+  write(
+    `games/${g.slug}.html`,
+    layout({
+      rel: "../",
+      title: `${g.name} in your browser — link, requirements & setup`,
+      description: `${g.summary} Category: ${g.category}. Device: ${g.device}. Requirement: ${(REQ[g.requirement] || REQ.setup).label}. Original destination and setup notes.`,
+      canonical: `/games/${g.slug}.html`,
+      active: "directory",
+      body,
+      image: imgSrc(g, ""),
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "VideoGame",
+            name: g.name,
+            alternateName: g.altName,
+            genre: g.category,
+            applicationCategory: "Browser game",
+            description: g.summary,
+            url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+            image: abs(imgSrc(g, "")),
+            ...(g.sourceUrl ? { sameAs: g.sourceUrl } : {}),
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Browser games", item: `${CONFIG.baseUrl}/browser-games/` },
+              ...(grp
+                ? [{ "@type": "ListItem", position: 2, name: grp.name, item: `${CONFIG.baseUrl}/browser-games/${grp.slug}/` }]
+                : []),
+              {
+                "@type": "ListItem",
+                position: grp ? 3 : 2,
+                name: g.name,
+                item: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+              },
+            ],
+          },
+        ],
+      },
+    })
+  );
+});
+
+/* ---------------- guides ---------------- */
+
+GUIDES.forEach((g) => {
+  const raw = readFileSync(join(SRC, "content", g.file), "utf8");
+  const withAff = raw.replace(/#partner-antivirus/g, CONFIG.affiliateAntivirus).replace(/#partner-radiant/g, CONFIG.affiliateRadiant);
+  const body = `
+<div class="wrap">
+  <nav class="crumbs">
+    <a href="../index.html">Directory</a><span>/</span><a href="../index.html#guides">Guides</a><span>/</span>${esc(g.title.split(":")[0])}
+  </nav>
+  <div class="article-head">
+    <span class="eyebrow">${esc(g.kicker)}</span>
+    <h1>${esc(g.title)}</h1>
+    <p class="lede">${esc(g.description)}</p>
+  </div>
+  <div class="article-body">
+    ${withAff}
+    <div class="callout cta" style="margin-top:34px">
+      <h4>Browse the directory</h4>
+      <p>Every project, with a screenshot, its real destination and what it needs before it will run.</p>
+      <p><a class="inline" href="../index.html">Open the full directory &rarr;</a></p>
+    </div>
+  </div>
+</div>
+`;
+  write(
+    `guides/${g.slug}.html`,
+    layout({
+      rel: "../",
+      title: `${g.title} | ${CONFIG.siteName}`,
+      description: g.description,
+      canonical: `/guides/${g.slug}.html`,
+      active: g.nav,
+      body,
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: g.title,
+        description: g.description,
+        author: { "@type": "Organization", name: CONFIG.siteName },
+        publisher: { "@type": "Organization", name: CONFIG.siteName },
+        datePublished: sourceData.source.checkedDate,
+        dateModified: sourceData.source.checkedDate,
+        mainEntityOfPage: `${CONFIG.baseUrl}/guides/${g.slug}.html`,
+      },
+    })
+  );
+});
+
+/* ---------------- browser games hub ---------------- */
+
+const FAQ = [
+  {
+    q: "What counts as a browser game?",
+    a: "Here it means a classic PC or console game that has been rebuilt or emulated to run inside a browser tab. That covers four different approaches: native rewrites, decompilation builds, clean-room reimplementations and full emulation. Each behaves differently when you open it, which is why some entries start instantly and others ask you for a file first.",
+  },
+  {
+    q: "Are these browser games free?",
+    a: "The projects in this directory are free to open. What they are not is officially licensed: nearly every one is a fan or community project, and none is endorsed by the original publisher. Some ask you to supply data from a game you already own, which is a separate purchase you may have made years ago.",
+  },
+  {
+    q: "Do browser games need a download?",
+    a: "Most do not need an installer. You open a URL and the game runs. Browser play can still transfer a lot of data on first load, and projects that ask for your own game files expect you to prepare those files yourself. Nothing in this directory requires you to download an executable, and you should be suspicious of any browser game that does.",
+  },
+  {
+    q: "Why do some browser games ask for my own game files?",
+    a: "Because the engine and the content have different owners. A decompilation project rebuilds the code, which is the community's work, but the levels, textures and audio still belong to the publisher. Shipping those would be redistribution. Asking you to convert files from a copy you own keeps the project on the right side of that line.",
+  },
+  {
+    q: "Are browser games safe to play?",
+    a: "Running in a browser removes the need to install software, but it does not make every host trustworthy. Never bypass a certificate warning, never install an unfamiliar executable to play a supposed browser-only game, and only supply game files you legally own. Our safety guide covers the full checklist.",
+  },
+  {
+    q: "Can I play these browser games on a phone?",
+    a: "Some of them. Entries tagged Mobile are built with touch in mind, and a few projects explicitly document touch and gamepad support. A desktop-only build will not magically gain touch controls on a phone, so check the device badge on each entry before you try.",
+  },
+  {
+    q: "Why did browser ports suddenly get popular in 2026?",
+    a: "Two things converged. Decompilation projects matured to the point where a browser build was a small extra step rather than a research project, and a single post listing twenty of them went viral in October 2026. Mainstream coverage followed within days, which is what pushed the search interest you are probably responding to right now.",
+  },
+];
+
+const faqBlock = `
+<div class="faq">
+${FAQ.map(
+  (f) => `  <details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`
+).join("\n")}
+</div>`;
+
+const faqJsonLd = {
+  "@type": "FAQPage",
+  mainEntity: FAQ.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const genreLinks = (rel, activeSlug) =>
+  GROUPS.map(
+    (grp) => `<a class="link-card" href="${rel}browser-games/${grp.slug}/index.html">
+        <span class="k">${gamesInGroup(grp).length} games</span>
+        <h4>${esc(grp.name)}</h4>
+        <p>${esc(grp.lede)}</p>
+      </a>`
+  ).join("\n      ");
+
+const hubBody = `
+<div class="wrap">
+  <nav class="crumbs"><a href="../index.html">Home</a><span>/</span>Browser games</nav>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">${games.length} projects &middot; updated ${esc(sourceData.source.checkedDate)}</span>
+    <h1>Browser games you can <span class="grad">play right now</span></h1>
+    <p class="lede">Classic PC and console games, rebuilt or emulated to run inside a browser tab. No launchers, no installers, no store pages. Every entry below links to the original project, shows a real screenshot where we could capture one, and states plainly what it needs before it will run.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="#all">Browse all ${games.length} games</a>
+      <a class="btn btn-ghost" href="no-download/index.html">No download needed</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b>${games.length}</b><span>games listed</span></div>
+      <div class="stat"><b>${GROUPS.length}</b><span>genres</span></div>
+      <div class="stat"><b>${games.filter((g) => g.requirement === "ready").length}</b><span>ready to start</span></div>
+      <div class="stat"><b>${games.filter((g) => hasShot(g.slug)).length}</b><span>real screenshots</span></div>
+    </div>
+    <div class="notice">
+      ${ICON_WARN}
+      <div><strong>Not a download site.</strong> We link to original project destinations only. We do not host, mirror or provide game files, and we do not offer copies of commercial games. Projects marked "Bring your own files" expect data from a game you legally own.</div>
+    </div>
+  </div>
+</section>
+
+<section id="genres">
+  <div class="wrap">
+    <h2 class="sec">Browse by genre</h2>
+    <p class="sec-lede">Eight groups, from fast arena shooters to afternoon-eating simulation games.</p>
+    <div class="link-cards">
+      ${genreLinks("../", null)}
+    </div>
+  </div>
+</section>
+
+<section id="all">
+  <div class="wrap">
+    <h2 class="sec">Every browser game in the directory</h2>
+    <p class="sec-lede">Search by name, or filter by collection, genre and device.</p>
+    <div class="toolbar">
+      <div class="search-box">
+        ${ICON_SEARCH}
+        <input id="game-search" type="search" placeholder="Search games, e.g. Quake, Doom, Mario, zombies..." aria-label="Search games">
+      </div>
+      <div class="filters">
+        <span class="label">Collection</span>
+        <button class="chip active" data-group="col" data-value="All">All</button>
+        <button class="chip" data-group="col" data-value="source">${esc(COLLECTIONS.source.label)} (${SOURCE.length})</button>
+        <button class="chip" data-group="col" data-value="library">${esc(COLLECTIONS.library.label)} (${LIBRARY.length})</button>
+      </div>
+      <div class="filters">
+        <span class="label">Genre</span>
+        ${cats.map((c) => `<button class="chip${c === "All" ? " active" : ""}" data-group="cat" data-value="${esc(c)}">${esc(c)}</button>`).join("")}
+      </div>
+      <div class="filters">
+        <span class="label">Device</span>
+        ${["All", "Desktop", "Mobile"].map((d) => `<button class="chip${d === "All" ? " active" : ""}" data-group="dev" data-value="${esc(d)}">${esc(d)}</button>`).join("")}
+      </div>
+      <p class="result-count" id="result-count">${games.length} games shown</p>
+    </div>
+    <div class="grid" id="game-grid">
+      ${games.map((g) => card(g, "../")).join("\n      ")}
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2 class="sec">How a browser game actually works</h2>
+    <p class="sec-lede">"Playable in your browser" covers four different things, and knowing which one you are looking at explains most of the surprises.</p>
+    <div class="entry-types">
+      <div class="etype"><h4>Native rewrite</h4><p>The game's code is rewritten for the web. Starts instantly, needs nothing from you, loses some original behaviour.</p></div>
+      <div class="etype"><h4>Decompilation build</h4><p>Fans reverse-engineer the original into source, then rebuild it for the browser. Very faithful, often wants your own files.</p></div>
+      <div class="etype"><h4>Clean-room build</h4><p>Engine rebuilt from scratch with free replacement assets. Nothing commercial is used, so it just runs.</p></div>
+      <div class="etype"><h4>Emulation</h4><p>A full emulator runs the original machine's code in the tab. Highest fidelity, heaviest to load.</p></div>
+    </div>
+    <p class="sec-lede" style="margin-top:22px">
+      <a class="inline" href="../guides/browser-ports-explained.html">Read the full explanation, including why links break so often &rarr;</a>
+    </p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2 class="sec">Browser games: common questions</h2>
+    <p class="sec-lede">The things people ask before they click.</p>
+    ${faqBlock}
+    <p class="sec-lede" style="margin-top:22px">
+      Want the full safety checklist? Read <a class="inline" href="../guides/is-it-safe.html">is the browser games list safe</a>, or see <a class="inline" href="../guides/troubleshooting.html">what to do when a game will not load</a>.
+    </p>
+  </div>
+</section>
+
+<section id="radiant">
+  <div class="wrap">
+    <h2 class="sec">Looking for the Radiant Optimizer list?</h2>
+    <p class="sec-lede">The 25 projects shared by @RadiantOpti on 8 October 2026 have their own directory page, with the original graphic, the links reply and every status note.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="../index.html">Open the Radiant Optimizer list</a>
+    </div>
+  </div>
+</section>
+`;
+
+write(
+  "browser-games/index.html",
+  layout({
+    rel: "../",
+    title: `Browser Games: ${games.length} Classic Games You Can Play in a Tab (${sourceData.source.checkedDate})`,
+    description: `A curated directory of ${games.length} browser games: classic PC and console titles rebuilt or emulated to run in a browser tab. Real screenshots, original links, and what each one needs.`,
+    canonical: "/browser-games/",
+    active: "browser",
+    body: hubBody,
+    image: imgSrc(games[0], ""),
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          name: "Browser Games Directory",
+          description: `A directory of ${games.length} classic games playable in a browser tab.`,
+          url: `${CONFIG.baseUrl}/browser-games/`,
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: games.length,
+            itemListElement: games.map((g, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: g.name,
+              url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+            })),
+          },
+        },
+        faqJsonLd,
+      ],
+    },
+  })
+);
+
+/* ---------------- genre pages ---------------- */
+
+GROUPS.forEach((grp) => {
+  const list = gamesInGroup(grp);
+  if (!list.length) return;
+  const others = GROUPS.filter((x) => x.slug !== grp.slug);
+  const body = `
+<div class="wrap">
+  <nav class="crumbs">
+    <a href="../../index.html">Home</a><span>/</span><a href="../index.html">Browser games</a><span>/</span>${esc(grp.name)}
+  </nav>
+  <div class="article-head">
+    <span class="eyebrow">${list.length} games</span>
+    <h1>${esc(grp.title)}</h1>
+    <p class="lede">${esc(grp.lede)}</p>
+  </div>
+  <div class="article-body">
+    <p>${esc(grp.intro)}</p>
+  </div>
+</div>
+
+<section style="padding-top:12px">
+  <div class="wrap">
+    <h2 class="sec">${esc(grp.name)} games in the directory</h2>
+    <div class="grid">
+      ${list.map((g) => card(g, "../../")).join("\n      ")}
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="sec">Other genres</h2>
+    <p class="sec-lede">Or browse the <a class="inline" href="../index.html">full browser games directory</a>.</p>
+    <div class="link-cards">
+      ${genreLinks("../../", grp.slug)}
+    </div>
+  </div>
+</section>
+`;
+  write(
+    `browser-games/${grp.slug}/index.html`,
+    layout({
+      rel: "../../",
+      title: `${grp.title} — ${list.length} playable in a browser (${sourceData.source.checkedDate})`,
+      description: `${grp.lede} ${list.length} projects with real screenshots, original links and setup notes.`,
+      canonical: `/browser-games/${grp.slug}/`,
+      active: "browser",
+      body,
+      image: imgSrc(list[0], ""),
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "CollectionPage",
+            name: grp.title,
+            description: grp.intro,
+            url: `${CONFIG.baseUrl}/browser-games/${grp.slug}/`,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: list.length,
+              itemListElement: list.map((g, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: g.name,
+                url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+              })),
+            },
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Browser games", item: `${CONFIG.baseUrl}/browser-games/` },
+              { "@type": "ListItem", position: 2, name: grp.name, item: `${CONFIG.baseUrl}/browser-games/${grp.slug}/` },
+            ],
+          },
+        ],
+      },
+    })
+  );
+});
+
+/* ---------------- no-download page ---------------- */
+
+const readyGames = games.filter((g) => g.requirement === "ready");
+write(
+  "browser-games/no-download/index.html",
+  layout({
+    rel: "../../",
+    title: `Browser Games With No Download — ${readyGames.length} That Start Instantly`,
+    description: `${readyGames.length} browser games that need no installer and no game files. Open the link, click start, play. With screenshots and original links.`,
+    canonical: "/browser-games/no-download/",
+    active: "browser",
+    body: `
+<div class="wrap">
+  <nav class="crumbs">
+    <a href="../../index.html">Home</a><span>/</span><a href="../index.html">Browser games</a><span>/</span>No download
+  </nav>
+  <div class="article-head">
+    <span class="eyebrow">${readyGames.length} games</span>
+    <h1>Browser games with no download</h1>
+    <p class="lede">Every entry on this page starts without an installer and without you supplying game files. Open the link, press start, play.</p>
+  </div>
+  <div class="article-body">
+    <p>These are the projects whose hosts list a browser start rather than a file upload. They are the fastest way to find out whether browser ports are for you. Be aware that "no download" does not mean "no data": several of these still transfer a large amount of game data on first load, and one entry here has an initial load of around 380&nbsp;MB.</p>
+    <p>If you want the projects that expect your own game files instead, filter the <a class="inline" href="../index.html">full directory</a> by the "Bring your own files" badge.</p>
+  </div>
+</div>
+
+<section style="padding-top:12px">
+  <div class="wrap">
+    <h2 class="sec">Start instantly</h2>
+    <div class="grid">
+      ${readyGames.map((g) => card(g, "../../")).join("\n      ")}
+    </div>
+  </div>
+</section>
+`,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Browser games with no download",
+      url: `${CONFIG.baseUrl}/browser-games/no-download/`,
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: readyGames.length,
+        itemListElement: readyGames.map((g, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: g.name,
+          url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+        })),
+      },
+    },
+  })
+);
+
+/* ---------------- retired group redirects ---------------- */
+
+// Groups that were renamed or retired. A noindex stub is written at the old
+// path so a URL that was already shared still resolves, and so any stale copy
+// left behind on disk (when output cannot be deleted) is overwritten rather
+// than deployed as a duplicate page.
+const RETIRED_GROUPS = { shooter: "shooter-classics" };
+
+for (const [oldSlug, newSlug] of Object.entries(RETIRED_GROUPS)) {
+  write(
+    `browser-games/${oldSlug}/index.html`,
+    `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Moved &middot; ${esc(CONFIG.siteName)}</title>
+<link rel="canonical" href="${abs(`/browser-games/${newSlug}/`)}">
+<meta name="robots" content="noindex,follow">
+<meta http-equiv="refresh" content="0; url=../${newSlug}/index.html">
+</head>
+<body>
+<p>This category was split up and now lives at <a href="../${newSlug}/index.html">${esc(newSlug)}</a>.</p>
+</body>
+</html>
+`
+  );
+}
+
+/* ---------------- 404 ---------------- */
+
+write(
+  "404.html",
+  layout({
+    rel: "/",
+    title: `Page not found | ${CONFIG.siteName}`,
+    description: "That page does not exist. Browse the full browser games directory instead.",
+    canonical: "/404.html",
+    active: "",
+    body: `<div class="wrap"><div class="article-head"><h1>Page not found</h1><p class="lede">That link does not exist. Head back to the directory to find your project.</p></div><div class="article-body"><a class="btn btn-primary" href="/index.html">Browse the directory</a></div></div>`,
+  })
+);
+
+/* ---------------- sitemap + robots + covers ---------------- */
+
+const urls = [
+  { loc: "/", pri: "1.0" },
+  { loc: "/browser-games/", pri: "0.9" },
+  { loc: "/browser-games/no-download/", pri: "0.8" },
+  ...GROUPS.map((g) => ({ loc: `/browser-games/${g.slug}/`, pri: "0.8" })),
+  ...games.map((g) => ({ loc: `/games/${g.slug}.html`, pri: "0.8" })),
+  ...GUIDES.map((g) => ({ loc: `/guides/${g.slug}.html`, pri: "0.7" })),
+];
+
+write(
+  "sitemap.xml",
+  `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls
+  .map((u) => `  <url><loc>${CONFIG.baseUrl}${u.loc}</loc><lastmod>${sourceData.source.checkedDate}</lastmod><priority>${u.pri}</priority></url>`)
+  .join("\n")}
+</urlset>
+`
+);
+
+write("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${CONFIG.baseUrl}/sitemap.xml\n`);
+
+for (const g of games) {
+  write(`assets/covers/${g.slug}.svg`, coverSvg(g));
+}
+
+mkdirSync(join(OUT, "assets"), { recursive: true });
+for (const f of ["style.css", "app.js"]) {
+  writeFileSync(join(OUT, "assets", f), readFileSync(join(SRC, "assets", f)));
+}
+
+const shots = games.filter((g) => hasShot(g.slug)).length;
+const orphans = games.filter((g) => !groupOf(g));
+console.log(`Built ${3 + GROUPS.length + games.length + GUIDES.length + 1} pages`);
+console.log(`  index.html`);
+console.log(`  browser-games/  (hub + ${GROUPS.length} genres + no-download)`);
+console.log(`  games/   (${games.length}: ${SOURCE.length} source + ${LIBRARY.length} library)`);
+console.log(`  guides/  (${GUIDES.length})`);
+console.log(`  covers/  (${games.length} generated)`);
+console.log(`  shots/   (${shots} real screenshots)`);
+console.log(`  sitemap.xml, robots.txt, 404.html`);
+
+// Guard against stale output: a genre folder left behind by an earlier build
+// would still be deployed and could be indexed as a duplicate page.
+const bgDir = join(OUT, "browser-games");
+if (!cleaned) {
+  console.log("  NOTE: could not clear previous output in this environment.");
+  console.log(`  Delete public/{${GENERATED_DIRS.join(",")}} plus index.html/404.html/sitemap.xml/robots.txt before deploying.`);
+} else if (existsSync(bgDir)) {
+  const expected = new Set(GROUPS.map((g) => g.slug));
+  const stale = readdirSync(bgDir, { withFileTypes: true })
+    .filter((e) => e.isDirectory() && e.name !== "no-download" && !expected.has(e.name))
+    .map((e) => e.name);
+  if (stale.length) console.log(`  WARNING: stale genre folders still present: ${stale.join(", ")}`);
+}
+if (orphans.length) console.log(`  WARNING: ${orphans.length} games match no group: ${orphans.map((g) => g.slug).join(", ")}`);

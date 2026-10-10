@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#1d9e75" stop-opacity="0.16"/>
+<stop offset="1" stop-color="#0d2b23" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<rect width="1280" height="720" fill="#0d2b23"/>
+<rect x="-40" y="650" width="52" height="70" fill="#1d9e75" fill-opacity="0.16"/><rect x="120" y="603" width="52" height="117" fill="#1d9e75" fill-opacity="0.16"/><rect x="280" y="556" width="52" height="164" fill="#1d9e75" fill-opacity="0.16"/><rect x="440" y="639" width="52" height="81" fill="#1d9e75" fill-opacity="0.16"/><rect x="600" y="592" width="52" height="128" fill="#1d9e75" fill-opacity="0.16"/><rect x="760" y="545" width="52" height="175" fill="#1d9e75" fill-opacity="0.16"/><rect x="920" y="628" width="52" height="92" fill="#1d9e75" fill-opacity="0.16"/><rect x="1080" y="581" width="52" height="139" fill="#1d9e75" fill-opacity="0.16"/>
+<circle cx="960" cy="250" r="90" fill="none" stroke="#1d9e75" stroke-opacity="0.32" stroke-width="1.5"/><circle cx="960" cy="250" r="168" fill="none" stroke="#1d9e75" stroke-opacity="0.26" stroke-width="1.5"/><circle cx="960" cy="250" r="246" fill="none" stroke="#1d9e75" stroke-opacity="0.20" stroke-width="1.5"/><circle cx="960" cy="250" r="324" fill="none" stroke="#1d9e75" stroke-opacity="0.14" stroke-width="1.5"/>
+<rect x="0" y="0" width="1280" height="720" fill="url(#g)"/>
+<text x="72" y="196" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="200" font-weight="800" fill="#1d9e75" fill-opacity="0.9" letter-spacing="-6">S3</text>
+<text x="72" y="300" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="34" font-weight="600" fill="#9fe1cb" fill-opacity="0.75">Sports</text>
+<rect x="72" y="336" width="96" height="4" fill="#1d9e75"/>
+<text x="72" y="640" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="52" font-weight="700" fill="#ffffff" fill-opacity="0.94">Skate 3</text>
+<text x="72" y="684" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="24" fill="#9fe1cb" fill-opacity="0.6">skate.aaddpp.lol</text>
+</svg>

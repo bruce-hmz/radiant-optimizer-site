@@ -1,0 +1,17 @@
+# Dependencies
+# playwright-core is installed in the managed Node workspace, not in this repo.
+node_modules/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Throwaway one-off probe scripts used while picking a domain.
+# domaincheck.mjs is the kept, reusable tool; these three are superseded.
+src/probe.mjs
+src/domaincheck2.mjs
+src/domaincheck3.mjs
+
+# Local preview logs
+src/shots-log.json
