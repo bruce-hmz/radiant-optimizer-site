@@ -17,7 +17,7 @@ const OUT = join(__dirname, "..", "public");
 /*  is a warning, not a crash.                                          */
 /* ------------------------------------------------------------------ */
 const GENERATED_DIRS = ["browser-games", "games", "guides"];
-const GENERATED_FILES = ["index.html", "404.html", "sitemap.xml", "robots.txt"];
+const GENERATED_FILES = ["index.html", "404.html", "about.html", "privacy.html", "contact.html", "sitemap.xml", "robots.txt"];
 let cleaned = true;
 try {
   for (const d of GENERATED_DIRS) rmSync(join(OUT, d), { recursive: true, force: true });
@@ -30,19 +30,44 @@ try {
 /*  CONFIG — edit these before you deploy                              */
 /* ------------------------------------------------------------------ */
 const CONFIG = {
-  siteName: "PlayVault",
+  // Domain name written out. This site is the list, not the Windows product.
+  siteName: "Radiant Optimizer List",
+  mark: "RL",
   tagline: "Classic games you can play in a browser tab",
   baseUrl: "https://radiantoptimizerlist.com",
   sourcePostUrl: "https://x.com/RadiantOpti/status/2108068628793082338",
   sourceReplyUrl: "https://x.com/RadiantOpti/status/2108068632991256995",
-  affiliateAntivirus: "#partner-antivirus",
-  affiliateRadiant: "#partner-radiant",
+  // Official product site only. Leave antivirus empty until a real offer exists.
+  affiliateAntivirus: "",
+  affiliateRadiant: "https://radiantoptimizer.com/",
 };
 /* ------------------------------------------------------------------ */
 
 // Join the base URL and a path with exactly one slash, so that a baseUrl
 // without a trailing slash never produces "https://hostassets/...".
 const abs = (p) => `${String(CONFIG.baseUrl).replace(/\/+$/, "")}/${String(p).replace(/^\/+/, "")}`;
+
+// Public path matching the live host: index.html → `/`, dir/index.html → `/dir/`,
+// page.html → `/page` (no extension, no trailing slash).
+function publicPath(file) {
+  let p = String(file || "").replace(/\\/g, "/");
+  if (p === "" || p === "/" || p === "index.html") return "/";
+  p = p.replace(/^\/+/, "");
+  if (p.endsWith("/index.html")) return `/${p.slice(0, -"index.html".length)}`;
+  if (p.endsWith(".html")) return `/${p.slice(0, -".html".length)}`;
+  return `/${p}`;
+}
+
+function applyPartners(html) {
+  let out = html.replaceAll("#partner-radiant", CONFIG.affiliateRadiant || "#partner-radiant");
+  if (CONFIG.affiliateAntivirus) {
+    out = out.replaceAll("#partner-antivirus", CONFIG.affiliateAntivirus);
+  } else {
+    out = out.replace(/<p>\s*<a\b[^>]*href="#partner-antivirus"[^>]*>[\s\S]*?<\/a>\s*<\/p>\s*/g, "");
+    out = out.replace(/<a\b[^>]*href="#partner-antivirus"[^>]*>[\s\S]*?<\/a>/g, "");
+  }
+  return out;
+}
 
 // Normalise once so every `${CONFIG.baseUrl}/path` template below is safe
 // whether or not the operator typed a trailing slash.
@@ -359,47 +384,50 @@ const hasShot = (slug) => !SHOT_SKIP.has(slug) && existsSync(shotPath(slug));
 const ICON_SEARCH = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`;
 const ICON_WARN = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4"/><path d="M12 17.5v.01"/></svg>`;
 
-function header(rel, active) {
+function header(active) {
   const nav = [
-    ["", "Directory", "directory"],
-    ["browser-games/index.html", "Browser games", "browser"],
-    ["guides/how-to-use-the-list.html", "How to use", "howto"],
-    ["guides/is-it-safe.html", "Is it safe?", "safe"],
-    ["guides/radiant-optimizer-review.html", "Radiant review", "review"],
+    ["/#directory", "Directory", "directory"],
+    ["/browser-games/", "Browser games", "browser"],
+    ["/guides/how-to-use-the-list", "How to use", "howto"],
+    ["/guides/is-it-safe", "Is it safe?", "safe"],
+    ["/guides/radiant-optimizer-review", "Radiant review", "review"],
   ];
   return `<header class="site-header">
   <div class="wrap">
-    <a class="brand" href="${rel}index.html"><span class="mark">PV</span><span class="name">${esc(CONFIG.siteName)}</span></a>
+    <a class="brand" href="/"><span class="mark">${esc(CONFIG.mark)}</span><span class="name">${esc(CONFIG.siteName)}</span></a>
     <nav class="nav">${nav
-      .map(([href, label, key]) => `<a href="${rel}${href}"${key === active ? ' style="color:var(--text)"' : ""}>${label}</a>`)
+      .map(([href, label, key]) => `<a href="${href}"${key === active ? ' style="color:var(--text)"' : ""}>${label}</a>`)
       .join("")}</nav>
   </div>
 </header>`;
 }
 
-function footer(rel) {
+function footer() {
   return `<footer class="site-footer">
   <div class="wrap">
     <div class="footer-grid">
       <div>
         <h5>${esc(CONFIG.siteName)}</h5>
-        <p class="disclaimer">${esc(CONFIG.tagline)}. An independent directory of community browser-game projects. We are not affiliated with Radiant Optimizer, the projects listed, or their publishers.</p>
+        <p class="disclaimer">${esc(CONFIG.tagline)}. An independent directory of the browser-game projects shared by @RadiantOpti, plus a wider library. This site is not the Radiant Optimizer product, and it is not affiliated with its seller, the projects listed, or their publishers.</p>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/contact">Contact &amp; corrections</a>
       </div>
       <div>
         <h5>Browse</h5>
-        <a href="${rel}browser-games/index.html">Browser games</a>
-        <a href="${rel}browser-games/no-download/index.html">No download needed</a>
-        <a href="${rel}index.html">Radiant Optimizer list</a>
+        <a href="/browser-games/">Browser games</a>
+        <a href="/browser-games/no-download/">No download needed</a>
+        <a href="/#directory">Original list</a>
       </div>
       <div>
         <h5>Genres</h5>
         ${GROUPS.slice(0, 6)
-          .map((g) => `<a href="${rel}browser-games/${g.slug}/index.html">${esc(g.name)}</a>`)
+          .map((g) => `<a href="${publicPath(`browser-games/${g.slug}/index.html`)}">${esc(g.name)}</a>`)
           .join("")}
       </div>
       <div>
         <h5>Guides</h5>
-        ${GUIDES.map((g) => `<a href="${rel}guides/${g.slug}.html">${esc(g.title.split(":")[0])}</a>`).join("")}
+        ${GUIDES.map((g) => `<a href="${publicPath(`guides/${g.slug}.html`)}">${esc(g.title.split(":")[0])}</a>`).join("")}
       </div>
     </div>
     <div class="footer-bottom">
@@ -410,7 +438,7 @@ function footer(rel) {
 </footer>`;
 }
 
-function layout({ rel, title, description, canonical, active, body, jsonLd, image }) {
+function layout({ title, description, canonical, active, body, jsonLd, image, robots }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -419,6 +447,7 @@ function layout({ rel, title, description, canonical, active, body, jsonLd, imag
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${abs(canonical)}">
+${robots ? `<meta name="robots" content="${esc(robots)}">` : ""}
 <meta property="og:type" content="website">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
@@ -426,31 +455,35 @@ function layout({ rel, title, description, canonical, active, body, jsonLd, imag
 ${image ? `<meta property="og:image" content="${abs(image)}">` : ""}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0d12">
-<link rel="stylesheet" href="${rel}assets/style.css">
+<link rel="stylesheet" href="/assets/style.css">
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ""}
 </head>
 <body>
 <a class="sr-only" href="#main">Skip to content</a>
-${header(rel, active)}
+${header(active)}
 <main id="main">
 ${body}
 </main>
-${footer(rel)}
-<script src="${rel}assets/app.js" defer></script>
+${footer()}
+<script src="/assets/app.js" defer></script>
 </body>
 </html>`;
 }
 
 /* ---------------- index ---------------- */
 
-const cats = ["All", ...Array.from(new Set(games.map((g) => g.category))).sort()];
-const imgSrc = (g, prefix) => (hasShot(g.slug) ? `${prefix}assets/shots/${g.slug}.jpg` : `${prefix}assets/covers/${g.slug}.svg`);
+const catsOf = (list) => ["All", ...Array.from(new Set(list.map((g) => g.category))).sort()];
+const cats = catsOf(games);
+const imgSrc = (g) => (hasShot(g.slug) ? `/assets/shots/${g.slug}.jpg` : `/assets/covers/${g.slug}.svg`);
+const imgAlt = (g) =>
+  hasShot(g.slug) ? `Screenshot of ${g.name} running in a browser` : `Cover image for ${g.name}`;
 
-function card(g, prefix = "") {
+function card(g) {
+  const href = publicPath(`games/${g.slug}.html`);
   const search = [g.name, g.altName, g.category, g.device, g.summary, hostOf(g)].join(" ").toLowerCase();
   return `<article class="card" data-cat="${esc(g.category)}" data-dev="${esc(g.device)}" data-col="${g.collection}" data-search="${esc(search)}">
-  <a class="thumb" href="${prefix}games/${g.slug}.html" aria-hidden="true" tabindex="-1">
-    <img src="${imgSrc(g, prefix)}" alt="" loading="lazy" width="1280" height="720">
+  <a class="thumb" href="${href}" aria-hidden="true" tabindex="-1">
+    <img src="${imgSrc(g)}" alt="${esc(imgAlt(g))}" loading="lazy" width="1280" height="720">
     ${g.collection === "source" ? '<span class="pin">From the list</span>' : ""}
   </a>
   <div class="card-body">
@@ -458,11 +491,11 @@ function card(g, prefix = "") {
       <span class="badge cat">${esc(g.category)}</span>
       ${reqBadge(g.requirement)}
     </div>
-    <h3><a href="${prefix}games/${g.slug}.html">${esc(g.name)}</a></h3>
+    <h3><a href="${href}">${esc(g.name)}</a></h3>
     <p>${esc(g.summary)}</p>
     <div class="card-foot">
       <span class="badge dev">${esc(g.device)}</span>
-      <a class="go" href="${prefix}games/${g.slug}.html">Details &rarr;</a>
+      <a class="go" href="${href}">Details &rarr;</a>
     </div>
   </div>
 </article>`;
@@ -473,10 +506,10 @@ const homeBody = `
   <div class="wrap">
     <span class="eyebrow">Updated ${esc(sourceData.source.checkedDate)}</span>
     <h1>The <span class="grad">Radiant Optimizer</span> browser games list, sorted and explained</h1>
-    <p class="lede">In October 2026 the @RadiantOpti account shared a graphic of classic games that run in a browser tab, followed by a reply with the project links. This directory turns that thread into something you can actually use: every project, a real screenshot, its destination, what it needs before it will run, and what to watch out for.</p>
+    <p class="lede">In October 2026 the @RadiantOpti account shared a graphic of classic games that run in a browser tab, followed by a reply with the project links. This page is that thread, sorted: the original ${SOURCE.length} projects, a real screenshot where we could capture one, the destination, and what each one needs. The wider library of ${LIBRARY.length} other browser ports has its own page.</p>
     <div class="btn-row">
-      <a class="btn btn-primary" href="#directory">Browse all ${games.length} projects</a>
-      <a class="btn btn-ghost" href="guides/how-to-use-the-list.html">How to use the list</a>
+      <a class="btn btn-primary" href="#directory">Browse the original ${SOURCE.length}</a>
+      <a class="btn btn-ghost" href="/browser-games/">Full library (${games.length})</a>
     </div>
     <div class="hero-stats">
       <div class="stat"><b>${games.length}</b><span>projects listed</span></div>
@@ -493,33 +526,38 @@ const homeBody = `
 
 <section id="directory">
   <div class="wrap">
-    <h2 class="sec">The full directory</h2>
-    <p class="sec-lede">Filter by collection, category or device, or search by name. Each card shows a real screenshot where we could capture one, and what the project needs before you open it.</p>
+    <h2 class="sec">The original list</h2>
+    <p class="sec-lede">The ${SOURCE.length} projects from the @RadiantOpti thread. Filter by category or device, or search by name. Each card shows a real screenshot where we could capture one, and what the project needs before you open it.</p>
 
     <div class="toolbar">
       <div class="search-box">
         ${ICON_SEARCH}
-        <input id="game-search" type="search" placeholder="Search projects, e.g. Quake, Skate, zombies, Doom..." aria-label="Search projects">
-      </div>
-      <div class="filters">
-        <span class="label">Collection</span>
-        <button class="chip active" data-group="col" data-value="All">All</button>
-        <button class="chip" data-group="col" data-value="source">${esc(COLLECTIONS.source.label)} (${SOURCE.length})</button>
-        <button class="chip" data-group="col" data-value="library">${esc(COLLECTIONS.library.label)} (${LIBRARY.length})</button>
+        <input id="game-search" type="search" placeholder="Search the original list, e.g. Quake, Skate, zombies..." aria-label="Search the original list">
       </div>
       <div class="filters">
         <span class="label">Category</span>
-        ${cats.map((c) => `<button class="chip${c === "All" ? " active" : ""}" data-group="cat" data-value="${esc(c)}">${esc(c)}</button>`).join("")}
+        ${catsOf(SOURCE).map((c) => `<button class="chip${c === "All" ? " active" : ""}" data-group="cat" data-value="${esc(c)}">${esc(c)}</button>`).join("")}
       </div>
       <div class="filters">
         <span class="label">Device</span>
         ${["All", "Desktop", "Mobile"].map((d) => `<button class="chip${d === "All" ? " active" : ""}" data-group="dev" data-value="${esc(d)}">${esc(d)}</button>`).join("")}
       </div>
-      <p class="result-count" id="result-count">${games.length} projects shown</p>
+      <p class="result-count" id="result-count">${SOURCE.length} projects shown</p>
     </div>
 
     <div class="grid" id="game-grid">
-      ${games.map((g) => card(g, "")).join("\n      ")}
+      ${SOURCE.map((g) => card(g)).join("\n      ")}
+    </div>
+  </div>
+</section>
+
+<section id="library">
+  <div class="wrap">
+    <h2 class="sec">The wider library is a separate page</h2>
+    <p class="sec-lede">${LIBRARY.length} more browser ports were not on the original graphic: DOS classics, clean-room builds and open-source engines. They are listed with the original ${SOURCE.length} on the library page, which you can filter by collection.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/browser-games/">Open the full library</a>
+      <a class="btn btn-ghost" href="/guides/how-to-use-the-list">How to use the list</a>
     </div>
   </div>
 </section>
@@ -562,7 +600,7 @@ const homeBody = `
     <p class="sec-lede">Everything the list does not tell you.</p>
     <div class="link-cards">
       ${GUIDES.map(
-        (g) => `<a class="link-card" href="guides/${g.slug}.html">
+        (g) => `<a class="link-card" href="${publicPath(`guides/${g.slug}.html`)}">
         <span class="k">${esc(g.kicker)}</span>
         <h4>${esc(g.title)}</h4>
         <p>${esc(g.description)}</p>
@@ -576,27 +614,26 @@ const homeBody = `
 write(
   "index.html",
   layout({
-    rel: "",
-    title: `Radiant Optimizer Browser Games — Full List, Links & Setup (${sourceData.source.checkedDate})`,
-    description: `The complete Radiant Optimizer browser games list shared by @RadiantOpti, plus a wider library: ${games.length} classic game projects, their real destinations, screenshots and what each one needs.`,
+    title: "Radiant Optimizer Browser Games — Original List, Links & Setup",
+    description: `The original Radiant Optimizer browser games list shared by @RadiantOpti: ${SOURCE.length} projects, their real destinations, screenshots and what each one needs. The wider library is on a separate page.`,
     canonical: "/",
     active: "directory",
     body: homeBody,
-    image: imgSrc(games[0], ""),
+    image: imgSrc(SOURCE[0]),
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: "Radiant Optimizer Browser Games — Full List",
-      description: `A directory of ${games.length} community browser-game projects.`,
+      name: "Radiant Optimizer Browser Games — Original List",
+      description: `The ${SOURCE.length} browser-game projects from the @RadiantOpti thread.`,
       url: CONFIG.baseUrl + "/",
       mainEntity: {
         "@type": "ItemList",
-        numberOfItems: games.length,
-        itemListElement: games.map((g, i) => ({
+        numberOfItems: SOURCE.length,
+        itemListElement: SOURCE.map((g, i) => ({
           "@type": "ListItem",
           position: i + 1,
           name: g.name,
-          url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+          url: abs(publicPath(`games/${g.slug}.html`)),
         })),
       },
     },
@@ -610,14 +647,14 @@ games.forEach((g) => {
   const openBlock = g.sourceUrl
     ? `<a class="btn btn-primary" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener">Open the original project &nearr;</a>`
     : `<span class="btn btn-ghost" style="opacity:.6;cursor:default">Launch button withheld</span>`;
-  const img = imgSrc(g, "../");
+  const img = imgSrc(g);
 
   const grp = groupOf(g);
   const body = `
 <div class="wrap">
   <nav class="crumbs">
-    <a href="../browser-games/index.html">Browser games</a><span>/</span>${
-      grp ? `<a href="../browser-games/${grp.slug}/index.html">${esc(grp.name)}</a><span>/</span>` : ""
+    <a href="/browser-games/">Browser games</a><span>/</span>${
+      grp ? `<a href="${publicPath(`browser-games/${grp.slug}/index.html`)}">${esc(grp.name)}</a><span>/</span>` : ""
     }${esc(g.name)}
   </nav>
 
@@ -633,14 +670,14 @@ games.forEach((g) => {
   </div>
 
   <figure class="shot">
-    <img src="${img}" alt="${esc(g.name)} running in a browser" width="1280" height="720">
+    <img src="${img}" alt="${esc(imgAlt(g))}" width="1280" height="720">
     <figcaption>${hasShot(g.slug) ? `Screenshot captured from ${esc(hostOf(g))}. Belongs to the project's creators.` : `Cover art for ${esc(g.name)}. We could not capture a live screenshot of this project.`}</figcaption>
   </figure>
 
   <div class="article-body">
     <div class="btn-row" style="margin:6px 0 8px">
       ${openBlock}
-      <a class="btn btn-ghost" href="../index.html">Back to directory</a>
+      <a class="btn btn-ghost" href="/#directory">Back to the original list</a>
     </div>
     <p style="font-size:13px;color:var(--muted-2);margin-top:14px">${esc(g.statusNote)}</p>
 
@@ -674,7 +711,7 @@ games.forEach((g) => {
     <div class="link-cards">
       ${related
         .map(
-          (r) => `<a class="link-card" href="${r.slug}.html">
+          (r) => `<a class="link-card" href="${publicPath(`games/${r.slug}.html`)}">
         <span class="k">${esc(r.category)}</span>
         <h4>${esc(r.name)}</h4>
         <p>${esc(r.summary)}</p>
@@ -691,13 +728,12 @@ games.forEach((g) => {
   write(
     `games/${g.slug}.html`,
     layout({
-      rel: "../",
       title: `${g.name} in your browser — link, requirements & setup`,
       description: `${g.summary} Category: ${g.category}. Device: ${g.device}. Requirement: ${(REQ[g.requirement] || REQ.setup).label}. Original destination and setup notes.`,
-      canonical: `/games/${g.slug}.html`,
+      canonical: publicPath(`games/${g.slug}.html`),
       active: "directory",
       body,
-      image: imgSrc(g, ""),
+      image: imgSrc(g),
       jsonLd: {
         "@context": "https://schema.org",
         "@graph": [
@@ -708,8 +744,8 @@ games.forEach((g) => {
             genre: g.category,
             applicationCategory: "Browser game",
             description: g.summary,
-            url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
-            image: abs(imgSrc(g, "")),
+            url: abs(publicPath(`games/${g.slug}.html`)),
+            image: abs(imgSrc(g)),
             ...(g.sourceUrl ? { sameAs: g.sourceUrl } : {}),
           },
           {
@@ -723,7 +759,7 @@ games.forEach((g) => {
                 "@type": "ListItem",
                 position: grp ? 3 : 2,
                 name: g.name,
-                item: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+                item: abs(publicPath(`games/${g.slug}.html`)),
               },
             ],
           },
@@ -737,11 +773,11 @@ games.forEach((g) => {
 
 GUIDES.forEach((g) => {
   const raw = readFileSync(join(SRC, "content", g.file), "utf8");
-  const withAff = raw.replace(/#partner-antivirus/g, CONFIG.affiliateAntivirus).replace(/#partner-radiant/g, CONFIG.affiliateRadiant);
+  const withAff = applyPartners(raw);
   const body = `
 <div class="wrap">
   <nav class="crumbs">
-    <a href="../index.html">Directory</a><span>/</span><a href="../index.html#guides">Guides</a><span>/</span>${esc(g.title.split(":")[0])}
+    <a href="/#directory">Directory</a><span>/</span><a href="/#guides">Guides</a><span>/</span>${esc(g.title.split(":")[0])}
   </nav>
   <div class="article-head">
     <span class="eyebrow">${esc(g.kicker)}</span>
@@ -752,8 +788,8 @@ GUIDES.forEach((g) => {
     ${withAff}
     <div class="callout cta" style="margin-top:34px">
       <h4>Browse the directory</h4>
-      <p>Every project, with a screenshot, its real destination and what it needs before it will run.</p>
-      <p><a class="inline" href="../index.html">Open the full directory &rarr;</a></p>
+      <p>The original thread is on the homepage. The full library, including everything added afterwards, is a separate page.</p>
+      <p><a class="inline" href="/#directory">Original list &rarr;</a> &nbsp; <a class="inline" href="/browser-games/">Full library &rarr;</a></p>
     </div>
   </div>
 </div>
@@ -761,10 +797,9 @@ GUIDES.forEach((g) => {
   write(
     `guides/${g.slug}.html`,
     layout({
-      rel: "../",
       title: `${g.title} | ${CONFIG.siteName}`,
       description: g.description,
-      canonical: `/guides/${g.slug}.html`,
+      canonical: publicPath(`guides/${g.slug}.html`),
       active: g.nav,
       body,
       jsonLd: {
@@ -776,7 +811,7 @@ GUIDES.forEach((g) => {
         publisher: { "@type": "Organization", name: CONFIG.siteName },
         datePublished: sourceData.source.checkedDate,
         dateModified: sourceData.source.checkedDate,
-        mainEntityOfPage: `${CONFIG.baseUrl}/guides/${g.slug}.html`,
+        mainEntityOfPage: abs(publicPath(`guides/${g.slug}.html`)),
       },
     })
   );
@@ -831,9 +866,9 @@ const faqJsonLd = {
   })),
 };
 
-const genreLinks = (rel, activeSlug) =>
+const genreLinks = () =>
   GROUPS.map(
-    (grp) => `<a class="link-card" href="${rel}browser-games/${grp.slug}/index.html">
+    (grp) => `<a class="link-card" href="${publicPath(`browser-games/${grp.slug}/index.html`)}">
         <span class="k">${gamesInGroup(grp).length} games</span>
         <h4>${esc(grp.name)}</h4>
         <p>${esc(grp.lede)}</p>
@@ -842,17 +877,17 @@ const genreLinks = (rel, activeSlug) =>
 
 const hubBody = `
 <div class="wrap">
-  <nav class="crumbs"><a href="../index.html">Home</a><span>/</span>Browser games</nav>
+  <nav class="crumbs"><a href="/">Home</a><span>/</span>Browser games</nav>
 </div>
 
 <section class="hero">
   <div class="wrap">
     <span class="eyebrow">${games.length} projects &middot; updated ${esc(sourceData.source.checkedDate)}</span>
     <h1>Browser games you can <span class="grad">play right now</span></h1>
-    <p class="lede">Classic PC and console games, rebuilt or emulated to run inside a browser tab. No launchers, no installers, no store pages. Every entry below links to the original project, shows a real screenshot where we could capture one, and states plainly what it needs before it will run.</p>
+    <p class="lede">This is the full library: the ${SOURCE.length} projects from the @RadiantOpti thread, plus ${LIBRARY.length} others that were not on that graphic. Classic PC and console games, rebuilt or emulated to run inside a browser tab. Every entry links to the original project, shows a real screenshot where we could capture one, and states plainly what it needs before it will run.</p>
     <div class="btn-row">
       <a class="btn btn-primary" href="#all">Browse all ${games.length} games</a>
-      <a class="btn btn-ghost" href="no-download/index.html">No download needed</a>
+      <a class="btn btn-ghost" href="/browser-games/no-download/">No download needed</a>
     </div>
     <div class="hero-stats">
       <div class="stat"><b>${games.length}</b><span>games listed</span></div>
@@ -872,7 +907,7 @@ const hubBody = `
     <h2 class="sec">Browse by genre</h2>
     <p class="sec-lede">Eight groups, from fast arena shooters to afternoon-eating simulation games.</p>
     <div class="link-cards">
-      ${genreLinks("../", null)}
+      ${genreLinks()}
     </div>
   </div>
 </section>
@@ -903,7 +938,7 @@ const hubBody = `
       <p class="result-count" id="result-count">${games.length} games shown</p>
     </div>
     <div class="grid" id="game-grid">
-      ${games.map((g) => card(g, "../")).join("\n      ")}
+      ${games.map((g) => card(g)).join("\n      ")}
     </div>
   </div>
 </section>
@@ -919,7 +954,7 @@ const hubBody = `
       <div class="etype"><h4>Emulation</h4><p>A full emulator runs the original machine's code in the tab. Highest fidelity, heaviest to load.</p></div>
     </div>
     <p class="sec-lede" style="margin-top:22px">
-      <a class="inline" href="../guides/browser-ports-explained.html">Read the full explanation, including why links break so often &rarr;</a>
+      <a class="inline" href="/guides/browser-ports-explained">Read the full explanation, including why links break so often &rarr;</a>
     </p>
   </div>
 </section>
@@ -930,7 +965,7 @@ const hubBody = `
     <p class="sec-lede">The things people ask before they click.</p>
     ${faqBlock}
     <p class="sec-lede" style="margin-top:22px">
-      Want the full safety checklist? Read <a class="inline" href="../guides/is-it-safe.html">is the browser games list safe</a>, or see <a class="inline" href="../guides/troubleshooting.html">what to do when a game will not load</a>.
+      Want the full safety checklist? Read <a class="inline" href="/guides/is-it-safe">is the browser games list safe</a>, or see <a class="inline" href="/guides/troubleshooting">what to do when a game will not load</a>.
     </p>
   </div>
 </section>
@@ -938,9 +973,9 @@ const hubBody = `
 <section id="radiant">
   <div class="wrap">
     <h2 class="sec">Looking for the Radiant Optimizer list?</h2>
-    <p class="sec-lede">The 25 projects shared by @RadiantOpti on 8 October 2026 have their own directory page, with the original graphic, the links reply and every status note.</p>
+    <p class="sec-lede">The homepage is only the ${SOURCE.length} projects shared by @RadiantOpti on 8 October 2026, with the original graphic, the links reply and every status note. This page is the full library.</p>
     <div class="btn-row">
-      <a class="btn btn-primary" href="../index.html">Open the Radiant Optimizer list</a>
+      <a class="btn btn-primary" href="/#directory">Open the original list</a>
     </div>
   </div>
 </section>
@@ -949,13 +984,12 @@ const hubBody = `
 write(
   "browser-games/index.html",
   layout({
-    rel: "../",
-    title: `Browser Games: ${games.length} Classic Games You Can Play in a Tab (${sourceData.source.checkedDate})`,
-    description: `A curated directory of ${games.length} browser games: classic PC and console titles rebuilt or emulated to run in a browser tab. Real screenshots, original links, and what each one needs.`,
+    title: `Browser Games: ${games.length} Classic Games You Can Play in a Tab`,
+    description: `The full library of ${games.length} browser games: the original @RadiantOpti list plus a wider set of classic PC and console titles rebuilt or emulated to run in a browser tab.`,
     canonical: "/browser-games/",
     active: "browser",
     body: hubBody,
-    image: imgSrc(games[0], ""),
+    image: imgSrc(games[0]),
     jsonLd: {
       "@context": "https://schema.org",
       "@graph": [
@@ -971,7 +1005,7 @@ write(
               "@type": "ListItem",
               position: i + 1,
               name: g.name,
-              url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+              url: abs(publicPath(`games/${g.slug}.html`)),
             })),
           },
         },
@@ -990,7 +1024,7 @@ GROUPS.forEach((grp) => {
   const body = `
 <div class="wrap">
   <nav class="crumbs">
-    <a href="../../index.html">Home</a><span>/</span><a href="../index.html">Browser games</a><span>/</span>${esc(grp.name)}
+    <a href="/">Home</a><span>/</span><a href="/browser-games/">Browser games</a><span>/</span>${esc(grp.name)}
   </nav>
   <div class="article-head">
     <span class="eyebrow">${list.length} games</span>
@@ -1006,7 +1040,7 @@ GROUPS.forEach((grp) => {
   <div class="wrap">
     <h2 class="sec">${esc(grp.name)} games in the directory</h2>
     <div class="grid">
-      ${list.map((g) => card(g, "../../")).join("\n      ")}
+      ${list.map((g) => card(g)).join("\n      ")}
     </div>
   </div>
 </section>
@@ -1014,9 +1048,9 @@ GROUPS.forEach((grp) => {
 <section>
   <div class="wrap">
     <h2 class="sec">Other genres</h2>
-    <p class="sec-lede">Or browse the <a class="inline" href="../index.html">full browser games directory</a>.</p>
+    <p class="sec-lede">Or browse the <a class="inline" href="/browser-games/">full browser games library</a>.</p>
     <div class="link-cards">
-      ${genreLinks("../../", grp.slug)}
+      ${genreLinks()}
     </div>
   </div>
 </section>
@@ -1024,13 +1058,12 @@ GROUPS.forEach((grp) => {
   write(
     `browser-games/${grp.slug}/index.html`,
     layout({
-      rel: "../../",
-      title: `${grp.title} — ${list.length} playable in a browser (${sourceData.source.checkedDate})`,
+      title: `${grp.title} — ${list.length} playable in a browser`,
       description: `${grp.lede} ${list.length} projects with real screenshots, original links and setup notes.`,
       canonical: `/browser-games/${grp.slug}/`,
       active: "browser",
       body,
-      image: imgSrc(list[0], ""),
+      image: imgSrc(list[0]),
       jsonLd: {
         "@context": "https://schema.org",
         "@graph": [
@@ -1046,7 +1079,7 @@ GROUPS.forEach((grp) => {
                 "@type": "ListItem",
                 position: i + 1,
                 name: g.name,
-                url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+                url: abs(publicPath(`games/${g.slug}.html`)),
               })),
             },
           },
@@ -1069,7 +1102,6 @@ const readyGames = games.filter((g) => g.requirement === "ready");
 write(
   "browser-games/no-download/index.html",
   layout({
-    rel: "../../",
     title: `Browser Games With No Download — ${readyGames.length} That Start Instantly`,
     description: `${readyGames.length} browser games that need no installer and no game files. Open the link, click start, play. With screenshots and original links.`,
     canonical: "/browser-games/no-download/",
@@ -1077,7 +1109,7 @@ write(
     body: `
 <div class="wrap">
   <nav class="crumbs">
-    <a href="../../index.html">Home</a><span>/</span><a href="../index.html">Browser games</a><span>/</span>No download
+    <a href="/">Home</a><span>/</span><a href="/browser-games/">Browser games</a><span>/</span>No download
   </nav>
   <div class="article-head">
     <span class="eyebrow">${readyGames.length} games</span>
@@ -1086,7 +1118,7 @@ write(
   </div>
   <div class="article-body">
     <p>These are the projects whose hosts list a browser start rather than a file upload. They are the fastest way to find out whether browser ports are for you. Be aware that "no download" does not mean "no data": several of these still transfer a large amount of game data on first load, and one entry here has an initial load of around 380&nbsp;MB.</p>
-    <p>If you want the projects that expect your own game files instead, filter the <a class="inline" href="../index.html">full directory</a> by the "Bring your own files" badge.</p>
+    <p>If you want the projects that expect your own game files instead, filter the <a class="inline" href="/browser-games/">full library</a> by the "Bring your own files" badge.</p>
   </div>
 </div>
 
@@ -1094,7 +1126,7 @@ write(
   <div class="wrap">
     <h2 class="sec">Start instantly</h2>
     <div class="grid">
-      ${readyGames.map((g) => card(g, "../../")).join("\n      ")}
+      ${readyGames.map((g) => card(g)).join("\n      ")}
     </div>
   </div>
 </section>
@@ -1111,7 +1143,7 @@ write(
           "@type": "ListItem",
           position: i + 1,
           name: g.name,
-          url: `${CONFIG.baseUrl}/games/${g.slug}.html`,
+          url: abs(publicPath(`games/${g.slug}.html`)),
         })),
       },
     },
@@ -1136,10 +1168,10 @@ for (const [oldSlug, newSlug] of Object.entries(RETIRED_GROUPS)) {
 <title>Moved &middot; ${esc(CONFIG.siteName)}</title>
 <link rel="canonical" href="${abs(`/browser-games/${newSlug}/`)}">
 <meta name="robots" content="noindex,follow">
-<meta http-equiv="refresh" content="0; url=../${newSlug}/index.html">
+<meta http-equiv="refresh" content="0; url=/browser-games/${newSlug}/">
 </head>
 <body>
-<p>This category was split up and now lives at <a href="../${newSlug}/index.html">${esc(newSlug)}</a>.</p>
+<p>This category was split up and now lives at <a href="/browser-games/${newSlug}/">${esc(newSlug)}</a>.</p>
 </body>
 </html>
 `
@@ -1151,14 +1183,70 @@ for (const [oldSlug, newSlug] of Object.entries(RETIRED_GROUPS)) {
 write(
   "404.html",
   layout({
-    rel: "/",
     title: `Page not found | ${CONFIG.siteName}`,
     description: "That page does not exist. Browse the full browser games directory instead.",
-    canonical: "/404.html",
+    canonical: "/404",
+    robots: "noindex",
     active: "",
-    body: `<div class="wrap"><div class="article-head"><h1>Page not found</h1><p class="lede">That link does not exist. Head back to the directory to find your project.</p></div><div class="article-body"><a class="btn btn-primary" href="/index.html">Browse the directory</a></div></div>`,
+    body: `<div class="wrap"><div class="article-head"><h1>Page not found</h1><p class="lede">That link does not exist. Head back to the directory to find your project.</p></div><div class="article-body"><a class="btn btn-primary" href="/#directory">Browse the original list</a></div></div>`,
   })
 );
+
+/* ---------------- trust pages ---------------- */
+
+const TRUST = [
+  {
+    slug: "about",
+    title: "About this directory",
+    description:
+      "Radiant Optimizer List is an independent directory of browser-game projects shared by @RadiantOpti, plus a wider library. It is not the Radiant Optimizer product.",
+    kicker: "About",
+    file: "about.html",
+  },
+  {
+    slug: "privacy",
+    title: "Privacy",
+    description:
+      "What Radiant Optimizer List does with information about you: a static directory with no accounts, no analytics cookies, and no game files.",
+    kicker: "Privacy",
+    file: "privacy.html",
+  },
+  {
+    slug: "contact",
+    title: "Contact and corrections",
+    description:
+      "How to report a wrong link on Radiant Optimizer List, and where to go for the Radiant Optimizer product or a game host.",
+    kicker: "Contact",
+    file: "contact.html",
+  },
+];
+
+for (const page of TRUST) {
+  const raw = applyPartners(readFileSync(join(SRC, "content", page.file), "utf8"));
+  write(
+    `${page.slug}.html`,
+    layout({
+      title: `${page.title} | ${CONFIG.siteName}`,
+      description: page.description,
+      canonical: publicPath(`${page.slug}.html`),
+      active: "",
+      body: `
+<div class="wrap">
+  <nav class="crumbs">
+    <a href="/">Home</a><span>/</span>${esc(page.title)}
+  </nav>
+  <div class="article-head">
+    <span class="eyebrow">${esc(page.kicker)}</span>
+    <h1>${esc(page.title)}</h1>
+    <p class="lede">${esc(page.description)}</p>
+  </div>
+  <div class="article-body">
+    ${raw}
+  </div>
+</div>`,
+    })
+  );
+}
 
 /* ---------------- sitemap + robots + covers ---------------- */
 
@@ -1167,8 +1255,9 @@ const urls = [
   { loc: "/browser-games/", pri: "0.9" },
   { loc: "/browser-games/no-download/", pri: "0.8" },
   ...GROUPS.map((g) => ({ loc: `/browser-games/${g.slug}/`, pri: "0.8" })),
-  ...games.map((g) => ({ loc: `/games/${g.slug}.html`, pri: "0.8" })),
-  ...GUIDES.map((g) => ({ loc: `/guides/${g.slug}.html`, pri: "0.7" })),
+  ...games.map((g) => ({ loc: publicPath(`games/${g.slug}.html`), pri: "0.8" })),
+  ...GUIDES.map((g) => ({ loc: publicPath(`guides/${g.slug}.html`), pri: "0.7" })),
+  ...TRUST.map((p) => ({ loc: publicPath(`${p.slug}.html`), pri: "0.4" })),
 ];
 
 write(
@@ -1195,11 +1284,12 @@ for (const f of ["style.css", "app.js"]) {
 
 const shots = games.filter((g) => hasShot(g.slug)).length;
 const orphans = games.filter((g) => !groupOf(g));
-console.log(`Built ${3 + GROUPS.length + games.length + GUIDES.length + 1} pages`);
+console.log(`Built ${3 + GROUPS.length + games.length + GUIDES.length + TRUST.length + 1} pages`);
 console.log(`  index.html`);
 console.log(`  browser-games/  (hub + ${GROUPS.length} genres + no-download)`);
 console.log(`  games/   (${games.length}: ${SOURCE.length} source + ${LIBRARY.length} library)`);
 console.log(`  guides/  (${GUIDES.length})`);
+console.log(`  about, privacy, contact`);
 console.log(`  covers/  (${games.length} generated)`);
 console.log(`  shots/   (${shots} real screenshots)`);
 console.log(`  sitemap.xml, robots.txt, 404.html`);

@@ -7,6 +7,10 @@
     "directory": "./public",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
+    // Matches the live host: /page.html and /page/ serve as /page,
+    // /dir/index.html and /dir serve as /dir/. The worker upgrades
+    // those redirects from 307 to 301.
+    "html_handling": "auto-trailing-slash",
     "run_worker_first": true
   },
   "routes": [

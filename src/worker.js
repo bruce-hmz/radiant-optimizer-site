@@ -1,16 +1,48 @@
-// Serves the static site from Workers Assets. The only dynamic behaviour is
-// canonicalising the host: www is 301-redirected to the apex domain so both
-// custom domains don't serve duplicate content. Everything else (including
-// the 404 page) is handled by the assets binding.
+// Serves the static site from Workers Assets.
+// www → apex is a 301. Requests for *.html are 301'd to the extensionless
+// path the rest of the site already uses (index.html → directory slash,
+// page.html → page). Asset html_handling still 307s trailing-slash
+// variants; those are upgraded to 301 here so canonicals are one hop.
 const APEX = "radiantoptimizerlist.com";
+
+function extensionlessPath(pathname) {
+  if (pathname.endsWith("/index.html")) {
+    const dir = pathname.slice(0, -"index.html".length);
+    return dir || "/";
+  }
+  if (pathname.endsWith(".html")) {
+    const next = pathname.slice(0, -".html".length);
+    return next || "/";
+  }
+  return null;
+}
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    let redirect = false;
     if (url.hostname === `www.${APEX}`) {
       url.hostname = APEX;
-      return Response.redirect(url.toString(), 301);
+      redirect = true;
     }
-    return env.ASSETS.fetch(request);
+    const clean = extensionlessPath(url.pathname);
+    if (clean && clean !== url.pathname) {
+      url.pathname = clean;
+      redirect = true;
+    }
+    if (redirect) return Response.redirect(url.toString(), 301);
+
+    const response = await env.ASSETS.fetch(request);
+    if (response.status >= 300 && response.status < 400) {
+      const loc = response.headers.get("Location");
+      if (loc) {
+        const dest = new URL(loc, url);
+        if (dest.origin === url.origin && dest.href !== url.href) {
+          await response.body?.cancel();
+          return Response.redirect(dest.toString(), 301);
+        }
+      }
+    }
+    return response;
   },
 };
