@@ -182,18 +182,18 @@ const GROUPS = [
     name: "Sports",
     cats: ["Sports"],
     title: "Browser sports games",
-    lede: "Skating and football classics, ported to run in a browser tab.",
+    lede: "Snowboarding, skating and football classics, ported to run in a browser tab.",
     intro:
-      "Sports ports are the most likely to ask for your own data, because the original games shipped with large licensed asset libraries that cannot be redistributed. Skate 3 streams from a converted copy you make yourself, and PES 6 documents keyboard, gamepad and touch controls. Read the setup notes before you start a conversion.",
+      "Sports ports are the most likely to ask for your own data, because the original games shipped with licensed asset libraries that cannot be redistributed: Skate 3 streams from a converted copy you make yourself, and PES 6 documents keyboard, gamepad and touch controls. Not everything here works that way. 1080° Snowboarding is a clean-room N64 build that regenerates its own textures, and International Sensible Soccer is the 1994 DOS game running in a browser DOS environment with nothing to supply. Read the requirement badge first, because it varies more in this group than in any other.",
   },
   {
     slug: "arcade",
     name: "Arcade & fighting",
     cats: ["Arcade", "Fighting", "Collection"],
     title: "Browser arcade and fighting games",
-    lede: "Short-session arcade action, party fighters and collection directories.",
+    lede: "Short-session arcade action, party and one-on-one fighters, and collection directories.",
     intro:
-      "The arcade end of the library is where you find games you can finish in a coffee break. Super Smash Bros. and Open Cadet both start quickly, and the WASM Arcade entry is a directory rather than a single title, so treat it as a jumping-off point to more projects.",
+      "The arcade end of the library is where you find games you can finish in a coffee break. Super Smash Bros. is the quickest to pick up, Open Cadet is an open-source arcade shooter, and Open Digger rebuilds the 1983 maze-digger with eight new mazes and free assets. Mortal Kombat arrives as the 1993 DOS build with its original roster, though that build opens with the manual-based copy-protection word check, so you need the manual or the answer before you reach the character select screen. One entry is not a single game at all: WASM Arcade is a directory that leads to more projects, so treat it as a jumping-off point rather than a title.",
   },
 ];
 const GROUP_OF = {};
