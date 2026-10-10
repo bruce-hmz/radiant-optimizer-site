@@ -1211,7 +1211,7 @@ if (!cleaned) {
   console.log("  NOTE: could not clear previous output in this environment.");
   console.log(`  Delete public/{${GENERATED_DIRS.join(",")}} plus index.html/404.html/sitemap.xml/robots.txt before deploying.`);
 } else if (existsSync(bgDir)) {
-  const expected = new Set(GROUPS.map((g) => g.slug));
+  const expected = new Set([...GROUPS.map((g) => g.slug), ...Object.keys(RETIRED_GROUPS)]);
   const stale = readdirSync(bgDir, { withFileTypes: true })
     .filter((e) => e.isDirectory() && e.name !== "no-download" && !expected.has(e.name))
     .map((e) => e.name);

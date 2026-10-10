@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "radiant-optimizer-site",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": true
+  }
+  // Custom domains are attached in a later deploy once the zone is active:
+  // "routes": [
+  //   { "pattern": "radiantoptimizerlist.com", "custom_domain": true },
+  //   { "pattern": "www.radiantoptimizerlist.com", "custom_domain": true }
+  // ]
+}
