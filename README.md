@@ -23,7 +23,13 @@ Live: https://radiantoptimizerlist.com
 node src/build.mjs        # rebuild public/
 node src/serve.mjs        # local preview
 node src/checklinks.mjs   # verify internal links + sitemap
+node src/check-external-links.mjs  # bounded, unauthenticated destination audit
+node src/check-reliability.mjs [--report docs/link-audit-2026-10-11.json]  # local regression checks
 ```
+
+The external audit writes `docs/link-audit-<Asia/Shanghai date>.json` and `.md` for all catalog records. It uses GET requests only, limits concurrency to 3, each request to 10 seconds, follows at most 6 HTTP redirects, and inspects at most 256 KiB of HTML. HTTP status codes describe responses only. Off-topic `lkgp.pro` HTTP redirect targets and page-level navigation hints are recorded without fetching the target; hints are not executed and do not establish that browser navigation occurred. The audit does not execute page scripts, download game assets, test gameplay, or certify safety. `launchDisabled` is an explicit catalog decision and is never automatically set or cleared by an audit. Missing destinations and login, access, rate-limit, TLS, timeout and other unresolved responses remain explicit in the report.
+
+`src/check-reliability.mjs` is local-only: it checks the catalog against the selected saved audit snapshot and runs bounded HTTP fixtures. By default it reads the snapshot date recorded in catalog `verification.checkedAt`; pass `--report <path>` to select another JSON snapshot. It does not contact catalog destinations.
 
 ## Deploy
 

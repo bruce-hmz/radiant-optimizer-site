@@ -190,6 +190,10 @@ a { color: inherit; text-decoration: none; }
 .badge.req-setup { background: rgba(124, 92, 255, .12); border-color: rgba(124, 92, 255, .35); color: #b3a4ff; }
 .badge.req-archive { background: rgba(154, 164, 184, .1); border-color: rgba(154, 164, 184, .3); color: var(--muted); }
 .badge.req-unavailable { background: rgba(248, 113, 113, .12); border-color: rgba(248, 113, 113, .35); color: var(--red); }
+.badge.verification { background: rgba(154, 164, 184, .08); border-color: var(--border); color: var(--muted); }
+.badge.verify-disabled { background: rgba(248, 113, 113, .12); border-color: rgba(248, 113, 113, .35); color: var(--red); }
+.badge.verify-unconfirmed { background: rgba(251, 191, 36, .1); border-color: rgba(251, 191, 36, .3); color: var(--amber); }
+.card p.verification-note { flex: 0; font-size: 12px; line-height: 1.45; color: var(--muted-2); }
 
 /* ---------- sections ---------- */
 section { padding: 46px 0; }

@@ -1,0 +1,1953 @@
+{
+  "schemaVersion": 1,
+  "auditDate": "2026-10-11",
+  "startedAt": "2026-10-11T13:54:13+08:00",
+  "finishedAt": "2026-10-11T13:54:53+08:00",
+  "scope": "Every current source-list and wider-library record; known sourceUrl or historicalSourceUrl only.",
+  "settings": {
+    "method": "GET",
+    "authenticated": false,
+    "concurrency": 3,
+    "timeoutMs": 10000,
+    "maxRedirects": 6,
+    "maxResponseBytes": 262144,
+    "scriptsExecuted": false,
+    "gameplayTested": false,
+    "blockedOffTopicHosts": [
+      "lkgp.pro"
+    ],
+    "clientSideNavigationExecuted": false,
+    "contentNavigationHintsFollowed": false
+  },
+  "summary": {
+    "records": 67,
+    "requested": 65,
+    "missing": 2,
+    "classifications": {
+      "http-response": 51,
+      "off-topic-navigation-hint": 3,
+      "network-error": 2,
+      "possible-auth-or-bot-challenge": 1,
+      "missing-destination": 2,
+      "content-navigation-hint": 7,
+      "timeout": 1
+    },
+    "httpStatusCodes": {
+      "200": 62
+    }
+  },
+  "records": [
+    {
+      "slug": "black-ops-zombies",
+      "name": "Black Ops Zombies",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": false,
+      "requestedUrl": "https://vel.gg/bo1z",
+      "checkedAt": "2026-10-11T13:54:14+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://vel.gg/bo1z",
+      "redirectChain": [
+        {
+          "url": "https://vel.gg/bo1z",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html",
+      "responseBytesCaptured": 4317,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "moon-zombies",
+      "name": "Moon Zombies",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": true,
+      "requestedUrl": "https://moon-zombies.pages.dev/",
+      "checkedAt": "2026-10-11T13:54:15+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://moon-zombies.pages.dev/",
+      "redirectChain": [
+        {
+          "url": "https://moon-zombies.pages.dev/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "off-topic-navigation-hint",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 416,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "meta-refresh",
+          "target": "https://lkgp.pro/0aff63bc",
+          "followed": false,
+          "confirmedOffTopic": true
+        },
+        {
+          "kind": "javascript-location-call",
+          "target": "https://lkgp.pro/0aff63bc",
+          "followed": false,
+          "confirmedOffTopic": true
+        },
+        {
+          "kind": "redirect-page-link",
+          "target": "https://lkgp.pro/0aff63bc",
+          "followed": false,
+          "confirmedOffTopic": true
+        }
+      ]
+    },
+    {
+      "slug": "kino-der-toten",
+      "name": "Kino der Toten",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": true,
+      "requestedUrl": "https://kino-der-toten.pages.dev/",
+      "checkedAt": "2026-10-11T13:54:17+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://kino-der-toten.pages.dev/",
+      "redirectChain": [
+        {
+          "url": "https://kino-der-toten.pages.dev/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "off-topic-navigation-hint",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 416,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "meta-refresh",
+          "target": "https://lkgp.pro/0aff63bc",
+          "followed": false,
+          "confirmedOffTopic": true
+        },
+        {
+          "kind": "javascript-location-call",
+          "target": "https://lkgp.pro/0aff63bc",
+          "followed": false,
+          "confirmedOffTopic": true
+        },
+        {
+          "kind": "redirect-page-link",
+          "target": "https://lkgp.pro/0aff63bc",
+          "followed": false,
+          "confirmedOffTopic": true
+        }
+      ]
+    },
+    {
+      "slug": "cheese-cube",
+      "name": "BO3 Cheese Cube",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": true,
+      "requestedUrl": "https://cheese-cube.pages.dev/",
+      "checkedAt": "2026-10-11T13:54:18+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://cheese-cube.pages.dev/",
+      "redirectChain": [
+        {
+          "url": "https://cheese-cube.pages.dev/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "off-topic-navigation-hint",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 416,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "meta-refresh",
+          "target": "https://lkgp.pro/0aff63bc",
+          "followed": false,
+          "confirmedOffTopic": true
+        },
+        {
+          "kind": "javascript-location-call",
+          "target": "https://lkgp.pro/0aff63bc",
+          "followed": false,
+          "confirmedOffTopic": true
+        },
+        {
+          "kind": "redirect-page-link",
+          "target": "https://lkgp.pro/0aff63bc",
+          "followed": false,
+          "confirmedOffTopic": true
+        }
+      ]
+    },
+    {
+      "slug": "black-ops-2-vibe-slops",
+      "name": "Black Ops 2 / Vibe Slops",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": false,
+      "requestedUrl": "https://vibeslops.luckeysystems.com/",
+      "checkedAt": "2026-10-11T13:54:17+08:00",
+      "httpStatus": null,
+      "finalUrl": "https://vibeslops.luckeysystems.com/",
+      "redirectChain": [
+        {
+          "url": "https://vibeslops.luckeysystems.com/",
+          "status": null,
+          "location": null,
+          "followed": false,
+          "error": "network-error"
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "network-error",
+      "error": {
+        "kind": "network-error",
+        "code": "ENOTFOUND",
+        "message": "fetch failed"
+      },
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "modern-warfare-2",
+      "name": "Modern Warfare 2",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": false,
+      "requestedUrl": "https://ovz-game-production.up.railway.app/",
+      "checkedAt": "2026-10-11T13:54:18+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://ovz-game-production.up.railway.app/",
+      "redirectChain": [
+        {
+          "url": "https://ovz-game-production.up.railway.app/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "possible-auth-or-bot-challenge",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 5688,
+      "bodyTruncated": false,
+      "authEvidence": true,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "skate-3",
+      "name": "Skate 3",
+      "collection": "source",
+      "requirement": "files",
+      "launchDisabled": false,
+      "requestedUrl": "https://skate.aaddpp.lol/",
+      "checkedAt": "2026-10-11T13:54:20+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://skate.aaddpp.lol/",
+      "redirectChain": [
+        {
+          "url": "https://skate.aaddpp.lol/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 32328,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "skate-rust",
+      "name": "Skate Rust",
+      "collection": "source",
+      "requirement": "unavailable",
+      "launchDisabled": false,
+      "requestedUrl": null,
+      "checkedAt": null,
+      "httpStatus": null,
+      "finalUrl": null,
+      "redirectChain": [],
+      "gameplayVerified": false,
+      "classification": "missing-destination",
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "cs-surf",
+      "name": "CS Surf / Surfd",
+      "collection": "source",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://surfd.net/",
+      "checkedAt": "2026-10-11T13:54:20+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://surfd.net/",
+      "redirectChain": [
+        {
+          "url": "https://surfd.net/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 22761,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "halo-ce",
+      "name": "Halo: Combat Evolved",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": false,
+      "requestedUrl": "https://mitchellhynes.com/halo",
+      "checkedAt": "2026-10-11T13:54:22+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://mitchellhynes.com/halo/",
+      "redirectChain": [
+        {
+          "url": "https://mitchellhynes.com/halo",
+          "status": 302,
+          "location": "https://mitchellhynes.com/halo/",
+          "followed": true
+        },
+        {
+          "url": "https://mitchellhynes.com/halo/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "content-navigation-hint",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 698,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "meta-refresh",
+          "target": "https://mitchellhynes.com/halo/halo.html",
+          "followed": false,
+          "confirmedOffTopic": false
+        }
+      ]
+    },
+    {
+      "slug": "halo-ce-mobile",
+      "name": "Halo CE Mobile",
+      "collection": "source",
+      "requirement": "files",
+      "launchDisabled": false,
+      "requestedUrl": "https://hcemobile.com/",
+      "checkedAt": "2026-10-11T13:54:22+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://hcemobile.com/",
+      "redirectChain": [
+        {
+          "url": "https://hcemobile.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 63959,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "pes-6",
+      "name": "PES 6 Web Online",
+      "collection": "source",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://pes6.optijuegos.net/",
+      "checkedAt": "2026-10-11T13:54:24+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://pes6.optijuegos.net/",
+      "redirectChain": [
+        {
+          "url": "https://pes6.optijuegos.net/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 27141,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "gta-5",
+      "name": "GTA 5 (archived link)",
+      "collection": "source",
+      "requirement": "archive",
+      "launchDisabled": false,
+      "requestedUrl": "https://web.archive.org/web/20261006055917/https://playgta5.com/",
+      "checkedAt": "2026-10-11T13:54:32+08:00",
+      "httpStatus": null,
+      "finalUrl": "https://web.archive.org/web/20261006055917/https://playgta5.com/",
+      "redirectChain": [
+        {
+          "url": "https://web.archive.org/web/20261006055917/https://playgta5.com/",
+          "status": null,
+          "location": null,
+          "followed": false,
+          "error": "timeout"
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "timeout",
+      "error": {
+        "kind": "timeout",
+        "code": 23,
+        "message": "The operation was aborted due to timeout"
+      },
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "gta-vice-city",
+      "name": "GTA: Vice City (WASM)",
+      "collection": "source",
+      "requirement": "files",
+      "launchDisabled": false,
+      "requestedUrl": "https://joncodeofficial.github.io/gta-vice-city-wasm/",
+      "checkedAt": "2026-10-11T13:54:24+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://joncodeofficial.github.io/gta-vice-city-wasm/",
+      "redirectChain": [
+        {
+          "url": "https://joncodeofficial.github.io/gta-vice-city-wasm/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 14704,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "simpsons-hit-and-run",
+      "name": "The Simpsons: Hit & Run",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": false,
+      "requestedUrl": "https://shar-wasm.cjoseph.workers.dev/?skipmovie",
+      "checkedAt": "2026-10-11T13:54:26+08:00",
+      "httpStatus": null,
+      "finalUrl": "https://shar-wasm.cjoseph.workers.dev/?skipmovie",
+      "redirectChain": [
+        {
+          "url": "https://shar-wasm.cjoseph.workers.dev/?skipmovie",
+          "status": null,
+          "location": null,
+          "followed": false,
+          "error": "network-error"
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "network-error",
+      "error": {
+        "kind": "network-error",
+        "code": "ECONNRESET",
+        "message": "fetch failed"
+      },
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "quake",
+      "name": "Quake / QuakeWorld",
+      "collection": "source",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://q1.pieter.com/",
+      "checkedAt": "2026-10-11T13:54:27+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://q1.pieter.com/",
+      "redirectChain": [
+        {
+          "url": "https://q1.pieter.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "content-navigation-hint",
+      "contentType": "text/html",
+      "responseBytesCaptured": 16593,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "javascript-location-assignment",
+          "target": "https://q1.pieter.com/play",
+          "followed": false,
+          "confirmedOffTopic": false
+        }
+      ]
+    },
+    {
+      "slug": "quake-2",
+      "name": "Quake II",
+      "collection": "source",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://q2.pieter.com/",
+      "checkedAt": "2026-10-11T13:54:29+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://q2.pieter.com/",
+      "redirectChain": [
+        {
+          "url": "https://q2.pieter.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "content-navigation-hint",
+      "contentType": "text/html",
+      "responseBytesCaptured": 15593,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "javascript-location-assignment",
+          "target": "https://q2.pieter.com/play",
+          "followed": false,
+          "confirmedOffTopic": false
+        }
+      ]
+    },
+    {
+      "slug": "quake-3",
+      "name": "Quake III Arena",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": false,
+      "requestedUrl": "https://q3.pieter.com/",
+      "checkedAt": "2026-10-11T13:54:32+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://q3.pieter.com/",
+      "redirectChain": [
+        {
+          "url": "https://q3.pieter.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "content-navigation-hint",
+      "contentType": "text/html; charset=UTF-8",
+      "responseBytesCaptured": 29184,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "javascript-location-assignment",
+          "target": "https://q3.pieter.com/game2/game?host=q3.pieter.com&proxyPort=443&fs_game=baseq3&name=",
+          "followed": false,
+          "confirmedOffTopic": false
+        }
+      ]
+    },
+    {
+      "slug": "return-to-castle-wolfenstein",
+      "name": "Return to Castle Wolfenstein",
+      "collection": "source",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://rtcw.pieter.com/",
+      "checkedAt": "2026-10-11T13:54:31+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://rtcw.pieter.com/",
+      "redirectChain": [
+        {
+          "url": "https://rtcw.pieter.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "content-navigation-hint",
+      "contentType": "text/html",
+      "responseBytesCaptured": 15485,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "javascript-location-assignment",
+          "target": "https://rtcw.pieter.com/play?name=",
+          "followed": false,
+          "confirmedOffTopic": false
+        }
+      ]
+    },
+    {
+      "slug": "urban-terror",
+      "name": "Urban Terror",
+      "collection": "source",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://ut.pieter.com/",
+      "checkedAt": "2026-10-11T13:54:33+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://ut.pieter.com/",
+      "redirectChain": [
+        {
+          "url": "https://ut.pieter.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "content-navigation-hint",
+      "contentType": "text/html",
+      "responseBytesCaptured": 17481,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "javascript-location-assignment",
+          "target": "https://ut.pieter.com/play?name=",
+          "followed": false,
+          "confirmedOffTopic": false
+        }
+      ]
+    },
+    {
+      "slug": "half-life-pixelsuft",
+      "name": "Half-Life (Pixelsuft)",
+      "collection": "source",
+      "requirement": "files",
+      "launchDisabled": false,
+      "requestedUrl": "https://pixelsuft.github.io/hl/",
+      "checkedAt": "2026-10-11T13:54:33+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://pixelsuft.github.io/hl/",
+      "redirectChain": [
+        {
+          "url": "https://pixelsuft.github.io/hl/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "content-navigation-hint",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 3159,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": [
+        {
+          "kind": "javascript-location-assignment",
+          "target": "https://github.com/FWGS/xash3d/",
+          "followed": false,
+          "confirmedOffTopic": false
+        },
+        {
+          "kind": "javascript-location-assignment",
+          "target": "https://pixelsuft.github.io/hl/xash.html#",
+          "followed": false,
+          "confirmedOffTopic": false
+        }
+      ]
+    },
+    {
+      "slug": "half-life-cs16-webxash",
+      "name": "Half-Life / CS 1.6 (WebXash)",
+      "collection": "source",
+      "requirement": "files",
+      "launchDisabled": false,
+      "requestedUrl": "https://x8bitrain.github.io/webXash/",
+      "checkedAt": "2026-10-11T13:54:33+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://x8bitrain.github.io/webXash/",
+      "redirectChain": [
+        {
+          "url": "https://x8bitrain.github.io/webXash/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 498,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "diablo-web",
+      "name": "Diablo Web",
+      "collection": "source",
+      "requirement": "files",
+      "launchDisabled": false,
+      "requestedUrl": "https://johnimril.github.io/diablo_web/",
+      "checkedAt": "2026-10-11T13:54:34+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://johnimril.github.io/diablo_web/",
+      "redirectChain": [
+        {
+          "url": "https://johnimril.github.io/diablo_web/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 2822,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "hedgewars-webwars",
+      "name": "Hedgewars / WebWars",
+      "collection": "source",
+      "requirement": "unavailable",
+      "launchDisabled": false,
+      "requestedUrl": null,
+      "checkedAt": null,
+      "httpStatus": null,
+      "finalUrl": null,
+      "redirectChain": [],
+      "gameplayVerified": false,
+      "classification": "missing-destination",
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "wasm-arcade",
+      "name": "WASM Arcade (GTA / Minecraft)",
+      "collection": "source",
+      "requirement": "setup",
+      "launchDisabled": false,
+      "requestedUrl": "https://wasmarcade.com/Fan",
+      "checkedAt": "2026-10-11T13:54:40+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://wasmarcade.com/",
+      "redirectChain": [
+        {
+          "url": "https://wasmarcade.com/Fan",
+          "status": 302,
+          "location": "https://wasmarcade.com/",
+          "followed": true
+        },
+        {
+          "url": "https://wasmarcade.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 102367,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "minecraft-classic",
+      "name": "Minecraft Classic",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://classic.minecraft.net/",
+      "checkedAt": "2026-10-11T13:54:35+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://classic.minecraft.net/",
+      "redirectChain": [
+        {
+          "url": "https://classic.minecraft.net/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html",
+      "responseBytesCaptured": 1708,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "eaglercraft",
+      "name": "Eaglercraft",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://eaglercraft.com/play",
+      "checkedAt": "2026-10-11T13:54:36+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://eaglercraft.com/play",
+      "redirectChain": [
+        {
+          "url": "https://eaglercraft.com/play",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 211751,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "prince-of-persia",
+      "name": "Prince of Persia",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://princejs.com/",
+      "checkedAt": "2026-10-11T13:54:38+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://princejs.com/",
+      "redirectChain": [
+        {
+          "url": "https://princejs.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html",
+      "responseBytesCaptured": 3668,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "super-mario-64-js",
+      "name": "Super Mario 64 (sm64js)",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://brohann3214.github.io/sm64js/",
+      "checkedAt": "2026-10-11T13:54:37+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://brohann3214.github.io/sm64js/",
+      "redirectChain": [
+        {
+          "url": "https://brohann3214.github.io/sm64js/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 7744,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "doom-1993",
+      "name": "Doom (1993)",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://dos.zone/doom-dec-1993/",
+      "checkedAt": "2026-10-11T13:54:40+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://dos.zone/doom-dec-1993/",
+      "redirectChain": [
+        {
+          "url": "https://dos.zone/doom-dec-1993/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 37884,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "the-ultimate-doom",
+      "name": "The Ultimate Doom",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://dos.zone/the-ultimate-doom-1995/",
+      "checkedAt": "2026-10-11T13:54:40+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://dos.zone/the-ultimate-doom-1995/",
+      "redirectChain": [
+        {
+          "url": "https://dos.zone/the-ultimate-doom-1995/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 36227,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "doom-mod-collection",
+      "name": "Doom & Fan Mods",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://joeheyming.github.io/doom/",
+      "checkedAt": "2026-10-11T13:54:41+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://joeheyming.github.io/doom/",
+      "redirectChain": [
+        {
+          "url": "https://joeheyming.github.io/doom/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 43264,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "duke-nukem-3d",
+      "name": "Duke Nukem 3D",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://dos.zone/duke-nukem-3d-1996/",
+      "checkedAt": "2026-10-11T13:54:42+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://dos.zone/duke-nukem-3d-1996/",
+      "redirectChain": [
+        {
+          "url": "https://dos.zone/duke-nukem-3d-1996/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 36856,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "wolfenstein-3d",
+      "name": "Wolfenstein 3D",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://dos.zone/wolfenstein-3d-may-05-1992/",
+      "checkedAt": "2026-10-11T13:54:41+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://dos.zone/wolfenstein-3d-may-05-1992/",
+      "redirectChain": [
+        {
+          "url": "https://dos.zone/wolfenstein-3d-may-05-1992/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 36232,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "red-alert-multiplayer",
+      "name": "Command & Conquer: Red Alert",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://dos.zone/multiplayer/red-alert/",
+      "checkedAt": "2026-10-11T13:54:41+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://dos.zone/multiplayer/red-alert/",
+      "redirectChain": [
+        {
+          "url": "https://dos.zone/multiplayer/red-alert/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 36264,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "red-alert-2-chrono-divide",
+      "name": "Red Alert 2: Chrono Divide",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://chronodivide.com/",
+      "checkedAt": "2026-10-11T13:54:43+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://chronodivide.com/",
+      "redirectChain": [
+        {
+          "url": "https://chronodivide.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html",
+      "responseBytesCaptured": 26485,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "openttd-web",
+      "name": "OpenTTD",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://openttdonline.com/play/",
+      "checkedAt": "2026-10-11T13:54:44+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://openttdonline.com/play/",
+      "redirectChain": [
+        {
+          "url": "https://openttdonline.com/play/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 55994,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "openrct2-web",
+      "name": "OpenRCT2",
+      "collection": "library",
+      "requirement": "files",
+      "launchDisabled": false,
+      "requestedUrl": "https://openrct2online.com/",
+      "checkedAt": "2026-10-11T13:54:46+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://openrct2online.com/",
+      "redirectChain": [
+        {
+          "url": "https://openrct2online.com/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 23717,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "goldeneye-007",
+      "name": "GoldenEye 007",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/goldeneye-007/",
+      "checkedAt": "2026-10-11T13:54:45+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/goldeneye-007/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/goldeneye-007/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9890,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "perfect-dark",
+      "name": "Perfect Dark",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/perfect-dark/",
+      "checkedAt": "2026-10-11T13:54:45+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/perfect-dark/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/perfect-dark/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9945,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "doom-64",
+      "name": "Doom 64",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/doom-64/",
+      "checkedAt": "2026-10-11T13:54:46+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/doom-64/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/doom-64/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9808,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "star-fox-64",
+      "name": "Star Fox 64",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/star-fox-64/",
+      "checkedAt": "2026-10-11T13:54:47+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/star-fox-64/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/star-fox-64/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9803,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "duke-nukem-zero-hour",
+      "name": "Duke Nukem: Zero Hour",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/duke-nukem-zero-hour/",
+      "checkedAt": "2026-10-11T13:54:46+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/duke-nukem-zero-hour/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/duke-nukem-zero-hour/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9827,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "freedoom",
+      "name": "Freedoom",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/freedoom/",
+      "checkedAt": "2026-10-11T13:54:46+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/freedoom/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/freedoom/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9382,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "opentyrian",
+      "name": "OpenTyrian",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/opentyrian/",
+      "checkedAt": "2026-10-11T13:54:47+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/opentyrian/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/opentyrian/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9456,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "ocarina-of-time",
+      "name": "The Legend of Zelda: Ocarina of Time",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/ocarina-of-time/",
+      "checkedAt": "2026-10-11T13:54:47+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/ocarina-of-time/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/ocarina-of-time/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9999,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "mario-kart-64",
+      "name": "Mario Kart 64",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/mario-kart-64/",
+      "checkedAt": "2026-10-11T13:54:47+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/mario-kart-64/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/mario-kart-64/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9974,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "f-zero-x",
+      "name": "F-Zero X",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/f-zero-x/",
+      "checkedAt": "2026-10-11T13:54:47+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/f-zero-x/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/f-zero-x/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9717,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "diddy-kong-racing",
+      "name": "Diddy Kong Racing",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/diddy-kong-racing/",
+      "checkedAt": "2026-10-11T13:54:47+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/diddy-kong-racing/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/diddy-kong-racing/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9904,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "super-smash-bros",
+      "name": "Super Smash Bros.",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/super-smash-bros/",
+      "checkedAt": "2026-10-11T13:54:47+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/super-smash-bros/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/super-smash-bros/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9829,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "banjo-kazooie",
+      "name": "Banjo-Kazooie",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/banjo-kazooie/",
+      "checkedAt": "2026-10-11T13:54:48+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/banjo-kazooie/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/banjo-kazooie/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9946,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "conkers-bad-fur-day",
+      "name": "Conker's Bad Fur Day",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/conkers-bad-fur-day/",
+      "checkedAt": "2026-10-11T13:54:47+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/conkers-bad-fur-day/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/conkers-bad-fur-day/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 10006,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "sonic-the-hedgehog-2",
+      "name": "Sonic the Hedgehog 2",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/sonic-the-hedgehog-2/",
+      "checkedAt": "2026-10-11T13:54:48+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/sonic-the-hedgehog-2/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/sonic-the-hedgehog-2/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 10868,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "castlevania-sotn",
+      "name": "Castlevania: Symphony of the Night",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/sotn/",
+      "checkedAt": "2026-10-11T13:54:48+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/sotn/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/sotn/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9136,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "super-metroid",
+      "name": "Super Metroid",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/super-metroid/",
+      "checkedAt": "2026-10-11T13:54:48+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/super-metroid/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/super-metroid/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 11240,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "beneath-a-steel-sky",
+      "name": "Beneath a Steel Sky",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/beneath-a-steel-sky/",
+      "checkedAt": "2026-10-11T13:54:48+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/beneath-a-steel-sky/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/beneath-a-steel-sky/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9108,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "open-cadet",
+      "name": "Open Cadet",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/open-cadet/",
+      "checkedAt": "2026-10-11T13:54:48+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/open-cadet/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/open-cadet/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 8946,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "craft",
+      "name": "Craft",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/craft/",
+      "checkedAt": "2026-10-11T13:54:49+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/craft/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/craft/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 10334,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "wave-race-64",
+      "name": "Wave Race 64",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/wave-race-64/",
+      "checkedAt": "2026-10-11T13:54:49+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/wave-race-64/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/wave-race-64/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9913,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "open-skyways",
+      "name": "Open Skyways",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/skyways/",
+      "checkedAt": "2026-10-11T13:54:50+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/skyways/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/skyways/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 10137,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "supertuxkart-wasm",
+      "name": "SuperTuxKart (Wasm)",
+      "collection": "library",
+      "requirement": "setup",
+      "launchDisabled": false,
+      "requestedUrl": "https://supertuxkart.pages.dev/",
+      "checkedAt": "2026-10-11T13:54:50+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://supertuxkart.pages.dev/",
+      "redirectChain": [
+        {
+          "url": "https://supertuxkart.pages.dev/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 3314,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "stunts-dos",
+      "name": "Stunts",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://dos.zone/stunts/",
+      "checkedAt": "2026-10-11T13:54:50+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://dos.zone/stunts/",
+      "redirectChain": [
+        {
+          "url": "https://dos.zone/stunts/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 35862,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "wacky-wheels",
+      "name": "Wacky Wheels",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://dos.zone/wackywheels/",
+      "checkedAt": "2026-10-11T13:54:53+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://dos.zone/wackywheels/",
+      "redirectChain": [
+        {
+          "url": "https://dos.zone/wackywheels/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 36687,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "1080-snowboarding",
+      "name": "1080° Snowboarding",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/1080-snowboarding/",
+      "checkedAt": "2026-10-11T13:54:51+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/1080-snowboarding/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/1080-snowboarding/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9960,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "sensible-soccer",
+      "name": "International Sensible Soccer",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://dos.zone/international-sensible-soccer-1994/",
+      "checkedAt": "2026-10-11T13:54:51+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://dos.zone/international-sensible-soccer-1994/",
+      "redirectChain": [
+        {
+          "url": "https://dos.zone/international-sensible-soccer-1994/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 36433,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "open-digger",
+      "name": "Open Digger",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://decompgames.com/games/digger/",
+      "checkedAt": "2026-10-11T13:54:52+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://decompgames.com/games/digger/",
+      "redirectChain": [
+        {
+          "url": "https://decompgames.com/games/digger/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 9619,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    },
+    {
+      "slug": "mortal-kombat",
+      "name": "Mortal Kombat",
+      "collection": "library",
+      "requirement": "ready",
+      "launchDisabled": false,
+      "requestedUrl": "https://dos.zone/mortal-kombat-1993/",
+      "checkedAt": "2026-10-11T13:54:53+08:00",
+      "httpStatus": 200,
+      "finalUrl": "https://dos.zone/mortal-kombat-1993/",
+      "redirectChain": [
+        {
+          "url": "https://dos.zone/mortal-kombat-1993/",
+          "status": 200,
+          "location": null,
+          "followed": false
+        }
+      ],
+      "gameplayVerified": false,
+      "classification": "http-response",
+      "contentType": "text/html; charset=utf-8",
+      "responseBytesCaptured": 36140,
+      "bodyTruncated": false,
+      "authEvidence": false,
+      "error": null,
+      "contentRedirectHints": []
+    }
+  ]
+}

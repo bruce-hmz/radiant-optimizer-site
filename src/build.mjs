@@ -33,7 +33,7 @@ const CONFIG = {
   // Domain name written out. This site is the list, not the Windows product.
   siteName: "Radiant Optimizer List",
   mark: "RL",
-  tagline: "Classic games you can play in a browser tab",
+  tagline: "Browser game projects, sorted by requirements and status",
   baseUrl: "https://radiantoptimizerlist.com",
   sourcePostUrl: "https://x.com/RadiantOpti/status/2108068628793082338",
   sourceReplyUrl: "https://x.com/RadiantOpti/status/2108068632991256995",
@@ -80,6 +80,17 @@ const LIBRARY = libraryData.games.map((g) => ({ ...g, collection: "library" }));
 const games = [...SOURCE, ...LIBRARY];
 const bySlug = Object.fromEntries(games.map((g) => [g.slug, g]));
 
+function isLaunchDisabled(g) {
+  const manualMarker = Boolean(g.launchDisabled);
+  const verificationMarker = g.verification?.status === "link-disabled";
+  if (manualMarker !== verificationMarker) {
+    throw new Error(`Conflicting launchDisabled and verification.status for ${g.slug}`);
+  }
+  return manualMarker;
+}
+
+for (const game of games) isLaunchDisabled(game);
+
 const hostOf = (g) => {
   if (g.host) return g.host;
   if (!g.sourceUrl) return "no destination";
@@ -91,7 +102,7 @@ const hostOf = (g) => {
 };
 
 const REQ = {
-  ready: { cls: "req-ready", label: "Ready to start" },
+  ready: { cls: "req-ready", label: "No extra files listed" },
   files: { cls: "req-files", label: "Bring your own files" },
   setup: { cls: "req-setup", label: "Check setup first" },
   archive: { cls: "req-archive", label: "Archive snapshot" },
@@ -254,7 +265,7 @@ const GUIDES = [
     slug: "browser-ports-explained",
     title: "Browser ports explained: decompilation, emulation and clean-room builds",
     description:
-      "Why some browser games start instantly and others ask for your own game files. The four kinds of browser port, how they differ, and why links break so often.",
+      "Why some browser projects need no extra files and others ask you to supply game data. The four kinds of browser port, how they differ, and why links break so often.",
     kicker: "Background",
     file: "browser-ports-explained.html",
     nav: "howto",
@@ -301,6 +312,80 @@ const reqBadge = (r) => {
   const m = REQ[r] || REQ.setup;
   return `<span class="badge ${m.cls}">${esc(m.label)}</span>`;
 };
+
+function verificationLabel(g) {
+  const verification = g.verification;
+  if (!verification?.status || !verification.checkedAt) {
+    throw new Error(`Missing verification status or date for ${g.slug}`);
+  }
+  if (isLaunchDisabled(g)) return "Link disabled";
+  if (verification.status === "http-response" || verification.status === "content-navigation-hint") return "Page responded";
+  if (verification.status === "possible-access-challenge") return "Access check needed";
+  if (verification.status === "network-error" || verification.status === "timeout") return "Check inconclusive";
+  if (verification.status === "missing-destination") return "No link";
+  throw new Error(`Unknown verification status "${verification.status}" for ${g.slug}`);
+}
+
+function verificationDate(g) {
+  const verification = g.verification;
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "UTC",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(`${verification.checkedAt}T00:00:00Z`));
+}
+
+function verificationEvidence(g) {
+  const verification = g.verification;
+  const date = verificationDate(g);
+  let observation;
+  if (isLaunchDisabled(g)) {
+    observation = `HTTP ${verification.httpStatus}; off-topic navigation hints appeared in the response HTML and were not followed`;
+  } else if (verification.status === "http-response") {
+    observation = `HTTP response ${verification.httpStatus}`;
+  } else if (verification.status === "content-navigation-hint") {
+    observation = `HTTP response ${verification.httpStatus}; page navigation hints were recorded but not followed`;
+  } else if (verification.status === "possible-access-challenge") {
+    observation = `HTTP response ${verification.httpStatus}; possible access or bot challenge`;
+  } else if (verification.status === "network-error") {
+    observation = `network error${verification.errorCode ? ` (${verification.errorCode})` : ""}; no HTTP response confirmed`;
+  } else if (verification.status === "timeout") {
+    observation = "request timed out; no HTTP response confirmed";
+  } else if (verification.status === "missing-destination") {
+    observation = "no destination URL was available, so no HTTP request was made";
+  } else {
+    throw new Error(`Unknown verification status "${verification.status}" for ${g.slug}`);
+  }
+  const dateLabel = verification.status === "missing-destination" ? "Catalog checked" : "Checked";
+  return `${dateLabel} ${date}; ${observation}. Gameplay not tested.`;
+}
+
+function verificationCardNote(g) {
+  const verification = g.verification;
+  const date = verificationDate(g);
+  const dateLabel = verification.status === "missing-destination" ? "Catalog checked" : "Checked";
+  const scope = isLaunchDisabled(g)
+    ? "off-topic page content; link withheld"
+    : ["network-error", "timeout"].includes(verification.status)
+      ? "no response confirmed"
+      : verification.status === "missing-destination"
+        ? "no destination URL to check"
+        : verification.status === "possible-access-challenge"
+          ? "page response only; access unclear"
+          : "page response only";
+  return `${dateLabel} ${date}; ${scope}. Gameplay not tested.`;
+}
+
+function verificationBadge(g) {
+  const status = g.verification?.status;
+  const cls = isLaunchDisabled(g)
+    ? "verify-disabled"
+    : ["network-error", "timeout", "missing-destination", "possible-access-challenge"].includes(status)
+      ? "verify-unconfirmed"
+      : "verify-http";
+  return `<span class="badge verification ${cls}">${esc(verificationLabel(g))}</span>`;
+}
 
 const write = (relPath, content) => {
   const full = join(OUT, relPath);
@@ -432,7 +517,7 @@ function footer() {
     </div>
     <div class="footer-bottom">
       <p class="disclaimer">We link to original project destinations only. We do not host, mirror or provide game files, and we do not offer copies of commercial games. Projects marked "Bring your own files" expect data from a game you legally own. Screenshots are captured from the linked projects for identification purposes and remain the property of their creators. Never bypass a browser certificate warning, and never download an unfamiliar executable to play a browser game.</p>
-      <p class="disclaimer" style="margin-top:12px">Last checked ${esc(sourceData.source.checkedDate)}. Destinations and status can change without notice.</p>
+    <p class="disclaimer" style="margin-top:12px">Source-list metadata reviewed ${esc(sourceData.source.checkedDate)}. Destination evidence is per entry and can change without notice.</p>
     </div>
   </div>
 </footer>`;
@@ -490,9 +575,11 @@ function card(g) {
     <div class="card-top">
       <span class="badge cat">${esc(g.category)}</span>
       ${reqBadge(g.requirement)}
+      ${verificationBadge(g)}
     </div>
     <h3><a href="${href}">${esc(g.name)}</a></h3>
     <p>${esc(g.summary)}</p>
+    <p class="verification-note">${esc(verificationCardNote(g))}</p>
     <div class="card-foot">
       <span class="badge dev">${esc(g.device)}</span>
       <a class="go" href="${href}">Details &rarr;</a>
@@ -506,7 +593,7 @@ const homeBody = `
   <div class="wrap">
     <span class="eyebrow">Updated ${esc(sourceData.source.checkedDate)}</span>
     <h1>The <span class="grad">Radiant Optimizer</span> browser games list, sorted and explained</h1>
-    <p class="lede">In October 2026 the @RadiantOpti account shared a graphic of classic games that run in a browser tab, followed by a reply with the project links. This page is that thread, sorted: the original ${SOURCE.length} projects, a real screenshot where we could capture one, the destination, and what each one needs. The wider library of ${LIBRARY.length} other browser ports has its own page.</p>
+    <p class="lede">In October 2026 the @RadiantOpti account shared a graphic of classic games described as browser projects, followed by a reply with project links. This page keeps the original ${SOURCE.length} entries, their available destinations and requirements, plus a real screenshot where one could be captured. The wider library of ${LIBRARY.length} other browser ports has its own page.</p>
     <div class="btn-row">
       <a class="btn btn-primary" href="#directory">Browse the original ${SOURCE.length}</a>
       <a class="btn btn-ghost" href="/browser-games/">Full library (${games.length})</a>
@@ -519,7 +606,7 @@ const homeBody = `
     </div>
     <div class="notice">
       ${ICON_WARN}
-      <div><strong>Not a download page.</strong> Every game here runs on someone else's website. We link to original destinations only, we do not host game files, and projects marked "Bring your own files" expect data from a game you legally own.</div>
+      <div><strong>Not a download page.</strong> Available project links lead to third-party sites. We do not host game files, and projects marked "Bring your own files" expect data from a game you legally own. Requirements and destination evidence are separate; neither confirms gameplay.</div>
     </div>
   </div>
 </section>
@@ -565,12 +652,12 @@ const homeBody = `
 <section id="entry-types">
   <div class="wrap">
     <h2 class="sec">How to read the badges</h2>
-    <p class="sec-lede">The fastest way to avoid disappointment is to check what a project needs before you click. Every entry falls into one of these buckets.</p>
+    <p class="sec-lede">The badges describe listed setup and file requirements. A separate project status note records what is known about each destination; it does not certify gameplay.</p>
     <div class="entry-types">
-      <div class="etype"><h4>${reqBadge("ready")}</h4><p>The host lists a browser start. Quickest to try, still a community project with no uptime guarantee.</p></div>
-      <div class="etype"><h4>${reqBadge("setup")}</h4><p>The project loads, but read its own notes for controls, servers or data before committing a session.</p></div>
+      <div class="etype"><h4>${reqBadge("ready")}</h4><p>No extra game files or installer are listed as requirements. The destination may still be unavailable, and gameplay is not implied.</p></div>
+      <div class="etype"><h4>${reqBadge("setup")}</h4><p>Requirements or setup need checking. Use project instructions only if its destination is available.</p></div>
       <div class="etype"><h4>${reqBadge("files")}</h4><p>Expects data converted from a game you legally own. Browser access does not include those files.</p></div>
-      <div class="etype"><h4>${reqBadge("archive")} ${reqBadge("unavailable")}</h4><p>The link resolves to an archive or fails a check. Historical context rather than something playable today.</p></div>
+      <div class="etype"><h4>${reqBadge("archive")} ${reqBadge("unavailable")}</h4><p>An archive is historical context; an unavailable entry has no launch link. Neither indicates current gameplay.</p></div>
     </div>
   </div>
 </section>
@@ -644,9 +731,12 @@ write(
 
 games.forEach((g) => {
   const related = (g.related || []).map((s) => bySlug[s]).filter(Boolean);
-  const openBlock = g.sourceUrl
-    ? `<a class="btn btn-primary" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener">Open the original project &nearr;</a>`
-    : `<span class="btn btn-ghost" style="opacity:.6;cursor:default">Launch button withheld</span>`;
+  const launchDisabled = isLaunchDisabled(g);
+  const openBlock = launchDisabled
+    ? `<span class="btn btn-ghost" aria-disabled="true">Launch link disabled</span>`
+    : g.sourceUrl
+      ? `<a class="btn btn-primary" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener">${g.requirement === "archive" ? "View archive snapshot" : "Open project page"} &nearr;</a>`
+      : `<span class="btn btn-ghost" aria-disabled="true">Launch button withheld</span>`;
   const img = imgSrc(g);
 
   const grp = groupOf(g);
@@ -663,6 +753,7 @@ games.forEach((g) => {
       <span class="badge cat">${esc(g.category)}</span>
       <span class="badge dev">${esc(g.device)}</span>
       ${reqBadge(g.requirement)}
+      ${verificationBadge(g)}
       ${g.collection === "source" ? `<span class="badge dev">From the list</span>` : ""}
     </div>
     <h1>${esc(g.name)}</h1>
@@ -679,10 +770,15 @@ games.forEach((g) => {
       ${openBlock}
       <a class="btn btn-ghost" href="/#directory">Back to the original list</a>
     </div>
-    <p style="font-size:13px;color:var(--muted-2);margin-top:14px">${esc(g.statusNote)}</p>
+    <h2>Verification status</h2>
+    <p>${esc(verificationEvidence(g))}</p>
+    <p style="font-size:13px;color:var(--muted-2);margin-top:14px"><strong>Project status / evidence:</strong> ${esc(g.statusNote)}</p>
 
     <h2>What it is</h2>
     <p>${esc(g.whatItIs)}</p>
+
+    <h2>Requirement</h2>
+    <p>${reqBadge(g.requirement)} ${(g.requirement === "ready" ? "No extra game files or installer are listed as requirements. This does not establish destination availability or gameplay." : g.requirement === "files" ? "The project lists game files as a requirement; use only files from a copy you legally own." : g.requirement === "setup" ? "Check the project-specific setup information if the destination is available; requirements may still be unknown." : g.requirement === "archive" ? "This is an archive snapshot, not a current launch requirement." : "The current launch link is withheld." )}</p>
 
     <h2>What you need</h2>
     <ul>${g.whatYouNeed.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
@@ -697,7 +793,9 @@ games.forEach((g) => {
 
     <h2>Source</h2>
     <p>${
-      g.sourceUrl
+      launchDisabled
+        ? "No launch link is provided. The supplied destination was disabled after off-topic navigation hints appeared in the response HTML; see the verification and project status above."
+        : g.sourceUrl
         ? `Original destination: <a class="inline" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(g.sourceUrl.replace(/^https?:\/\//, ""))}</a> (${esc(hostOf(g))}).`
         : "No usable destination: the supplied link did not resolve to the named project, so we withhold it."
     }${
@@ -728,8 +826,8 @@ games.forEach((g) => {
   write(
     `games/${g.slug}.html`,
     layout({
-      title: `${g.name} in your browser — link, requirements & setup`,
-      description: `${g.summary} Category: ${g.category}. Device: ${g.device}. Requirement: ${(REQ[g.requirement] || REQ.setup).label}. Original destination and setup notes.`,
+      title: `${g.name} browser project — requirement & status`,
+      description: `${g.summary} Category: ${g.category}. Device: ${g.device}. Requirement: ${(REQ[g.requirement] || REQ.setup).label}. Destination evidence and setup notes.`,
       canonical: publicPath(`games/${g.slug}.html`),
       active: "directory",
       body,
@@ -746,7 +844,7 @@ games.forEach((g) => {
             description: g.summary,
             url: abs(publicPath(`games/${g.slug}.html`)),
             image: abs(imgSrc(g)),
-            ...(g.sourceUrl ? { sameAs: g.sourceUrl } : {}),
+            ...(g.sourceUrl && !isLaunchDisabled(g) ? { sameAs: g.sourceUrl } : {}),
           },
           {
             "@type": "BreadcrumbList",
@@ -822,7 +920,7 @@ GUIDES.forEach((g) => {
 const FAQ = [
   {
     q: "What counts as a browser game?",
-    a: "Here it means a classic PC or console game that has been rebuilt or emulated to run inside a browser tab. That covers four different approaches: native rewrites, decompilation builds, clean-room reimplementations and full emulation. Each behaves differently when you open it, which is why some entries start instantly and others ask you for a file first.",
+    a: "Here it means a classic PC or console game project intended to run inside a browser tab. That covers four different approaches: native rewrites, decompilation builds, clean-room reimplementations and full emulation. Startup and availability depend on the specific project and host; some list no file requirements while others ask you to supply data.",
   },
   {
     q: "Are these browser games free?",
@@ -830,7 +928,7 @@ const FAQ = [
   },
   {
     q: "Do browser games need a download?",
-    a: "Most do not need an installer. You open a URL and the game runs. Browser play can still transfer a lot of data on first load, and projects that ask for your own game files expect you to prepare those files yourself. Nothing in this directory requires you to download an executable, and you should be suspicious of any browser game that does.",
+    a: "Many projects do not list an installer or extra game files as requirements, but that says nothing about whether a destination is reachable or gameplay starts. A first load can still transfer a lot of data, and projects that ask for your own files expect you to prepare them yourself. Nothing in this directory requires an executable download; be suspicious of any browser project that does.",
   },
   {
     q: "Why do some browser games ask for my own game files?",
@@ -838,7 +936,7 @@ const FAQ = [
   },
   {
     q: "Are browser games safe to play?",
-    a: "Running in a browser removes the need to install software, but it does not make every host trustworthy. Never bypass a certificate warning, never install an unfamiliar executable to play a supposed browser-only game, and only supply game files you legally own. Our safety guide covers the full checklist.",
+    a: "Running in a browser removes the need to install software, but it does not make every host trustworthy or prove a game works. Never bypass a certificate warning, never install an unfamiliar executable to play a supposed browser-only game, and only supply game files you legally own. Our safety guide covers the full checklist.",
   },
   {
     q: "Can I play these browser games on a phone?",
@@ -883,8 +981,8 @@ const hubBody = `
 <section class="hero">
   <div class="wrap">
     <span class="eyebrow">${games.length} projects &middot; updated ${esc(sourceData.source.checkedDate)}</span>
-    <h1>Browser games you can <span class="grad">play right now</span></h1>
-    <p class="lede">This is the full library: the ${SOURCE.length} projects from the @RadiantOpti thread, plus ${LIBRARY.length} others that were not on that graphic. Classic PC and console games, rebuilt or emulated to run inside a browser tab. Every entry links to the original project, shows a real screenshot where we could capture one, and states plainly what it needs before it will run.</p>
+    <h1>Browser game projects, <span class="grad">sorted and explained</span></h1>
+    <p class="lede">This is the full library: the ${SOURCE.length} projects from the @RadiantOpti thread, plus ${LIBRARY.length} others that were not on that graphic. It records each project's listed requirements, status notes and available destination links. A no-files requirement or HTTP response does not confirm that gameplay works.</p>
     <div class="btn-row">
       <a class="btn btn-primary" href="#all">Browse all ${games.length} games</a>
       <a class="btn btn-ghost" href="/browser-games/no-download/">No download needed</a>
@@ -892,7 +990,7 @@ const hubBody = `
     <div class="hero-stats">
       <div class="stat"><b>${games.length}</b><span>games listed</span></div>
       <div class="stat"><b>${GROUPS.length}</b><span>genres</span></div>
-      <div class="stat"><b>${games.filter((g) => g.requirement === "ready").length}</b><span>ready to start</span></div>
+      <div class="stat"><b>${games.filter((g) => g.requirement === "ready").length}</b><span>no extra files listed</span></div>
       <div class="stat"><b>${games.filter((g) => hasShot(g.slug)).length}</b><span>real screenshots</span></div>
     </div>
     <div class="notice">
@@ -948,10 +1046,10 @@ const hubBody = `
     <h2 class="sec">How a browser game actually works</h2>
     <p class="sec-lede">"Playable in your browser" covers four different things, and knowing which one you are looking at explains most of the surprises.</p>
     <div class="entry-types">
-      <div class="etype"><h4>Native rewrite</h4><p>The game's code is rewritten for the web. Starts instantly, needs nothing from you, loses some original behaviour.</p></div>
-      <div class="etype"><h4>Decompilation build</h4><p>Fans reverse-engineer the original into source, then rebuild it for the browser. Very faithful, often wants your own files.</p></div>
-      <div class="etype"><h4>Clean-room build</h4><p>Engine rebuilt from scratch with free replacement assets. Nothing commercial is used, so it just runs.</p></div>
-      <div class="etype"><h4>Emulation</h4><p>A full emulator runs the original machine's code in the tab. Highest fidelity, heaviest to load.</p></div>
+      <div class="etype"><h4>Native rewrite</h4><p>The game's code is rewritten for the web. It may avoid a separate emulator, while loading and startup still depend on the project and host.</p></div>
+      <div class="etype"><h4>Decompilation build</h4><p>Fans reverse-engineer the original into source, then rebuild it for the browser. These builds often ask for original game files; availability depends on the host.</p></div>
+      <div class="etype"><h4>Clean-room build</h4><p>An engine is rebuilt with replacement assets. The asset requirement may be lighter, but startup still depends on the implementation and host.</p></div>
+      <div class="etype"><h4>Emulation</h4><p>A full emulator can run the original machine's code in a tab. Loading demands and current availability depend on the project.</p></div>
     </div>
     <p class="sec-lede" style="margin-top:22px">
       <a class="inline" href="/guides/browser-ports-explained">Read the full explanation, including why links break so often &rarr;</a>
@@ -996,7 +1094,7 @@ write(
         {
           "@type": "CollectionPage",
           name: "Browser Games Directory",
-          description: `A directory of ${games.length} classic games playable in a browser tab.`,
+          description: `A directory of ${games.length} classic browser-game projects with requirement and destination notes.`,
           url: `${CONFIG.baseUrl}/browser-games/`,
           mainEntity: {
             "@type": "ItemList",
@@ -1058,8 +1156,8 @@ GROUPS.forEach((grp) => {
   write(
     `browser-games/${grp.slug}/index.html`,
     layout({
-      title: `${grp.title} — ${list.length} playable in a browser`,
-      description: `${grp.lede} ${list.length} projects with real screenshots, original links and setup notes.`,
+      title: `${grp.title} — ${list.length} browser-game entries`,
+      description: `${grp.lede} ${list.length} projects with screenshots where available, destination notes and setup requirements.`,
       canonical: `/browser-games/${grp.slug}/`,
       active: "browser",
       body,
@@ -1102,8 +1200,8 @@ const readyGames = games.filter((g) => g.requirement === "ready");
 write(
   "browser-games/no-download/index.html",
   layout({
-    title: `Browser Games With No Download — ${readyGames.length} That Start Instantly`,
-    description: `${readyGames.length} browser games that need no installer and no game files. Open the link, click start, play. With screenshots and original links.`,
+    title: `Browser Games With No Download — ${readyGames.length} With No Files Listed`,
+    description: `${readyGames.length} browser-game entries whose listed requirements include no installer or extra game files. This does not verify destination availability or gameplay.`,
     canonical: "/browser-games/no-download/",
     active: "browser",
     body: `
@@ -1114,17 +1212,17 @@ write(
   <div class="article-head">
     <span class="eyebrow">${readyGames.length} games</span>
     <h1>Browser games with no download</h1>
-    <p class="lede">Every entry on this page starts without an installer and without you supplying game files. Open the link, press start, play.</p>
+    <p class="lede">These entries list no installer or extra game files as requirements. That describes setup only; it does not mean the destination is reachable or that gameplay has been verified.</p>
   </div>
   <div class="article-body">
-    <p>These are the projects whose hosts list a browser start rather than a file upload. They are the fastest way to find out whether browser ports are for you. Be aware that "no download" does not mean "no data": several of these still transfer a large amount of game data on first load, and one entry here has an initial load of around 380&nbsp;MB.</p>
+    <p>These are projects whose listed requirement does not include extra game files or an installer. Check each project's status evidence before opening its link. "No download" does not mean "no data": several projects can transfer a large amount on first load, and one lists an initial load of around 380&nbsp;MB.</p>
     <p>If you want the projects that expect your own game files instead, filter the <a class="inline" href="/browser-games/">full library</a> by the "Bring your own files" badge.</p>
   </div>
 </div>
 
 <section style="padding-top:12px">
   <div class="wrap">
-    <h2 class="sec">Start instantly</h2>
+    <h2 class="sec">No extra files listed</h2>
     <div class="grid">
       ${readyGames.map((g) => card(g)).join("\n      ")}
     </div>

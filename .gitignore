@@ -1,6 +1,7 @@
 # Dependencies
 # playwright-core is installed in the managed Node workspace, not in this repo.
 node_modules/
+.codex-adaptive-agents/
 
 # OS cruft
 .DS_Store

@@ -15,7 +15,12 @@
       "howToOpen": ["Open the official Classic page at classic.minecraft.net.", "Enter a nickname when prompted, or leave it blank.", "Click the canvas to lock the pointer, then pick a block from the hotbar."],
       "sourceUrl": "https://classic.minecraft.net/",
       "statusNote": "Official Mojang build. Creative mode only, and multiplayer worlds vanish when the host closes the tab.",
-      "related": ["eaglercraft", "craft", "prince-of-persia"]
+      "related": ["eaglercraft", "craft", "prince-of-persia"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "eaglercraft",
@@ -31,7 +36,12 @@
       "howToOpen": ["Open the Eaglercraft play page.", "Choose a version from the list, then start a single-player world or open the server list.", "Read the project's own notes for controls and server rules."],
       "sourceUrl": "https://eaglercraft.com/play",
       "statusNote": "Community client with its own bugs and version quirks. Not affiliated with Mojang or Microsoft.",
-      "related": ["minecraft-classic", "craft", "openttd-web"]
+      "related": ["minecraft-classic", "craft", "openttd-web"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "prince-of-persia",
@@ -41,13 +51,18 @@
       "device": "Desktop",
       "requirement": "ready",
       "host": "princejs.com",
-      "summary": "The 1989 dungeon classic, reimplemented in HTML5 and playable instantly.",
-      "whatItIs": "PrinceJS is a reimplementation of the 1989 MS-DOS Prince of Persia in HTML5 and JavaScript. The original level design, the deliberately slow animation timing and the sword duels are recreated, so it still demands the same patience the original did. It starts straight in the tab with no download.",
+      "summary": "A browser-based reimplementation of the 1989 dungeon classic.",
+      "whatItIs": "PrinceJS is a reimplementation of the 1989 MS-DOS Prince of Persia in HTML5 and JavaScript. The original level design, the deliberately slow animation timing and the sword duels are recreated, so it still demands the same patience the original did. The listed requirement is no extra game files; startup and current availability depend on the project host.",
       "whatYouNeed": ["A desktop browser", "A keyboard for the arrow keys and the action key", "Tolerance for precise, unforgiving timing"],
       "howToOpen": ["Open PrinceJS.", "Read the on-screen key list first, because the controls are not the modern default.", "Start a new game and take the first jumps slowly."],
       "sourceUrl": "https://princejs.com/",
       "statusNote": "Reimplementation of the 1989 MS-DOS original, playable directly in the browser.",
-      "related": ["super-mario-64-js", "sonic-the-hedgehog-2", "banjo-kazooie"]
+      "related": ["super-mario-64-js", "sonic-the-hedgehog-2", "banjo-kazooie"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "super-mario-64-js",
@@ -63,7 +78,12 @@
       "howToOpen": ["Open the sm64js build.", "Wait for the asset loader to finish before touching the controls.", "Check the project page for the button layout, which is not the N64 original's."],
       "sourceUrl": "https://brohann3214.github.io/sm64js/",
       "statusNote": "Community port built from the Super Mario 64 decompilation. Not affiliated with Nintendo.",
-      "related": ["ocarina-of-time", "prince-of-persia", "banjo-kazooie"]
+      "related": ["ocarina-of-time", "prince-of-persia", "banjo-kazooie"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "doom-1993",
@@ -79,7 +99,12 @@
       "howToOpen": ["Open the Doom page on DOS Zone.", "Click the screen to capture input.", "Press Escape for the in-game menu and key bindings."],
       "sourceUrl": "https://dos.zone/doom-dec-1993/",
       "statusNote": "Runs the genuine 1993 DOS executable through browser-based emulation, not a rewrite.",
-      "related": ["the-ultimate-doom", "doom-mod-collection", "freedoom"]
+      "related": ["the-ultimate-doom", "doom-mod-collection", "freedoom"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "the-ultimate-doom",
@@ -95,7 +120,12 @@
       "howToOpen": ["Open the Ultimate Doom page.", "Click to capture the mouse.", "Pick an episode from the menu; episode four is the hardest of the four."],
       "sourceUrl": "https://dos.zone/the-ultimate-doom-1995/",
       "statusNote": "Runs the 1995 retail release, including the fourth episode, through browser-based DOS emulation.",
-      "related": ["doom-1993", "doom-mod-collection", "duke-nukem-3d"]
+      "related": ["doom-1993", "doom-mod-collection", "duke-nukem-3d"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "doom-mod-collection",
@@ -111,7 +141,12 @@
       "howToOpen": ["Open the collection.", "Pick a build from the list and note which base game it expects.", "Click the canvas to capture input, then check the in-game key bindings."],
       "sourceUrl": "https://joeheyming.github.io/doom/",
       "statusNote": "Fan-run collection bundling classic Doom with community conversions. Not an official release.",
-      "related": ["doom-1993", "the-ultimate-doom", "freedoom"]
+      "related": ["doom-1993", "the-ultimate-doom", "freedoom"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "duke-nukem-3d",
@@ -127,7 +162,12 @@
       "howToOpen": ["Open the Duke Nukem 3D page on DOS Zone.", "Let the DOS bundle finish loading, then click the screen to capture input.", "Use the in-game menu for controls, sound and difficulty."],
       "sourceUrl": "https://dos.zone/duke-nukem-3d-1996/",
       "statusNote": "Runs the 1996 DOS build through browser emulation. Free to play without registration.",
-      "related": ["wolfenstein-3d", "doom-1993", "duke-nukem-zero-hour"]
+      "related": ["wolfenstein-3d", "doom-1993", "duke-nukem-zero-hour"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "wolfenstein-3d",
@@ -143,7 +183,12 @@
       "howToOpen": ["Open the Wolfenstein 3D page on DOS Zone.", "Wait for the DOS bundle to load, then click the screen to begin.", "Use the in-game menu to set difficulty and controls before the first level."],
       "sourceUrl": "https://dos.zone/wolfenstein-3d-may-05-1992/",
       "statusNote": "Runs the original 1992 DOS build through browser emulation. Free to play without registration.",
-      "related": ["doom-1993", "duke-nukem-3d", "freedoom"]
+      "related": ["doom-1993", "duke-nukem-3d", "freedoom"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "red-alert-multiplayer",
@@ -159,7 +204,12 @@
       "howToOpen": ["Open the Red Alert multiplayer page.", "Create or join a lobby.", "Read the in-game controls before the first match starts."],
       "sourceUrl": "https://dos.zone/multiplayer/red-alert/",
       "statusNote": "Browser DOS build of the 1996 release, with a working multiplayer lobby.",
-      "related": ["red-alert-2-chrono-divide", "openttd-web", "openrct2-web"]
+      "related": ["red-alert-2-chrono-divide", "openttd-web", "openrct2-web"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "red-alert-2-chrono-divide",
@@ -175,7 +225,12 @@
       "howToOpen": ["Open the Chrono Divide site.", "Create an account or start a skirmish, depending on what the project currently offers.", "Read the project's own notes for controls and game modes."],
       "sourceUrl": "https://chronodivide.com/",
       "statusNote": "Fan-made recreation of Red Alert 2. Independent project, not an official release.",
-      "related": ["red-alert-multiplayer", "openttd-web", "openrct2-web"]
+      "related": ["red-alert-multiplayer", "openttd-web", "openrct2-web"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "openttd-web",
@@ -191,7 +246,12 @@
       "howToOpen": ["Open the browser build.", "Wait for the graphics to load.", "Start a new game and follow the in-game tutorial before building a network."],
       "sourceUrl": "https://openttdonline.com/play/",
       "statusNote": "Open-source engine with free graphics, and save import and export is supported.",
-      "related": ["openrct2-web", "red-alert-multiplayer"]
+      "related": ["openrct2-web", "red-alert-multiplayer"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "openrct2-web",
@@ -207,7 +267,12 @@
       "howToOpen": ["Read the site's notes on which game files are required.", "Upload data from a copy you own.", "Start a scenario once the assets are loaded."],
       "sourceUrl": "https://openrct2online.com/",
       "statusNote": "The engine is open source but expects original RollerCoaster Tycoon 2 data that you supply yourself.",
-      "related": ["openttd-web", "red-alert-2-chrono-divide"]
+      "related": ["openttd-web", "red-alert-2-chrono-divide"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "goldeneye-007",
@@ -223,7 +288,12 @@
       "howToOpen": ["Open the GoldenEye 007 build on Decomp Games.", "Wait for the loader to finish.", "Check the control scheme before a mission, as the default binds are not the N64 layout."],
       "sourceUrl": "https://decompgames.com/games/goldeneye-007/",
       "statusNote": "Clean-room browser build of the N64 original, hosted by Decomp Games. Not affiliated with the original publishers.",
-      "related": ["perfect-dark", "doom-64", "star-fox-64"]
+      "related": ["perfect-dark", "doom-64", "star-fox-64"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "perfect-dark",
@@ -239,7 +309,12 @@
       "howToOpen": ["Open the Perfect Dark build on Decomp Games.", "Let the loader complete.", "Read the control notes, then try the Combat Simulator with bots before the campaign."],
       "sourceUrl": "https://decompgames.com/games/perfect-dark/",
       "statusNote": "Clean-room browser build of the N64 original, hosted by Decomp Games. Includes the Combat Simulator with bots.",
-      "related": ["goldeneye-007", "doom-64", "star-fox-64"]
+      "related": ["goldeneye-007", "doom-64", "star-fox-64"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "doom-64",
@@ -255,7 +330,12 @@
       "howToOpen": ["Open the Doom 64 build on Decomp Games.", "Wait for the loader.", "Check the in-game options for controls and brightness, since the original is deliberately dark."],
       "sourceUrl": "https://decompgames.com/games/doom-64/",
       "statusNote": "Clean-room browser build of the N64-exclusive original, hosted by Decomp Games. Not a port of the PC Doom.",
-      "related": ["doom-1993", "the-ultimate-doom", "goldeneye-007"]
+      "related": ["doom-1993", "the-ultimate-doom", "goldeneye-007"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "star-fox-64",
@@ -271,7 +351,12 @@
       "howToOpen": ["Open the Star Fox 64 build on Decomp Games.", "Wait for the loader to finish.", "Check the controls, then pick a route from the map screen."],
       "sourceUrl": "https://decompgames.com/games/star-fox-64/",
       "statusNote": "Clean-room browser build of the N64 rail shooter, hosted by Decomp Games. Branching routes are intact.",
-      "related": ["f-zero-x", "goldeneye-007", "diddy-kong-racing"]
+      "related": ["f-zero-x", "goldeneye-007", "diddy-kong-racing"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "duke-nukem-zero-hour",
@@ -287,7 +372,12 @@
       "howToOpen": ["Open the Zero Hour build on Decomp Games.", "Let the loader finish.", "Read the control notes before starting, since the third-person camera takes adjusting."],
       "sourceUrl": "https://decompgames.com/games/duke-nukem-zero-hour/",
       "statusNote": "Clean-room browser build of the N64 title, hosted by Decomp Games. Distinct from the DOS Duke Nukem 3D.",
-      "related": ["duke-nukem-3d", "doom-64", "goldeneye-007"]
+      "related": ["duke-nukem-3d", "doom-64", "goldeneye-007"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "freedoom",
@@ -303,7 +393,12 @@
       "howToOpen": ["Open the Freedoom build on Decomp Games.", "Click the canvas to capture input.", "Check the in-game menu for controls, then choose a difficulty."],
       "sourceUrl": "https://decompgames.com/games/freedoom/",
       "statusNote": "Free and open-source assets throughout, hosted by Decomp Games. No commercial files required.",
-      "related": ["doom-1993", "opentyrian", "open-cadet"]
+      "related": ["doom-1993", "opentyrian", "open-cadet"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "opentyrian",
@@ -319,7 +414,12 @@
       "howToOpen": ["Open the OpenTyrian build on Decomp Games.", "Wait for the loader.", "Pick a difficulty and start the campaign, then spend upgrade points between levels."],
       "sourceUrl": "https://decompgames.com/games/opentyrian/",
       "statusNote": "Open-source reimplementation of Tyrian with free assets, hosted by Decomp Games. Full campaign included.",
-      "related": ["freedoom", "open-cadet", "star-fox-64"]
+      "related": ["freedoom", "open-cadet", "star-fox-64"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "ocarina-of-time",
@@ -335,7 +435,12 @@
       "howToOpen": ["Open the Ocarina of Time build on Decomp Games.", "Let the loader finish before touching the controls.", "Check the control scheme before leaving the first area, as the binds are remappable."],
       "sourceUrl": "https://decompgames.com/games/ocarina-of-time/",
       "statusNote": "Clean-room browser build from the Ship of Harkinian decompilation. Not affiliated with Nintendo.",
-      "related": ["super-mario-64-js", "mario-kart-64"]
+      "related": ["super-mario-64-js", "mario-kart-64"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "mario-kart-64",
@@ -351,7 +456,12 @@
       "howToOpen": ["Open the Mario Kart 64 build on Decomp Games.", "Wait for the loader.", "Read the control notes, then pick a cup or a battle arena."],
       "sourceUrl": "https://decompgames.com/games/mario-kart-64/",
       "statusNote": "Clean-room browser build of the N64 kart racer, hosted by Decomp Games. Not affiliated with Nintendo.",
-      "related": ["f-zero-x", "diddy-kong-racing", "super-smash-bros"]
+      "related": ["f-zero-x", "diddy-kong-racing", "super-smash-bros"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "f-zero-x",
@@ -367,7 +477,12 @@
       "howToOpen": ["Open the F-Zero X build on Decomp Games.", "Wait for the loader.", "Check the controls, then start a cup or try the randomly generated X Cup."],
       "sourceUrl": "https://decompgames.com/games/f-zero-x/",
       "statusNote": "Clean-room browser build of the N64 racer, hosted by Decomp Games. Includes the randomly generated X Cup.",
-      "related": ["mario-kart-64", "diddy-kong-racing", "wave-race-64"]
+      "related": ["mario-kart-64", "diddy-kong-racing", "wave-race-64"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "diddy-kong-racing",
@@ -383,7 +498,12 @@
       "howToOpen": ["Open the Diddy Kong Racing build on Decomp Games.", "Wait for the loader.", "Check the control notes, then start the adventure mode rather than a single race."],
       "sourceUrl": "https://decompgames.com/games/diddy-kong-racing/",
       "statusNote": "Clean-room browser build of the N64 adventure racer, hosted by Decomp Games. Three vehicle types included.",
-      "related": ["mario-kart-64", "banjo-kazooie", "conkers-bad-fur-day"]
+      "related": ["mario-kart-64", "banjo-kazooie", "conkers-bad-fur-day"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "super-smash-bros",
@@ -399,7 +519,12 @@
       "howToOpen": ["Open the Super Smash Bros. build on Decomp Games.", "Wait for the loader.", "Check the control scheme, then pick a mode and characters before the match."],
       "sourceUrl": "https://decompgames.com/games/super-smash-bros/",
       "statusNote": "Clean-room browser build of the original N64 fighter, hosted by Decomp Games. Not affiliated with Nintendo.",
-      "related": ["mario-kart-64", "goldeneye-007"]
+      "related": ["mario-kart-64", "goldeneye-007"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "banjo-kazooie",
@@ -415,7 +540,12 @@
       "howToOpen": ["Open the Banjo-Kazooie build on Decomp Games.", "Wait for the loader.", "Check the controls before leaving the first world, since the move list grows as you play."],
       "sourceUrl": "https://decompgames.com/games/banjo-kazooie/",
       "statusNote": "Clean-room browser build of the N64 collect-a-thon, hosted by Decomp Games.",
-      "related": ["conkers-bad-fur-day", "super-mario-64-js", "diddy-kong-racing"]
+      "related": ["conkers-bad-fur-day", "super-mario-64-js", "diddy-kong-racing"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "conkers-bad-fur-day",
@@ -431,7 +561,12 @@
       "howToOpen": ["Open the Conker build on Decomp Games.", "Wait for the loader.", "Check the controls before starting; the multiplayer modes are separate from the campaign."],
       "sourceUrl": "https://decompgames.com/games/conkers-bad-fur-day/",
       "statusNote": "Clean-room browser build of the N64 title, hosted by Decomp Games. Contains mature content.",
-      "related": ["banjo-kazooie", "diddy-kong-racing", "super-mario-64-js"]
+      "related": ["banjo-kazooie", "diddy-kong-racing", "super-mario-64-js"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "sonic-the-hedgehog-2",
@@ -447,7 +582,12 @@
       "howToOpen": ["Open the Sonic 2 build on Decomp Games.", "Wait for the loader.", "Check the controls, then pick a zone or start the two-player versus mode."],
       "sourceUrl": "https://decompgames.com/games/sonic-the-hedgehog-2/",
       "statusNote": "Clean-room browser build of the 1992 Mega Drive original, hosted by Decomp Games.",
-      "related": ["prince-of-persia", "super-mario-64-js", "castlevania-sotn"]
+      "related": ["prince-of-persia", "super-mario-64-js", "castlevania-sotn"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "castlevania-sotn",
@@ -463,7 +603,12 @@
       "howToOpen": ["Open the Symphony of the Night build on Decomp Games.", "Wait for the loader.", "Check the controls before you start exploring the castle, since the map is large."],
       "sourceUrl": "https://decompgames.com/games/sotn/",
       "statusNote": "Clean-room browser build of the 1997 PlayStation original, hosted by Decomp Games.",
-      "related": ["super-metroid", "sonic-the-hedgehog-2", "ocarina-of-time"]
+      "related": ["super-metroid", "sonic-the-hedgehog-2", "ocarina-of-time"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "super-metroid",
@@ -479,7 +624,12 @@
       "howToOpen": ["Open the Super Metroid build on Decomp Games.", "Wait for the loader.", "Check the controls before you leave the first area, and note the map screen button."],
       "sourceUrl": "https://decompgames.com/games/super-metroid/",
       "statusNote": "Clean-room browser build of the 1994 SNES original, hosted by Decomp Games.",
-      "related": ["castlevania-sotn", "ocarina-of-time"]
+      "related": ["castlevania-sotn", "ocarina-of-time"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "beneath-a-steel-sky",
@@ -495,7 +645,12 @@
       "howToOpen": ["Open the Beneath a Steel Sky build on Decomp Games.", "Wait for the loader.", "Use the in-game menu for controls and saving, and save often."],
       "sourceUrl": "https://decompgames.com/games/beneath-a-steel-sky/",
       "statusNote": "Released as freeware by the publisher in 2003. Browser build hosted by Decomp Games.",
-      "related": ["opentyrian", "freedoom", "open-cadet"]
+      "related": ["opentyrian", "freedoom", "open-cadet"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "open-cadet",
@@ -511,7 +666,12 @@
       "howToOpen": ["Open the Open Cadet build on Decomp Games.", "Wait for the loader.", "Check the controls on the title screen before starting."],
       "sourceUrl": "https://decompgames.com/games/open-cadet/",
       "statusNote": "Smaller open-source arcade title with free assets, hosted by Decomp Games.",
-      "related": ["freedoom", "opentyrian", "craft"]
+      "related": ["freedoom", "opentyrian", "craft"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "craft",
@@ -527,7 +687,12 @@
       "howToOpen": ["Open the Craft build on Decomp Games.", "Wait for the world to generate.", "Check the controls for movement and placing blocks, since there is no tutorial."],
       "sourceUrl": "https://decompgames.com/games/craft/",
       "statusNote": "Minimal open-source voxel sandbox with free assets, hosted by Decomp Games. No survival or crafting.",
-      "related": ["minecraft-classic", "eaglercraft", "open-cadet"]
+      "related": ["minecraft-classic", "eaglercraft", "open-cadet"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "wave-race-64",
@@ -543,7 +708,12 @@
       "howToOpen": ["Open the Wave Race 64 build on Decomp Games.", "Tap or press a key once, since sound only starts after your first input.", "Pick a championship from the menu; touch controls are still being rolled out, so use a keyboard or pad."],
       "sourceUrl": "https://decompgames.com/games/wave-race-64/",
       "statusNote": "Clean-room browser build of the N64 original, hosted by Decomp Games. Boots and starts a race; assets are regenerated, not retail.",
-      "related": ["mario-kart-64", "f-zero-x", "diddy-kong-racing"]
+      "related": ["mario-kart-64", "f-zero-x", "diddy-kong-racing"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "open-skyways",
@@ -559,7 +729,12 @@
       "howToOpen": ["Open the Open Skyways build on Decomp Games.", "Press Enter to leave the intro, then choose Play and pick a road.", "Accelerate and brake with the up and down arrows, steer with left and right, and press Space to jump."],
       "sourceUrl": "https://decompgames.com/games/skyways/",
       "statusNote": "Clean-room engine reconstruction with its own thirty courses, hosted by Decomp Games. Audio is disabled.",
-      "related": ["stunts-dos", "f-zero-x", "wave-race-64"]
+      "related": ["stunts-dos", "f-zero-x", "wave-race-64"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "supertuxkart-wasm",
@@ -575,7 +750,12 @@
       "howToOpen": ["Open the SuperTuxKart Wasm page.", "Choose a texture quality: low is 120 MB, medium 171 MB, high 249 MB.", "Press Start Game and let the download finish before expecting a menu."],
       "sourceUrl": "https://supertuxkart.pages.dev/",
       "statusNote": "Experimental WebAssembly port. Rendering APIs and networking are incomplete, and the initial download is 120 MB or more.",
-      "related": ["mario-kart-64", "diddy-kong-racing", "open-skyways"]
+      "related": ["mario-kart-64", "diddy-kong-racing", "open-skyways"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "stunts-dos",
@@ -591,7 +771,12 @@
       "howToOpen": ["Open the Stunts page on DOS Zone.", "Wait for the DOS bundle to load, then click the screen to capture input.", "Choose a car and track from the menu, and switch to fullscreen if the pointer misbehaves."],
       "sourceUrl": "https://dos.zone/stunts/",
       "statusNote": "Runs the 1990 Broderbund DOS build through browser emulation. Free to play without registration.",
-      "related": ["wacky-wheels", "open-skyways", "f-zero-x"]
+      "related": ["wacky-wheels", "open-skyways", "f-zero-x"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "wacky-wheels",
@@ -607,7 +792,12 @@
       "howToOpen": ["Open the Wacky Wheels page on DOS Zone.", "Click the screen to capture input.", "Pick a character and course, then drive with the arrow keys."],
       "sourceUrl": "https://dos.zone/wackywheels/",
       "statusNote": "Runs the 1994 Apogee DOS build through browser emulation. The build boots as version 1.1 and reports itself as registered.",
-      "related": ["stunts-dos", "mario-kart-64", "diddy-kong-racing"]
+      "related": ["stunts-dos", "mario-kart-64", "diddy-kong-racing"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "1080-snowboarding",
@@ -623,7 +813,12 @@
       "howToOpen": ["Open the 1080° Snowboarding build on Decomp Games.", "Tap or press a key once, since sound only starts after your first input.", "Pick a course and a mode; touch controls are still being rolled out, so use a keyboard or pad."],
       "sourceUrl": "https://decompgames.com/games/1080-snowboarding/",
       "statusNote": "Clean-room browser build of the N64 original, hosted by Decomp Games. A race plays start to finish; assets are regenerated.",
-      "related": ["skate-3", "wave-race-64", "f-zero-x"]
+      "related": ["skate-3", "wave-race-64", "f-zero-x"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "sensible-soccer",
@@ -639,7 +834,12 @@
       "howToOpen": ["Open the International Sensible Soccer page on DOS Zone.", "Click the screen to capture input.", "Pick a team and a match type from the menus, then check the key layout before kick-off."],
       "sourceUrl": "https://dos.zone/international-sensible-soccer-1994/",
       "statusNote": "Runs the 1994 DOS build through browser emulation. Free to play without registration.",
-      "related": ["pes-6", "1080-snowboarding", "skate-3"]
+      "related": ["pes-6", "1080-snowboarding", "skate-3"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "open-digger",
@@ -655,7 +855,12 @@
       "howToOpen": ["Open the Open Digger build on Decomp Games.", "Press Enter to start, then move and dig with the arrow keys.", "Press F1 to fire and Space to pause; F10 exits the game."],
       "sourceUrl": "https://decompgames.com/games/digger/",
       "statusNote": "Clean-room decompilation with eight replacement mazes, hosted by Decomp Games. Audio is disabled by design.",
-      "related": ["open-cadet", "open-skyways", "freedoom"]
+      "related": ["open-cadet", "open-skyways", "freedoom"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     },
     {
       "slug": "mortal-kombat",
@@ -671,7 +876,12 @@
       "howToOpen": ["Open the Mortal Kombat page on DOS Zone.", "Let the DOS bundle load, then click the screen to capture input.", "Clear the copy-protection screen by entering the word it asks for from the manual.", "Read the control list before you start, then pick a fighter and a mode."],
       "sourceUrl": "https://dos.zone/mortal-kombat-1993/",
       "statusNote": "Runs the 1993 DOS build through browser emulation. Free to play without registration, but the build opens with the manual-based copy-protection word check.",
-      "related": ["super-smash-bros", "open-digger", "duke-nukem-3d"]
+      "related": ["super-smash-bros", "open-digger", "duke-nukem-3d"],
+      "verification": {
+        "status": "http-response",
+        "checkedAt": "2026-10-11",
+        "httpStatus": 200
+      }
     }
   ]
 }
