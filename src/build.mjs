@@ -17,7 +17,7 @@ const OUT = join(__dirname, "..", "public");
 /*  is a warning, not a crash.                                          */
 /* ------------------------------------------------------------------ */
 const GENERATED_DIRS = ["browser-games", "games", "guides"];
-const GENERATED_FILES = ["index.html", "404.html", "about.html", "privacy.html", "contact.html", "sitemap.xml", "robots.txt"];
+const GENERATED_FILES = ["index.html", "404.html", "about.html", "privacy.html", "contact.html", "sitemap.xml", "robots.txt", "ads.txt"];
 let cleaned = true;
 try {
   for (const d of GENERATED_DIRS) rmSync(join(OUT, d), { recursive: true, force: true });
