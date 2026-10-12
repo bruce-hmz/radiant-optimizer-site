@@ -1,8 +1,10 @@
 // Serves the static site from Workers Assets.
-// www → apex is a 301. Requests for *.html are 301'd to the extensionless
-// path the rest of the site already uses (index.html → directory slash,
-// page.html → page). Asset html_handling still 307s trailing-slash
-// variants; those are upgraded to 301 here so canonicals are one hop.
+// www → apex is a 301, plain HTTP is 301'd to HTTPS (the zone's edge
+// "Always Use HTTPS" is off, so the worker owns that hop). Requests for
+// *.html are 301'd to the extensionless path the rest of the site already
+// uses (index.html → directory slash, page.html → page). Asset
+// html_handling still 307s trailing-slash variants; those are upgraded to
+// 301 here so canonicals are one hop.
 const APEX = "radiantoptimizerlist.com";
 
 function extensionlessPath(pathname) {
@@ -21,6 +23,12 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     let redirect = false;
+    const isSiteHost = url.hostname === APEX || url.hostname === `www.${APEX}`;
+    // Guarded by hostname so `wrangler dev` on localhost keeps plain HTTP.
+    if (url.protocol === "http:" && isSiteHost) {
+      url.protocol = "https:";
+      redirect = true;
+    }
     if (url.hostname === `www.${APEX}`) {
       url.hostname = APEX;
       redirect = true;

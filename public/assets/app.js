@@ -27,6 +27,9 @@
     if (countEl) {
       countEl.textContent = shown + (shown === 1 ? ' project' : ' projects') + ' shown';
     }
+    // analytics.js (when a GA4 ID is configured) reads this for the
+    // game_search event's result_count — one attribute, no shared state.
+    if (search) search.dataset.results = String(shown);
   }
 
   chips.forEach(function (chip) {

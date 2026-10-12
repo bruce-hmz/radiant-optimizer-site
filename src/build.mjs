@@ -40,6 +40,10 @@ const CONFIG = {
   // Official product site only. Leave antivirus empty until a real offer exists.
   affiliateAntivirus: "",
   affiliateRadiant: "https://radiantoptimizer.com/",
+  // GA4 web-stream measurement ID (G-…). Read from the environment so it is
+  // configured per deploy (Cloudflare Workers Builds variable) instead of
+  // being hardcoded. When empty the build emits no analytics markup at all.
+  ga4MeasurementId: process.env.GA4_MEASUREMENT_ID || "",
 };
 /* ------------------------------------------------------------------ */
 
@@ -72,6 +76,14 @@ function applyPartners(html) {
 // Normalise once so every `${CONFIG.baseUrl}/path` template below is safe
 // whether or not the operator typed a trailing slash.
 CONFIG.baseUrl = String(CONFIG.baseUrl).replace(/\/+$/, "");
+
+// A malformed measurement ID must never reach the page: it would load a
+// broken tag into every page head. Warn and build analytics-free instead.
+CONFIG.ga4MeasurementId = String(CONFIG.ga4MeasurementId).trim();
+if (CONFIG.ga4MeasurementId && !/^G-[A-Z0-9]{6,}$/.test(CONFIG.ga4MeasurementId)) {
+  console.warn(`  WARNING: GA4_MEASUREMENT_ID "${CONFIG.ga4MeasurementId}" is not a valid measurement ID (expected G-XXXXXXXXXX); building without analytics.`);
+  CONFIG.ga4MeasurementId = "";
+}
 
 const sourceData = JSON.parse(readFileSync(join(SRC, "data", "games.json"), "utf8"));
 const libraryData = JSON.parse(readFileSync(join(SRC, "data", "library.json"), "utf8"));
@@ -523,6 +535,23 @@ function footer() {
 </footer>`;
 }
 
+// GA4 head snippet. Everything is queued in dataLayer before gtag.js loads.
+// Consent Mode v2 starts fully denied; a stored "granted" choice is replayed
+// synchronously so returning visitors keep full measurement, and
+// assets/analytics.js offers new visitors an accept/decline banner. Ad
+// signals stay denied permanently — this site runs no ads.
+function ga4Head() {
+  const id = CONFIG.ga4MeasurementId;
+  if (!id) return "";
+  return `<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});
+try{if(localStorage.getItem('rol-consent')==='granted')gtag('consent','update',{analytics_storage:'granted'});}catch(e){}
+gtag('js',new Date());gtag('config','${id}');
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>`;
+}
+
 function layout({ title, description, canonical, active, body, jsonLd, image, robots }) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -541,6 +570,7 @@ ${image ? `<meta property="og:image" content="${abs(image)}">` : ""}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0d12">
 <link rel="stylesheet" href="/assets/style.css">
+${ga4Head()}
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ""}
 </head>
 <body>
@@ -551,6 +581,7 @@ ${body}
 </main>
 ${footer()}
 <script src="/assets/app.js" defer></script>
+${CONFIG.ga4MeasurementId ? `<script src="/assets/analytics.js" defer></script>` : ""}
 </body>
 </html>`;
 }
@@ -732,10 +763,14 @@ write(
 games.forEach((g) => {
   const related = (g.related || []).map((s) => bySlug[s]).filter(Boolean);
   const launchDisabled = isLaunchDisabled(g);
+  // data-rol-outbound marks the game's original-project links for the
+  // game_outbound_click event (see assets/analytics.js). click_location
+  // distinguishes the primary button from the source-section link.
+  const outboundAttrs = `data-rol-outbound data-game-slug="${esc(g.slug)}" data-game-category="${esc(g.category)}"`;
   const openBlock = launchDisabled
     ? `<span class="btn btn-ghost" aria-disabled="true">Launch link disabled</span>`
     : g.sourceUrl
-      ? `<a class="btn btn-primary" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener">${g.requirement === "archive" ? "View archive snapshot" : "Open project page"} &nearr;</a>`
+      ? `<a class="btn btn-primary" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener" ${outboundAttrs} data-click-location="primary_button">${g.requirement === "archive" ? "View archive snapshot" : "Open project page"} &nearr;</a>`
       : `<span class="btn btn-ghost" aria-disabled="true">Launch button withheld</span>`;
   const img = imgSrc(g);
 
@@ -796,7 +831,7 @@ games.forEach((g) => {
       launchDisabled
         ? "No launch link is provided. The supplied destination was disabled after off-topic navigation hints appeared in the response HTML; see the verification and project status above."
         : g.sourceUrl
-        ? `Original destination: <a class="inline" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener">${esc(g.sourceUrl.replace(/^https?:\/\//, ""))}</a> (${esc(hostOf(g))}).`
+        ? `Original destination: <a class="inline" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener" ${outboundAttrs} data-click-location="source_inline">${esc(g.sourceUrl.replace(/^https?:\/\//, ""))}</a> (${esc(hostOf(g))}).`
         : "No usable destination: the supplied link did not resolve to the named project, so we withhold it."
     }${
       g.collection === "source"
@@ -1292,6 +1327,16 @@ write(
 
 /* ---------------- trust pages ---------------- */
 
+// The privacy page must describe the analytics state this build actually
+// ships: GA4 disclosure when a measurement ID is configured, an explicit
+// "no analytics" statement when it is not. One placeholder keeps the two
+// states from drifting apart.
+const ANALYTICS_PRIVACY = CONFIG.ga4MeasurementId
+  ? `<h2>Analytics</h2>
+<p>This site uses Google Analytics to count page views, searches, filter use and clicks on game links. Google sets cookies (names starting with <code>_ga</code>) to tell returning visitors apart. Analytics is off until you accept it in the banner: declined visits are still counted in aggregate, but without cookies and without anything that identifies you. Your choice is stored in your browser (localStorage key <code>rol-consent</code>) and you can change it any time by clearing this site's data and reloading. Measurement is processed under <a class="inline" href="https://policies.google.com/technologies/partner-sites" rel="nofollow noopener" target="_blank">Google's policies</a>, including the <a class="inline" href="https://business.safety.google/adsettings/" rel="nofollow noopener" target="_blank">Google Ads settings</a> you can review. We collect no names, emails or accounts, we run no advertising pixels, and we never send search text or click data anywhere else.</p>`
+  : `<h2>Analytics</h2>
+<p>This build of the site runs no analytics: no statistics service, no advertising pixels, no tracking cookies.</p>`;
+
 const TRUST = [
   {
     slug: "about",
@@ -1304,8 +1349,7 @@ const TRUST = [
   {
     slug: "privacy",
     title: "Privacy",
-    description:
-      "What Radiant Optimizer List does with information about you: a static directory with no accounts, no analytics cookies, and no game files.",
+    description: "What Radiant Optimizer List does with information about you: no accounts, declinable aggregate analytics, and no game files.",
     kicker: "Privacy",
     file: "privacy.html",
   },
@@ -1320,7 +1364,10 @@ const TRUST = [
 ];
 
 for (const page of TRUST) {
-  const raw = applyPartners(readFileSync(join(SRC, "content", page.file), "utf8"));
+  const raw = applyPartners(readFileSync(join(SRC, "content", page.file), "utf8")).replaceAll(
+    "<!-- analytics-policy -->",
+    ANALYTICS_PRIVACY
+  );
   write(
     `${page.slug}.html`,
     layout({
@@ -1376,7 +1423,7 @@ for (const g of games) {
 }
 
 mkdirSync(join(OUT, "assets"), { recursive: true });
-for (const f of ["style.css", "app.js"]) {
+for (const f of ["style.css", "app.js", "analytics.js"]) {
   writeFileSync(join(OUT, "assets", f), readFileSync(join(SRC, "assets", f)));
 }
 

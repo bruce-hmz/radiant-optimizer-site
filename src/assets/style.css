@@ -269,6 +269,20 @@ tbody tr:hover { background: var(--bg-soft); }
 .faq summary:hover { background: var(--surface); }
 .faq details p { margin: 0; padding: 0 18px 17px; font-size: 14px; color: var(--muted); max-width: 78ch; }
 
+/* ---------- analytics consent banner (assets/analytics.js) ---------- */
+.consent-bar {
+  position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 60;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px 18px;
+  max-width: 720px; margin: 0 auto; padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+}
+.consent-bar p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.55; }
+.consent-bar p a { color: var(--cyan); text-decoration: underline; }
+.consent-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.consent-actions .btn { padding: 7px 14px; font-size: 13px; }
+
 /* ---------- footer ---------- */
 .site-footer {
   border-top: 1px solid var(--border-soft);
