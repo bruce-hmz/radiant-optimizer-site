@@ -44,6 +44,11 @@ const CONFIG = {
   // configured per deploy (Cloudflare Workers Builds variable) instead of
   // being hardcoded. When empty the build emits no analytics markup at all.
   ga4MeasurementId: process.env.GA4_MEASUREMENT_ID || "",
+  // AdSense publisher client (ca-pub-…). Same pattern as GA4: environment
+  // first, empty → no ad loader in <head>, no ads.txt, and the privacy page
+  // keeps its accurate "no ads" wording. Ads only ever display after Google
+  // approves the site AND placements/auto ads are enabled in the account.
+  adsenseClient: process.env.ADSENSE_CLIENT || "",
 };
 /* ------------------------------------------------------------------ */
 
@@ -83,6 +88,14 @@ CONFIG.ga4MeasurementId = String(CONFIG.ga4MeasurementId).trim();
 if (CONFIG.ga4MeasurementId && !/^G-[A-Z0-9]{6,}$/.test(CONFIG.ga4MeasurementId)) {
   console.warn(`  WARNING: GA4_MEASUREMENT_ID "${CONFIG.ga4MeasurementId}" is not a valid measurement ID (expected G-XXXXXXXXXX); building without analytics.`);
   CONFIG.ga4MeasurementId = "";
+}
+
+// Same guard for the AdSense publisher ID — a malformed ca-pub would inject
+// a broken ad loader into every page and break the AdSense site review.
+CONFIG.adsenseClient = String(CONFIG.adsenseClient).trim();
+if (CONFIG.adsenseClient && !/^ca-pub-\d{8,}$/.test(CONFIG.adsenseClient)) {
+  console.warn(`  WARNING: ADSENSE_CLIENT "${CONFIG.adsenseClient}" is not a valid publisher ID (expected ca-pub-XXXXXXXXXXXXXXXX); building without AdSense code.`);
+  CONFIG.adsenseClient = "";
 }
 
 const sourceData = JSON.parse(readFileSync(join(SRC, "data", "games.json"), "utf8"));
@@ -571,6 +584,7 @@ ${image ? `<meta property="og:image" content="${abs(image)}">` : ""}
 <meta name="theme-color" content="#0b0d12">
 <link rel="stylesheet" href="/assets/style.css">
 ${ga4Head()}
+${CONFIG.adsenseClient ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${CONFIG.adsenseClient}" crossorigin="anonymous"></script>` : ""}
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ""}
 </head>
 <body>
@@ -1337,6 +1351,17 @@ const ANALYTICS_PRIVACY = CONFIG.ga4MeasurementId
   : `<h2>Analytics</h2>
 <p>This build of the site runs no analytics: no statistics service, no advertising pixels, no tracking cookies.</p>`;
 
+// AdSense disclosure, also generated per build state so the page is only ever
+// accurate: the advertising paragraph exists exactly when the AdSense loader
+// does. Mirrors Google's AdSense privacy-disclosure guidance.
+const ADSENSE_PRIVACY = CONFIG.adsenseClient
+  ? `<h2>Advertising</h2>
+<p>Ads, when shown, are served through Google AdSense. Third-party vendors including Google use cookies to serve ads based on your prior visits to this site or other websites, and to measure ad performance. You can review or change personalized-ad settings at <a class="inline" href="https://www.google.com/settings/ads" rel="nofollow noopener" target="_blank">Google Ads Settings</a> and opt out of many third-party vendor cookies at <a class="inline" href="https://www.aboutads.info/choices/" rel="nofollow noopener" target="_blank">aboutads.info/choices</a>. Where consent is required (for example in the EEA and UK) ad and analytics cookies are only set after you accept them in the site banner, and you can withdraw that choice any time by clearing this site's data. See also <a class="inline" href="https://policies.google.com/technologies/ads" rel="nofollow noopener" target="_blank">How Google uses cookies</a>.</p>`
+  : "";
+const ADSENSE_CLAIM = CONFIG.adsenseClient
+  ? `<li>The only advertising on this site is Google AdSense, disclosed in the next section; we run no other ad networks and do not sell or share your data with data brokers.</li>`
+  : `<li>We do not run advertising pixels, and we do not sell or share data with data brokers.</li>`;
+
 const TRUST = [
   {
     slug: "about",
@@ -1364,10 +1389,10 @@ const TRUST = [
 ];
 
 for (const page of TRUST) {
-  const raw = applyPartners(readFileSync(join(SRC, "content", page.file), "utf8")).replaceAll(
-    "<!-- analytics-policy -->",
-    ANALYTICS_PRIVACY
-  );
+  const raw = applyPartners(readFileSync(join(SRC, "content", page.file), "utf8"))
+    .replaceAll("<!-- analytics-policy -->", ANALYTICS_PRIVACY)
+    .replaceAll("<!-- ads-policy -->", ADSENSE_PRIVACY)
+    .replaceAll("<!-- ads-claims -->", ADSENSE_CLAIM);
   write(
     `${page.slug}.html`,
     layout({
@@ -1417,6 +1442,13 @@ ${urls
 );
 
 write("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${CONFIG.baseUrl}/sitemap.xml\n`);
+
+// Authorized-sellers file for the AdSense account; absent until the
+// publisher ID is configured. Google requires the pub ID without the
+// ca- prefix and the standard Google TAG ID.
+if (CONFIG.adsenseClient) {
+  write("ads.txt", `google.com, ${CONFIG.adsenseClient.replace(/^ca-/, "")}, DIRECT, f08c47fec0942fa0\n`);
+}
 
 for (const g of games) {
   write(`assets/covers/${g.slug}.svg`, coverSvg(g));
