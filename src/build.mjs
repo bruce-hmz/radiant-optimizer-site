@@ -48,7 +48,9 @@ const CONFIG = {
   // first, empty → no ad loader in <head>, no ads.txt, and the privacy page
   // keeps its accurate "no ads" wording. Ads only ever display after Google
   // approves the site AND placements/auto ads are enabled in the account.
-  adsenseClient: process.env.ADSENSE_CLIENT || "",
+  // The default is this site's real publisher ID (public information that
+  // ships in every page's HTML and in /ads.txt).
+  adsenseClient: process.env.ADSENSE_CLIENT || "ca-pub-1367977665012576",
 };
 /* ------------------------------------------------------------------ */
 
