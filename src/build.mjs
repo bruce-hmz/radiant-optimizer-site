@@ -48,9 +48,10 @@ const CONFIG = {
   // first, empty → no ad loader in <head>, no ads.txt, and the privacy page
   // keeps its accurate "no ads" wording. Ads only ever display after Google
   // approves the site AND placements/auto ads are enabled in the account.
-  // The default is this site's real publisher ID (public information that
-  // ships in every page's HTML and in /ads.txt).
-  adsenseClient: process.env.ADSENSE_CLIENT || "ca-pub-1367977665012576",
+  // The first US-region account (pub-1367977665012576) was closed on
+  // 2026-10-12; set this to the new China-region publisher ID once the
+  // re-registered account exists.
+  adsenseClient: process.env.ADSENSE_CLIENT || "",
 };
 /* ------------------------------------------------------------------ */
 
