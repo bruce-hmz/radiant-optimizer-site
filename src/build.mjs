@@ -49,9 +49,8 @@ const CONFIG = {
   // keeps its accurate "no ads" wording. Ads only ever display after Google
   // approves the site AND placements/auto ads are enabled in the account.
   // The first US-region account (pub-1367977665012576) was closed on
-  // 2026-10-12; set this to the new China-region publisher ID once the
-  // re-registered account exists.
-  adsenseClient: process.env.ADSENSE_CLIENT || "",
+  // 2026-10-12; this default is the re-registered China-region account.
+  adsenseClient: process.env.ADSENSE_CLIENT || "ca-pub-7087310872799317",
 };
 /* ------------------------------------------------------------------ */
 
