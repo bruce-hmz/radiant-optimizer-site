@@ -19,3 +19,6 @@ src/shots-log.json
 
 # Wrangler local state (dev caches, account info)
 .wrangler/
+
+# video-agent-kit plugin runtime artifacts
+.video_agent/
