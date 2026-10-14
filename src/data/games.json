@@ -687,7 +687,7 @@
       "device": "Unknown",
       "requirement": "setup",
       "summary": "A collection page that redirects to a wider PC-game browser library.",
-      "whatItIs": "The source link redirects to a PC-game collection rather than a single title. Treat it as a directory entry that leads to more projects, not as one more game.",
+      "whatItIs": "The source link (wasmarcade.com/Fan) points to WASM Arcade's PC-game browser collection (also accessible via wasmarcade.com/pc-games), which lists entries for GTA 5, GTA: Vice City, GTA III, The Simpsons: Hit & Run and Minecraft rather than a single standalone title. Treat it as a directory entry that leads to more projects, not as one more game.",
       "whatYouNeed": [
         "A desktop browser",
         "A stable connection",

@@ -301,7 +301,18 @@ tbody tr:hover { background: var(--bg-soft); }
 }
 @media (max-width: 720px) {
   .footer-grid { grid-template-columns: 1fr; gap: 22px; }
-  .nav { display: none; }
+  .site-header .wrap { gap: 8px 12px; }
+  .nav {
+    width: 100%;
+    margin-left: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: 0 0 auto; padding: 6px 10px; font-size: 13px; }
   .hero { padding: 38px 0 24px; }
   section { padding: 36px 0; }
 }

@@ -18,7 +18,7 @@
       var hay = card.getAttribute('data-search') || '';
       var okCol = state.col === 'All' || col === state.col;
       var okCat = state.cat === 'All' || cat === state.cat;
-      var okDev = state.dev === 'All' || dev === state.dev || dev === 'Unknown';
+      var okDev = state.dev === 'All' || dev === state.dev;
       var okQ = !state.q || hay.indexOf(state.q) !== -1;
       var ok = okCol && okCat && okDev && okQ;
       card.style.display = ok ? '' : 'none';

@@ -17,7 +17,7 @@ const OUT = join(__dirname, "..", "public");
 /*  is a warning, not a crash.                                          */
 /* ------------------------------------------------------------------ */
 const GENERATED_DIRS = ["browser-games", "games", "guides"];
-const GENERATED_FILES = ["index.html", "404.html", "about.html", "privacy.html", "contact.html", "sitemap.xml", "robots.txt", "ads.txt"];
+const GENERATED_FILES = ["index.html", "404.html", "about.html", "privacy.html", "contact.html", "sitemap.xml", "robots.txt", "ads.txt", "favicon.svg"];
 let cleaned = true;
 try {
   for (const d of GENERATED_DIRS) rmSync(join(OUT, d), { recursive: true, force: true });
@@ -568,6 +568,9 @@ gtag('js',new Date());gtag('config','${id}');
 }
 
 function layout({ title, description, canonical, active, body, jsonLd, image, robots }) {
+  const isNoindex = Boolean(robots && robots.includes("noindex"));
+  const ogImage = image || (!isNoindex ? imgSrc(SOURCE[0]) : "");
+  const allowAds = Boolean(CONFIG.adsenseClient && !isNoindex);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -577,16 +580,17 @@ function layout({ title, description, canonical, active, body, jsonLd, image, ro
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${abs(canonical)}">
 ${robots ? `<meta name="robots" content="${esc(robots)}">` : ""}
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:site_name" content="${esc(CONFIG.siteName)}">
-${image ? `<meta property="og:image" content="${abs(image)}">` : ""}
+${ogImage ? `<meta property="og:image" content="${abs(ogImage)}">` : ""}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0d12">
 <link rel="stylesheet" href="/assets/style.css">
 ${ga4Head()}
-${CONFIG.adsenseClient ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${CONFIG.adsenseClient}" crossorigin="anonymous"></script>` : ""}
+${allowAds ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${CONFIG.adsenseClient}" crossorigin="anonymous"></script>` : ""}
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ""}
 </head>
 <body>
@@ -743,7 +747,63 @@ const homeBody = `
     </div>
   </div>
 </section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2 class="sec">Radiant Optimizer list: common questions</h2>
+    <p class="sec-lede">Answers about the 25 original links, disabled hosts, file requirements and the Windows utility.</p>
+    <div class="faq">
+${[
+  {
+    q: "Where is the Radiant Optimizer full games list and links?",
+    a: "The original Radiant Optimizer list shared by @RadiantOpti on 8 October 2026 contains 25 browser game links, all preserved in the directory above with their recorded destination domains, setup requirements and verification notes. A wider library of 42 additional browser ports (67 projects in total) is available on the Browser Games page.",
+  },
+  {
+    q: "Why are some Radiant Optimizer game links disabled or not loading?",
+    a: "Each entry points to an independent third-party host that can change or go offline. In our 11 October 2026 check, Moon Zombies (moon-zombies.pages.dev), Kino der Toten (kino-der-toten.pages.dev) and BO3 Cheese Cube (cheese-cube.pages.dev) returned off-topic navigation hints in their HTML, so their launch links are disabled here. Black Ops 2 / Vibe Slops (vibeslops.luckeysystems.com) and The Simpsons: Hit & Run (shar-wasm.cjoseph.workers.dev) returned network errors during the check, while GTA 5 resolves to a web.archive.org snapshot rather than a live game.",
+  },
+  {
+    q: "Which games on the Radiant Optimizer list require your own game files?",
+    a: "Entries badged 'Bring your own files'—including Skate 3 (skate.aaddpp.lol), Halo CE Mobile (hcemobile.com), GTA: Vice City WASM, Diablo Web, Half-Life (Pixelsuft) and WebXash (CS 1.6)—expect data converted from a copy you legally own. Entries badged 'No extra files listed'—such as CS Surf (surfd.net), PES 6 Web Online, Quake, Quake II, Return to Castle Wolfenstein and Urban Terror—do not list extra files as a requirement, though a reachable page still does not guarantee gameplay.",
+  },
+  {
+    q: "Are these browser games part of the Radiant Optimizer Windows app?",
+    a: "No. Radiant Optimizer is a separate Windows PC tuning utility (with a free tier and a $57.77 one-time Premium option), while the browser games are independent community projects that @RadiantOpti listed in a social post. You do not need to buy or install the Windows utility to open any browser project. Read our independent Radiant Optimizer review and safety guide for details.",
+  },
+  {
+    q: "Is it spelled Radiant Optimizer, Radient Optimizer, or RadiantOpti?",
+    a: "The account handle is @RadiantOpti and the full name is Radiant Optimizer (often searched as 'Radient Optimizer', 'Radian Optimizer' or 'Radiant Optimazer', or in Spanish as 'Radiant Optimizer lista de juegos'). All of those searches refer to the same 25-link browser game list indexed on this page.",
+  },
+]
+  .map((f) => `      <details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`)
+  .join("\n")}
+    </div>
+  </div>
+</section>
 `;
+
+const HOME_FAQ = [
+  {
+    q: "Where is the Radiant Optimizer full games list and links?",
+    a: "The original Radiant Optimizer list shared by @RadiantOpti on 8 October 2026 contains 25 browser game links, all preserved in the directory above with their recorded destination domains, setup requirements and verification notes. A wider library of 42 additional browser ports (67 projects in total) is available on the Browser Games page.",
+  },
+  {
+    q: "Why are some Radiant Optimizer game links disabled or not loading?",
+    a: "Each entry points to an independent third-party host that can change or go offline. In our 11 October 2026 check, Moon Zombies (moon-zombies.pages.dev), Kino der Toten (kino-der-toten.pages.dev) and BO3 Cheese Cube (cheese-cube.pages.dev) returned off-topic navigation hints in their HTML, so their launch links are disabled here. Black Ops 2 / Vibe Slops (vibeslops.luckeysystems.com) and The Simpsons: Hit & Run (shar-wasm.cjoseph.workers.dev) returned network errors during the check, while GTA 5 resolves to a web.archive.org snapshot rather than a live game.",
+  },
+  {
+    q: "Which games on the Radiant Optimizer list require your own game files?",
+    a: "Entries badged 'Bring your own files'—including Skate 3 (skate.aaddpp.lol), Halo CE Mobile (hcemobile.com), GTA: Vice City WASM, Diablo Web, Half-Life (Pixelsuft) and WebXash (CS 1.6)—expect data converted from a copy you legally own. Entries badged 'No extra files listed'—such as CS Surf (surfd.net), PES 6 Web Online, Quake, Quake II, Return to Castle Wolfenstein and Urban Terror—do not list extra files as a requirement, though a reachable page still does not guarantee gameplay.",
+  },
+  {
+    q: "Are these browser games part of the Radiant Optimizer Windows app?",
+    a: "No. Radiant Optimizer is a separate Windows PC tuning utility (with a free tier and a $57.77 one-time Premium option), while the browser games are independent community projects that @RadiantOpti listed in a social post. You do not need to buy or install the Windows utility to open any browser project. Read our independent Radiant Optimizer review and safety guide for details.",
+  },
+  {
+    q: "Is it spelled Radiant Optimizer, Radient Optimizer, or RadiantOpti?",
+    a: "The account handle is @RadiantOpti and the full name is Radiant Optimizer (often searched as 'Radient Optimizer', 'Radian Optimizer' or 'Radiant Optimazer', or in Spanish as 'Radiant Optimizer lista de juegos'). All of those searches refer to the same 25-link browser game list indexed on this page.",
+  },
+];
 
 write(
   "index.html",
@@ -756,20 +816,32 @@ write(
     image: imgSrc(SOURCE[0]),
     jsonLd: {
       "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      name: "Radiant Optimizer Browser Games — Original List",
-      description: `The ${SOURCE.length} browser-game projects from the @RadiantOpti thread.`,
-      url: CONFIG.baseUrl + "/",
-      mainEntity: {
-        "@type": "ItemList",
-        numberOfItems: SOURCE.length,
-        itemListElement: SOURCE.map((g, i) => ({
-          "@type": "ListItem",
-          position: i + 1,
-          name: g.name,
-          url: abs(publicPath(`games/${g.slug}.html`)),
-        })),
-      },
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          name: "Radiant Optimizer Browser Games — Original List",
+          description: `The ${SOURCE.length} browser-game projects from the @RadiantOpti thread.`,
+          url: CONFIG.baseUrl + "/",
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: SOURCE.length,
+            itemListElement: SOURCE.map((g, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: g.name,
+              url: abs(publicPath(`games/${g.slug}.html`)),
+            })),
+          },
+        },
+        {
+          "@type": "FAQPage",
+          mainEntity: HOME_FAQ.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        },
+      ],
     },
   })
 );
@@ -845,7 +917,7 @@ games.forEach((g) => {
     <h2>Source</h2>
     <p>${
       launchDisabled
-        ? "No launch link is provided. The supplied destination was disabled after off-topic navigation hints appeared in the response HTML; see the verification and project status above."
+        ? `No launch link is provided (${esc(hostOf(g))}). The supplied destination was disabled after off-topic navigation hints appeared in the response HTML; see the verification and project status above.`
         : g.sourceUrl
         ? `Original destination: <a class="inline" href="${esc(g.sourceUrl)}" target="_blank" rel="nofollow noopener" ${outboundAttrs} data-click-location="source_inline">${esc(g.sourceUrl.replace(/^https?:\/\//, ""))}</a> (${esc(hostOf(g))}).`
         : "No usable destination: the supplied link did not resolve to the named project, so we withhold it."
@@ -874,11 +946,12 @@ games.forEach((g) => {
 </div>
 `;
 
+  const srcRef = g.sourceUrl ? g.sourceUrl.replace(/^https?:\/\//, "").replace(/\/$/, "") : hostOf(g);
   write(
     `games/${g.slug}.html`,
     layout({
       title: `${g.name} browser project — requirement & status`,
-      description: `${g.summary} Category: ${g.category}. Device: ${g.device}. Requirement: ${(REQ[g.requirement] || REQ.setup).label}. Destination evidence and setup notes.`,
+      description: `${g.summary} Source: ${srcRef} (${verificationLabel(g)}). Requirement: ${(REQ[g.requirement] || REQ.setup).label}. Category: ${g.category} (${g.device}).`,
       canonical: publicPath(`games/${g.slug}.html`),
       active: "directory",
       body,
@@ -1349,9 +1422,9 @@ write(
 // states from drifting apart.
 const ANALYTICS_PRIVACY = CONFIG.ga4MeasurementId
   ? `<h2>Analytics</h2>
-<p>This site uses Google Analytics to count page views, searches, filter use and clicks on game links. Google sets cookies (names starting with <code>_ga</code>) to tell returning visitors apart. Analytics is off until you accept it in the banner: declined visits are still counted in aggregate, but without cookies and without anything that identifies you. Your choice is stored in your browser (localStorage key <code>rol-consent</code>) and you can change it any time by clearing this site's data and reloading. Measurement is processed under <a class="inline" href="https://policies.google.com/technologies/partner-sites" rel="nofollow noopener" target="_blank">Google's policies</a>, including the <a class="inline" href="https://business.safety.google/adsettings/" rel="nofollow noopener" target="_blank">Google Ads settings</a> you can review. We collect no names, emails or accounts, we run no advertising pixels, and we never send search text or click data anywhere else.</p>`
+<p>This site uses Google Analytics to count page views, searches, filter use and clicks on game links. Google sets cookies (names starting with <code>_ga</code>) to tell returning visitors apart. Analytics is off until you accept it in the banner: declined visits are still counted in aggregate, but without cookies and without anything that identifies you. Your choice is stored in your browser (localStorage key <code>rol-consent</code>) and you can change it any time by clearing this site's data and reloading. Measurement is processed under <a class="inline" href="https://policies.google.com/technologies/partner-sites" rel="nofollow noopener" target="_blank">Google's policies</a>, including the <a class="inline" href="https://business.safety.google/adsettings/" rel="nofollow noopener" target="_blank">Google Ads settings</a> you can review. We collect no names, emails or accounts, and we never send search text or click data anywhere else.</p>`
   : `<h2>Analytics</h2>
-<p>This build of the site runs no analytics: no statistics service, no advertising pixels, no tracking cookies.</p>`;
+<p>This build of the site runs no visitor analytics or first-party statistics service.</p>`;
 
 // AdSense disclosure, also generated per build state so the page is only ever
 // accurate: the advertising paragraph exists exactly when the AdSense loader
@@ -1376,7 +1449,9 @@ const TRUST = [
   {
     slug: "privacy",
     title: "Privacy",
-    description: "What Radiant Optimizer List does with information about you: no accounts, declinable aggregate analytics, and no game files.",
+    description: CONFIG.ga4MeasurementId
+      ? "What Radiant Optimizer List does with information about you: no accounts, declinable aggregate analytics, and no game files."
+      : "What Radiant Optimizer List does with information about you: no accounts, no game files, and how third-party services work.",
     kicker: "Privacy",
     file: "privacy.html",
   },
@@ -1444,6 +1519,20 @@ ${urls
 );
 
 write("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${CONFIG.baseUrl}/sitemap.xml\n`);
+
+write(
+  "favicon.svg",
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<defs>
+<linearGradient id="fg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#7c5cff"/>
+<stop offset="1" stop-color="#22d3ee"/>
+</linearGradient>
+</defs>
+<rect width="64" height="64" rx="16" fill="url(#fg)"/>
+<text x="32" y="42" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="28" font-weight="800" fill="#0b0d12" letter-spacing="-1">RL</text>
+</svg>\n`
+);
 
 // Authorized-sellers file for the AdSense account; absent until the
 // publisher ID is configured. Google requires the pub ID without the
