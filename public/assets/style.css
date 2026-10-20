@@ -283,6 +283,16 @@ tbody tr:hover { background: var(--bg-soft); }
 .consent-actions { display: flex; gap: 8px; flex-shrink: 0; }
 .consent-actions .btn { padding: 7px 14px; font-size: 13px; }
 
+/* ---------- ad strip (third-party banners) ---------- */
+.ad-strip { margin-top: 36px; }
+.ad-label {
+  display: block; text-align: center;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted-2); margin: 0 0 10px;
+}
+.ad-row { display: flex; flex-wrap: wrap; gap: 16px 28px; justify-content: center; align-items: flex-start; }
+.ad-slot { min-width: 300px; min-height: 250px; }
+
 /* ---------- footer ---------- */
 .site-footer {
   border-top: 1px solid var(--border-soft);

@@ -554,7 +554,8 @@ function footer() {
 // Consent Mode v2 starts fully denied; a stored "granted" choice is replayed
 // synchronously so returning visitors keep full measurement, and
 // assets/analytics.js offers new visitors an accept/decline banner. Ad
-// signals stay denied permanently — this site runs no ads.
+// signals stay denied for Google-managed measurement; the third-party
+// banner strip in the layout is outside Consent Mode and loads on its own.
 function ga4Head() {
   const id = CONFIG.ga4MeasurementId;
   if (!id) return "";
@@ -565,6 +566,43 @@ try{if(localStorage.getItem('rol-consent')==='granted')gtag('consent','update',{
 gtag('js',new Date());gtag('config','${id}');
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>`;
+}
+
+// Third-party display banners (Adsterra snippets served from bauval.org),
+// kept verbatim from the network's code. The 22/… pair reads the global
+// `atOptions` and document.writes its iframe at the exact spot it occupies,
+// so it must stay inline in the body — it cannot be injected after load.
+// Rendered once per page in the layout's ad strip; noindex pages (404) stay
+// ad-free, mirroring the AdSense guard.
+const PARTNER_ADS = [
+  {
+    label: "adsterra 300x250 iframe",
+    html: `<script>
+  atOptions = {
+    'key' : '8ea38e399c1e1a8bcb507c6a0d3c396d',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://bauval.org/22/8ea38e399c1e1a8bcb507c6a0d3c396d"></script>`,
+  },
+  {
+    label: "adsterra container banner",
+    html: `<script async="async" data-cfasync="false" src="https://bauval.org/21/f9fc95e67239e9ef9f34fb8a2a20eecd"></script>
+<div id="container-f9fc95e67239e9ef9f34fb8a2a20eecd"></div>`,
+  },
+];
+
+function adStrip() {
+  if (!PARTNER_ADS.length) return "";
+  return `<aside class="ad-strip wrap">
+  <span class="ad-label">Advertisement</span>
+  <div class="ad-row">
+    ${PARTNER_ADS.map((ad) => `<div class="ad-slot">\n${ad.html}\n</div>`).join("\n    ")}
+  </div>
+</aside>`;
 }
 
 function layout({ title, description, canonical, active, body, jsonLd, image, robots }) {
@@ -599,6 +637,7 @@ ${header(active)}
 <main id="main">
 ${body}
 </main>
+${!isNoindex ? adStrip() : ""}
 ${footer()}
 <script src="/assets/app.js" defer></script>
 ${CONFIG.ga4MeasurementId ? `<script src="/assets/analytics.js" defer></script>` : ""}
@@ -1434,8 +1473,23 @@ const ADSENSE_PRIVACY = CONFIG.adsenseClient
 <p>Ads, when shown, are served through Google AdSense. Third-party vendors including Google use cookies to serve ads based on your prior visits to this site or other websites, and to measure ad performance. You can review or change personalized-ad settings at <a class="inline" href="https://www.google.com/settings/ads" rel="nofollow noopener" target="_blank">Google Ads Settings</a> and opt out of many third-party vendor cookies at <a class="inline" href="https://www.aboutads.info/choices/" rel="nofollow noopener" target="_blank">aboutads.info/choices</a>. Where consent is required (for example in the EEA and UK) ad and analytics cookies are only set after you accept them in the site banner, and you can withdraw that choice any time by clearing this site's data. See also <a class="inline" href="https://policies.google.com/technologies/ads" rel="nofollow noopener" target="_blank">How Google uses cookies</a>.</p>`
   : "";
 const ADSENSE_CLAIM = CONFIG.adsenseClient
-  ? `<li>The only advertising on this site is Google AdSense, disclosed in the next section; we run no other ad networks and do not sell or share your data with data brokers.</li>`
-  : `<li>We do not run advertising pixels, and we do not sell or share data with data brokers.</li>`;
+  ? `<li>Some ads come through Google AdSense, disclosed in the next section.</li>`
+  : "";
+// Disclosure for the third-party banner strip (PARTNER_ADS). It ships on
+// every non-noindex page regardless of the AdSense account state, so its
+// privacy wording must be unconditional too.
+const NETWORK_ADS_PRIVACY = PARTNER_ADS.length
+  ? `<p>Banner placements are also served by independent advertising networks (scripts loaded from bauval.org). Those networks may use their own cookies or similar technologies to deliver and measure ads and operate under their own privacy policies. You can opt out of many third-party vendor cookies at <a class="inline" href="https://www.aboutads.info/choices/" rel="nofollow noopener" target="_blank">aboutads.info/choices</a>.</p>`
+  : "";
+const ADS_CLAIMS = [
+  PARTNER_ADS.length
+    ? `<li>Banner placements on this site are served by third-party advertising networks, which may use cookies or similar technologies to deliver and measure ads — see the advertising section below.</li>`
+    : "",
+  ADSENSE_CLAIM,
+  `<li>We do not sell or share your data with data brokers.</li>`,
+]
+  .filter(Boolean)
+  .join("\n  ");
 
 const TRUST = [
   {
@@ -1468,8 +1522,8 @@ const TRUST = [
 for (const page of TRUST) {
   const raw = applyPartners(readFileSync(join(SRC, "content", page.file), "utf8"))
     .replaceAll("<!-- analytics-policy -->", ANALYTICS_PRIVACY)
-    .replaceAll("<!-- ads-policy -->", ADSENSE_PRIVACY)
-    .replaceAll("<!-- ads-claims -->", ADSENSE_CLAIM);
+    .replaceAll("<!-- ads-policy -->", ADSENSE_PRIVACY + NETWORK_ADS_PRIVACY)
+    .replaceAll("<!-- ads-claims -->", ADS_CLAIMS);
   write(
     `${page.slug}.html`,
     layout({
