@@ -51,6 +51,13 @@ const CONFIG = {
   // The first US-region account (pub-1367977665012576) was closed on
   // 2026-10-12; this default is the re-registered China-region account.
   adsenseClient: process.env.ADSENSE_CLIENT || "ca-pub-7087310872799317",
+  // Plausible Analytics script URL (privacy-friendly pageview counting; the
+  // account's proxy host serves the script, so no adblock-vs-domain churn).
+  // Cookieless, so like Adsterra it sits outside Consent Mode and loads on
+  // its own. Environment-first like GA4/AdSense; empty → no Plausible markup.
+  plausibleScriptUrl:
+    process.env.PLAUSIBLE_SCRIPT_URL ||
+    "https://plausible.zombiecouplevideo.pro/js/pa-rp3GZF6PSoNRdBaI2jErO.js",
 };
 /* ------------------------------------------------------------------ */
 
@@ -98,6 +105,14 @@ CONFIG.adsenseClient = String(CONFIG.adsenseClient).trim();
 if (CONFIG.adsenseClient && !/^ca-pub-\d{8,}$/.test(CONFIG.adsenseClient)) {
   console.warn(`  WARNING: ADSENSE_CLIENT "${CONFIG.adsenseClient}" is not a valid publisher ID (expected ca-pub-XXXXXXXXXXXXXXXX); building without AdSense code.`);
   CONFIG.adsenseClient = "";
+}
+
+// Same guard for the Plausible script URL — a malformed URL would inject a
+// dead script tag into every page head.
+CONFIG.plausibleScriptUrl = String(CONFIG.plausibleScriptUrl || "").trim();
+if (CONFIG.plausibleScriptUrl && !/^https:\/\/[^/]+\/js\/[\w.-]+\.js$/.test(CONFIG.plausibleScriptUrl)) {
+  console.warn(`  WARNING: PLAUSIBLE_SCRIPT_URL "${CONFIG.plausibleScriptUrl}" is not a valid script URL (expected https://host/js/name.js); building without Plausible.`);
+  CONFIG.plausibleScriptUrl = "";
 }
 
 const sourceData = JSON.parse(readFileSync(join(SRC, "data", "games.json"), "utf8"));
@@ -568,6 +583,20 @@ gtag('js',new Date());gtag('config','${id}');
 <script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>`;
 }
 
+// Plausible head snippet, kept verbatim from the Plausible dashboard (the
+// init stub is the vendor's own queue shim). Cookieless pageview counting,
+// so it needs no consent banner and is not gated by analytics.js.
+function plausibleHead() {
+  const url = CONFIG.plausibleScriptUrl;
+  if (!url) return "";
+  return `<!-- Privacy-friendly analytics by Plausible -->
+<script async src="${esc(url)}"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>`;
+}
+
 // Third-party display banners (Adsterra snippets served from bauval.org),
 // kept verbatim from the network's code. The 22/… pair reads the global
 // `atOptions` and document.writes its iframe at the exact spot it occupies,
@@ -628,6 +657,7 @@ ${ogImage ? `<meta property="og:image" content="${abs(ogImage)}">` : ""}
 <meta name="theme-color" content="#0b0d12">
 <link rel="stylesheet" href="/assets/style.css">
 ${ga4Head()}
+${plausibleHead()}
 ${allowAds ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${CONFIG.adsenseClient}" crossorigin="anonymous"></script>` : ""}
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ""}
 </head>
@@ -1456,12 +1486,18 @@ write(
 /* ---------------- trust pages ---------------- */
 
 // The privacy page must describe the analytics state this build actually
-// ships: GA4 disclosure when a measurement ID is configured, an explicit
-// "no analytics" statement when it is not. One placeholder keeps the two
-// states from drifting apart.
-const ANALYTICS_PRIVACY = CONFIG.ga4MeasurementId
-  ? `<h2>Analytics</h2>
-<p>This site uses Google Analytics to count page views, searches, filter use and clicks on game links. Google sets cookies (names starting with <code>_ga</code>) to tell returning visitors apart. Analytics is off until you accept it in the banner: declined visits are still counted in aggregate, but without cookies and without anything that identifies you. Your choice is stored in your browser (localStorage key <code>rol-consent</code>) and you can change it any time by clearing this site's data and reloading. Measurement is processed under <a class="inline" href="https://policies.google.com/technologies/partner-sites" rel="nofollow noopener" target="_blank">Google's policies</a>, including the <a class="inline" href="https://business.safety.google/adsettings/" rel="nofollow noopener" target="_blank">Google Ads settings</a> you can review. We collect no names, emails or accounts, and we never send search text or click data anywhere else.</p>`
+// ships: a GA4 paragraph when a measurement ID is configured, a Plausible
+// paragraph when its script URL is, and an explicit "no analytics" statement
+// only when neither is. One placeholder keeps the states from drifting apart.
+const GA4_PRIVACY = CONFIG.ga4MeasurementId
+  ? `<p>This site uses Google Analytics to count page views, searches, filter use and clicks on game links. Google sets cookies (names starting with <code>_ga</code>) to tell returning visitors apart. Analytics is off until you accept it in the banner: declined visits are still counted in aggregate, but without cookies and without anything that identifies you. Your choice is stored in your browser (localStorage key <code>rol-consent</code>) and you can change it any time by clearing this site's data and reloading. Measurement is processed under <a class="inline" href="https://policies.google.com/technologies/partner-sites" rel="nofollow noopener" target="_blank">Google's policies</a>, including the <a class="inline" href="https://business.safety.google/adsettings/" rel="nofollow noopener" target="_blank">Google Ads settings</a> you can review. We collect no names, emails or accounts, and we never send search text or click data anywhere else.</p>`
+  : "";
+const PLAUSIBLE_PRIVACY = CONFIG.plausibleScriptUrl
+  ? `<p>Page views are ${CONFIG.ga4MeasurementId ? "also " : ""}counted by Plausible Analytics, a cookieless statistics service. It sets no cookies, stores nothing in your browser, and does not track you across other sites, which is why it runs without a consent banner. Each visit sends only the page address, the referring site, your approximate country and your browser and device type; a daily-rotating hash stands in for any identifier and cannot be traced back to you. Processing is covered by <a class="inline" href="https://plausible.io/privacy" rel="nofollow noopener" target="_blank">Plausible's privacy policy</a>.</p>`
+  : "";
+const ANALYTICS_PARAGRAPHS = [GA4_PRIVACY, PLAUSIBLE_PRIVACY].filter(Boolean);
+const ANALYTICS_PRIVACY = ANALYTICS_PARAGRAPHS.length
+  ? `<h2>Analytics</h2>\n${ANALYTICS_PARAGRAPHS.join("\n")}`
   : `<h2>Analytics</h2>
 <p>This build of the site runs no visitor analytics or first-party statistics service.</p>`;
 
@@ -1503,9 +1539,11 @@ const TRUST = [
   {
     slug: "privacy",
     title: "Privacy",
-    description: CONFIG.ga4MeasurementId
-      ? "What Radiant Optimizer List does with information about you: no accounts, declinable aggregate analytics, and no game files."
-      : "What Radiant Optimizer List does with information about you: no accounts, no game files, and how third-party services work.",
+    description: `What Radiant Optimizer List does with information about you: no accounts, ${
+      [CONFIG.ga4MeasurementId && "declinable analytics", CONFIG.plausibleScriptUrl && "cookieless visit counting"]
+        .filter(Boolean)
+        .join(" plus ") || "no analytics"
+    }, no game files, and how third-party services work.`,
     kicker: "Privacy",
     file: "privacy.html",
   },
