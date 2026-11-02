@@ -53,8 +53,8 @@ const CONFIG = {
   adsenseClient: process.env.ADSENSE_CLIENT || "ca-pub-7087310872799317",
   // Plausible Analytics script URL (privacy-friendly pageview counting; the
   // account's proxy host serves the script, so no adblock-vs-domain churn).
-  // Cookieless, so like Adsterra it sits outside Consent Mode and loads on
-  // its own. Environment-first like GA4/AdSense; empty → no Plausible markup.
+  // Cookieless, so it sits outside Consent Mode and loads on its own.
+  // Environment-first like GA4/AdSense; empty → no Plausible markup.
   plausibleScriptUrl:
     process.env.PLAUSIBLE_SCRIPT_URL ||
     "https://plausible.zombiecouplevideo.pro/js/pa-rp3GZF6PSoNRdBaI2jErO.js",
@@ -569,8 +569,7 @@ function footer() {
 // Consent Mode v2 starts fully denied; a stored "granted" choice is replayed
 // synchronously so returning visitors keep full measurement, and
 // assets/analytics.js offers new visitors an accept/decline banner. Ad
-// signals stay denied for Google-managed measurement; the third-party
-// banner strip in the layout is outside Consent Mode and loads on its own.
+// signals stay denied for Google-managed measurement.
 function ga4Head() {
   const id = CONFIG.ga4MeasurementId;
   if (!id) return "";
@@ -597,32 +596,12 @@ function plausibleHead() {
 </script>`;
 }
 
-// Third-party display banners (Adsterra snippets served from bauval.org),
-// kept verbatim from the network's code. The 22/… pair reads the global
-// `atOptions` and document.writes its iframe at the exact spot it occupies,
-// so it must stay inline in the body — it cannot be injected after load.
-// Rendered once per page in the layout's ad strip; noindex pages (404) stay
+// Third-party display banners. The Adsterra pair (bauval.org snippets) was
+// removed on 2026-11-02; entries placed here are rendered verbatim once per
+// page in the layout's ad strip, and the privacy page's third-party-network
+// disclosure follows this array automatically. noindex pages (404) stay
 // ad-free, mirroring the AdSense guard.
-const PARTNER_ADS = [
-  {
-    label: "adsterra 300x250 iframe",
-    html: `<script>
-  atOptions = {
-    'key' : '8ea38e399c1e1a8bcb507c6a0d3c396d',
-    'format' : 'iframe',
-    'height' : 250,
-    'width' : 300,
-    'params' : {}
-  };
-</script>
-<script src="https://bauval.org/22/8ea38e399c1e1a8bcb507c6a0d3c396d"></script>`,
-  },
-  {
-    label: "adsterra container banner",
-    html: `<script async="async" data-cfasync="false" src="https://bauval.org/21/f9fc95e67239e9ef9f34fb8a2a20eecd"></script>
-<div id="container-f9fc95e67239e9ef9f34fb8a2a20eecd"></div>`,
-  },
-];
+const PARTNER_ADS = [];
 
 function adStrip() {
   if (!PARTNER_ADS.length) return "";
